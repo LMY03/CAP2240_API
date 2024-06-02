@@ -30,10 +30,10 @@ RUN apt-get update && apt-get install -y
 COPY . .
 
 # Make the entrypoint script executable
-RUN chmod +x /entrypoint.sh
+RUN chmod +x entrypoint.sh
 
 # Set the entrypoint
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["entrypoint.sh"]
 
 # Command to run when the container starts
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
