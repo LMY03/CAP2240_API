@@ -20,7 +20,7 @@ sudo apt-get autoremove
 sudo rm -rf /tmp/*
 
 # Prune Docker system (if using Docker)
-docker system prune -a
+docker system prune -a -y
 
 # Check log files and clear if necessary
 sudo find /var/log -type f -delete
