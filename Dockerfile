@@ -8,9 +8,9 @@ COPY requirements.txt /app/
 
 RUN pip install -r requirements.txt
 
-COPY . /app/
+RUN apt-get update && apt-get install -y
 
-ENTRYPOINT ["entrypoint.sh"]
+COPY . /app/
 
 #############################################################
 
