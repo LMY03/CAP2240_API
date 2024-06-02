@@ -3,9 +3,9 @@ from django.conf import settings
 from django.core.cache import cache
 
 # Parameters
-PROXMOX_HOST = 'https://192.168.254.112:8006'
+PROXMOX_HOST = 'https:/10.1.200.11:8006'
 USERNAME = 'root@pam'
-PASSWORD = '123456'
+PASSWORD = 'cap2240'
 
 # Authenticate
 def get_authenticated_session():
