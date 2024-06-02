@@ -1,10 +1,10 @@
 # Github Repository
 
 git clone https://github.com/LMY03/CAP2240_API.git
-docker compose -f ~/CAPSTONE2240/docker-compose.yml up --build -d
+docker compose -f ~/CAP2240_API/docker-compose.yml up --build -d
 
-git -C CAPSTONE2240 pull origin main
-docker compose -f ~/CAPSTONE2240/docker-compose.yml up --build -d
+git -C CAP2240_API pull origin main
+docker compose -f ~/CAP2240_API/docker-compose.yml up --build -d
 
 # GUACAMOLE
 
