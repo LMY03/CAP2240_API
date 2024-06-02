@@ -12,6 +12,8 @@ RUN apt-get update && apt-get install -y
 
 COPY . /app/
 
+# CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
 #############################################################
 
 # # Use the official Python image from the Docker Hub
