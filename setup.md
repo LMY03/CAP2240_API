@@ -6,6 +6,9 @@ docker compose -f ~/CAP2240_API/docker-compose.yml up --build -d
 
 ### FOR UPDATES ONLY
 
+sudo apt-get clean
+sudo apt-get autoremove
+
 git -C CAP2240_API pull origin main
 
 docker compose -f ~/CAP2240_API/docker-compose.yml up --build -d
