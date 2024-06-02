@@ -32,11 +32,11 @@ RUN apt-get update && apt-get install -y
 COPY . /app/
 
 # Copy the entrypoint.sh script
-COPY entrypoint.sh /app/entrypoint.sh
-RUN chmod +x /app/entrypoint.sh
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 # Set the entrypoint
-ENTRYPOINT ["/app/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
 
 # The command to run the application
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
