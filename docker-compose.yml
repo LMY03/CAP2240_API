@@ -20,6 +20,7 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app
+    restart: always
     ports:
       - "8000:8000"
     depends_on:
@@ -83,7 +84,7 @@ services:
     networks:
       - app-network
 
-  ansible:
+  ansible: # cant pint
     image: cytopia/ansible:latest
     container_name: ansible
     volumes:
