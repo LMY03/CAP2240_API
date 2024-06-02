@@ -1,38 +1,38 @@
-FROM python:3
-
-ENV PYTHONUNBUFFERED 1
-
-WORKDIR /app
-
-COPY requirements.txt /app/
-
-RUN pip install -r requirements.txt
-
-COPY . /app/
-
-# Use an official Python runtime as a parent image
-# FROM python:3.8
+# FROM python:3
 
 # ENV PYTHONUNBUFFERED 1
 
-# # Set the working directory in the container
 # WORKDIR /app
 
-# # Copy the current directory contents into the container at /app
-# ADD . /app
+# COPY requirements.txt /app/
 
-# # Install any needed packages specified in requirements.txt
-# RUN pip install --no-cache-dir -r requirements.txt
+# RUN pip install -r requirements.txt
 
-# # Copy the entrypoint script into the container
-# COPY entrypoint.sh /entrypoint.sh
+# COPY . /app/
 
-# # Make entrypoint.sh executable
-# RUN chmod +x /entrypoint.sh
-# # RUN python manage.py makemigrations
-# # RUN python manage.py migrate
-# # RUN python manage.py collectstatic --noinput
-# # RUN python manage.py runserver 0.0.0.0:8000
+# Use the official Python image from the Docker Hub
+FROM python:3.9-slim
 
-# # Run entrypoint.sh
-# ENTRYPOINT ["/entrypoint.sh"]
+# Set the working directory
+WORKDIR /app
+
+# Copy the requirements file
+COPY requirements.txt .
+
+# Install the dependencies
+RUN pip install -r requirements.txt
+
+# Copy the project files
+COPY . .
+
+# Copy the entrypoint script
+COPY entrypoint.sh /app/entrypoint.sh
+
+# Make the entrypoint script executable
+RUN chmod +x /app/entrypoint.sh
+
+# Set the entrypoint
+ENTRYPOINT ["/app/entrypoint.sh"]
+
+# Command to run when the container starts
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
