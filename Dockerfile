@@ -10,6 +10,8 @@ RUN pip install -r requirements.txt
 
 COPY . /app/
 
+ENTRYPOINT ["entrypoint.sh"]
+
 #############################################################
 
 # # Use the official Python image from the Docker Hub
