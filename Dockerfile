@@ -20,6 +20,8 @@ WORKDIR /app
 COPY requirements.txt .
 
 # Install the dependencies
+RUN apt-get update
+RUN apt-get upgrade
 RUN pip install -r requirements.txt
 
 # Copy the project files
