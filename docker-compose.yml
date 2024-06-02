@@ -19,7 +19,6 @@ services:
     build: .
     # command: /entrypoint.sh
     command: python manage.py runserver 0.0.0.0:8000
-    restart: always
     volumes:
       - .:/app
     restart: always
