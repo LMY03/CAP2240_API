@@ -27,10 +27,10 @@ COPY entrypoint.sh /entrypoint.sh
 
 # Make entrypoint.sh executable
 RUN chmod +x /entrypoint.sh
-RUN python manage.py makemigrations
-RUN python manage.py migrate
-RUN python manage.py collectstatic --noinput
-RUN python manage.py runserver 0.0.0.0:8000
+# RUN python manage.py makemigrations
+# RUN python manage.py migrate
+# RUN python manage.py collectstatic --noinput
+# RUN python manage.py runserver 0.0.0.0:8000
 
 # Run entrypoint.sh
 # ENTRYPOINT ["/entrypoint.sh"]
