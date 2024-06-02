@@ -93,3 +93,6 @@ docker exec -it ansible ansible all -i /inventory/hosts -m ping
 
 https://www.youtube.com/watch?v=sYNfPqAN3H4&t
 https://learn.netdata.cloud/docs/netdata-agent/installation/docker#create-a-new-netdata-agent-container
+
+# Containerize
+https://www.youtube.com/watch?v=GGb1C-4mTCw
