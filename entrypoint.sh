@@ -29,10 +29,17 @@
 
 #!/bin/sh
 
-# Run migrations
+# Wait for the database to be ready
+while ! nc -z db 3306; do
+  sleep 1
+done
+
+# Run database migrations
 python manage.py makemigrations
 python manage.py migrate
-# python manage.py runserver 0.0.0.0:8000
 
-# Start the Django development server
-# exec "$@"
+# Collect static files (if necessary)
+python manage.py collectstatic --noinput
+
+# Start the Django server
+exec "$@"

@@ -1,45 +1,42 @@
-FROM python:3
+# FROM python:3
 
-ENV PYTHONUNBUFFERED 1
+# ENV PYTHONUNBUFFERED 1
 
-WORKDIR /app
+# WORKDIR /app
 
-COPY requirements.txt /app/
+# COPY requirements.txt /app/
 
-RUN pip install -r requirements.txt
+# RUN pip install -r requirements.txt
 
-RUN apt-get update && apt-get install -y
+# RUN apt-get update && apt-get install -y
 
-COPY . /app/
+# COPY . /app/
 
 # CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 
 #############################################################
 
-# # Use the official Python image from the Docker Hub
-# FROM python:3.9-slim
+# Use the official Python image from the Docker Hub
+FROM python:3.9
 
-# ENV PYTHONUNBUFFERED 1
+# Set the working directory
+WORKDIR /app
 
-# # Set the working directory
-# WORKDIR /app
+# Copy the requirements file and install dependencies
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 
-# # Copy the requirements file
-# COPY requirements.txt /app/
+RUN apt-get update && apt-get install -y
 
-# RUN pip install -r requirements.txt
+# Copy the rest of the application code
+COPY . .
 
-# # Install the dependencies
-# RUN apt-get update && apt-get install -y
+# Copy the entrypoint.sh script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-# # Copy the project files
-# COPY . /app/
+# Set the entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
 
-# # Make the entrypoint script executable
-# RUN chmod +x entrypoint.sh
-
-# # Set the entrypoint
-# ENTRYPOINT ["entrypoint.sh"]
-
-# # Command to run when the container starts
-# CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# The command to run the application
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
