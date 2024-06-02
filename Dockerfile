@@ -33,7 +33,7 @@ COPY . .
 RUN chmod +x /entrypoint.sh
 
 # Set the entrypoint
-ENTRYPOINT ["/app/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
 
 # Command to run when the container starts
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
