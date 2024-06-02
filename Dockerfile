@@ -13,6 +13,8 @@
 # Use the official Python image from the Docker Hub
 FROM python:3.9-slim
 
+ENV PYTHONUNBUFFERED 1
+
 # Set the working directory
 WORKDIR /app
 
@@ -22,7 +24,7 @@ COPY requirements.txt .
 # Install the dependencies
 RUN apt-get update
 RUN apt-get upgrade
-RUN pip install -r requirements.txt
+RUN apt-get update && apt-get install -y
 
 # Copy the project files
 COPY . .
