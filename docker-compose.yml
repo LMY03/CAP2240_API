@@ -17,7 +17,8 @@ services:
 
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: /entrypoint.sh
+    # command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app
     restart: always
@@ -87,6 +88,7 @@ services:
   ansible: # cant pint
     image: cytopia/ansible:latest
     container_name: ansible
+    restart: always
     volumes:
       - ./playbooks:/playbooks
       - ./inventory:/inventory
