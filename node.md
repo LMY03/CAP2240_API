@@ -1,5 +1,6 @@
 # qemu agent
 sudo apt update -y
+
 sudo apt upgrade -y
 
 sudo apt install qemu-guest-agent
