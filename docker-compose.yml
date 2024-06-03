@@ -87,6 +87,7 @@ services:
 
   ansible:
     image: cytopia/ansible:latest
+    restart: always
     container_name: ansible
     volumes:
       - ./playbooks:/playbooks
