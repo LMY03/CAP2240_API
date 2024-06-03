@@ -6,23 +6,18 @@ docker compose -f ~/CAP2240_API/docker-compose.yml up --build -d
 
 ### FOR UPDATES ONLY
 
-# Check disk space usage
 df -h
 
-# Identify large files and directories
 du -ah / | sort -rh | head -n 20
 
-# Clean package caches (for Debian-based systems)
 sudo apt-get clean
+
 sudo apt-get autoremove
 
-# Clear temporary files
 sudo rm -rf /tmp/*
 
-# Prune Docker system (if using Docker)
 docker system prune -a -y
 
-# Check log files and clear if necessary
 sudo find /var/log -type f -delete
 
 git -C CAP2240_API pull origin main
@@ -41,14 +36,18 @@ docker cp ~/guacamole-initdb/initdb.sql mysql:/docker-entrypoint-initdb.d
 
 docker exec -it mysql bash
 
+
 cd /docker-entrypoint-initdb.d
 
 mysql -u root -p
 
+
 CREATE DATABASE IF NOT EXISTS guacamole_db;
 
 CREATE USER IF NOT EXISTS 'guacadmin'@'%' IDENTIFIED BY 'guacpassword';
+
 GRANT SELECT, UPDATE, INSERT, DELETE ON guacamole_db.* TO 'guacadmin'@'%';
+
 flush privileges;
 
 use guacamole_db;
