@@ -32,3 +32,6 @@ sudo nano /etc/netdata/netdata.conf
 sudo systemctl enable netdata
 
 sudo systemctl restart netdata
+
+# Tiger VNC
+
