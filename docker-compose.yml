@@ -19,7 +19,7 @@ services:
     command: ["python", "manage.py", "runserver", "0.0.0.0:5000"]
     restart: always
     volumes:
-      - .:/app
+      - .:/code
     ports:
       - "8000:8000"
     depends_on:
