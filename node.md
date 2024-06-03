@@ -3,7 +3,7 @@ sudo apt update -y
 
 sudo apt upgrade -y
 
-sudo apt install qemu-guest-agent
+sudo apt install qemu-guest-agent -y
 
 sudo systemctl start qemu-guest-agent
 
