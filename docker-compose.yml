@@ -12,8 +12,6 @@ services:
       MYSQL_PASSWORD: CAP_2240
     volumes:
       - mysql_data:/var/lib/mysql
-    networks:
-      - app-network
 
   django:
     build: .
@@ -25,8 +23,6 @@ services:
       - "8000:8000"
     depends_on:
       - mysql
-    networks:
-      - app-network
 
   guacamole:
     image: guacamole/guacamole:latest
@@ -45,8 +41,6 @@ services:
     depends_on:
       - guacd
       - mysql
-    networks:
-      - app-network
 
   guacd:
     image: guacamole/guacd:latest
