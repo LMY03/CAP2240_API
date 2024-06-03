@@ -22,7 +22,7 @@ sudo nano /etc/netdata/stream.conf
 [stream]
     enabled = yes
     destination = parent_vm_ip:19999
-    api key = API_KEY
+    api key = 76afe428-665e-4418-b84c-cbb0c374233d
 
 sudo nano /etc/netdata/netdata.conf
 
