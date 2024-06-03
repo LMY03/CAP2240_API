@@ -1,40 +1,39 @@
-FROM python:3
+# FROM python:3
 
-ENV PYTHONUNBUFFERED 1
+# ENV PYTHONUNBUFFERED 1
 
-WORKDIR /app
-
-COPY requirements.txt /app/
-
-RUN pip install -r requirements.txt
-
-RUN apt-get update && apt-get install -y
-
-COPY . /app/
-
-#############################################################
-
-# Use the official Python image from the Docker Hub
-# FROM python:3.9
-
-# # Set the working directory
 # WORKDIR /app
 
-# # Copy the requirements file and install dependencies
 # COPY requirements.txt /app/
+
 # RUN pip install -r requirements.txt
 
 # RUN apt-get update && apt-get install -y
 
-# # Copy the rest of the application code
 # COPY . /app/
 
-# # Copy the entrypoint.sh script
-# COPY entrypoint.sh /entrypoint.sh
-# RUN chmod +x /entrypoint.sh
+#############################################################
 
-# # Set the entrypoint
-# ENTRYPOINT ["/entrypoint.sh"]
+# Use an official Python runtime as a parent image
+FROM python:3.8-slim-buster
 
-# # The command to run the application
-# CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Set the working directory in the container
+WORKDIR /code
+
+# Copy the current directory contents into the container at /code
+COPY . /code
+
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the entrypoint script
+COPY entrypoint.sh /code/entrypoint.sh
+
+# Make port 5000 available to the world outside this container
+EXPOSE 5000
+
+# Set the entrypoint script
+ENTRYPOINT ["/code/entrypoint.sh"]
+
+# Run the Django server
+CMD ["python", "manage.py", "runserver", "0.0.0.0:5000"]
