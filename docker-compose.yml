@@ -1,5 +1,5 @@
 services:
-  db:
+  mysql:
     image: mysql:8.0
     container_name: mysql
     restart: always
@@ -15,17 +15,15 @@ services:
     networks:
       - app-network
 
-  web:
+  django:
     build: .
-    # command: python manage.py runserver 0.0.0.0:8000
-    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app
-    restart: always
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      - mysql
     networks:
       - app-network
 
@@ -45,7 +43,7 @@ services:
       MYSQL_ROOT_PASSWORD: 123456
     depends_on:
       - guacd
-      - db
+      - mysql
     networks:
       - app-network
 
@@ -55,14 +53,14 @@ services:
     restart: always
     ports:
       - "4822:4822"
-    networks:
-      - app-network
 
   netdata:
     image: netdata/netdata:latest
     container_name: netdata
     pid: host
-    restart: always
+    network_mode: host
+    # restart: always
+    restart: unless-stopped
     ports:
       - "19999:19999"
     cap_add:
@@ -82,13 +80,10 @@ services:
       - /etc/os-release:/host/etc/os-release:ro
       - /var/log:/host/var/log:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-    networks:
-      - app-network
 
-  ansible: # cant pint
+  ansible:
     image: cytopia/ansible:latest
     container_name: ansible
-    restart: always
     volumes:
       - ./playbooks:/playbooks
       - ./inventory:/inventory
@@ -99,14 +94,9 @@ services:
     working_dir: /playbooks
     entrypoint: ["sh", "-c"]
     command: ["apk update && apk add --no-cache openssh-client && tail -f /dev/null"]
-    networks:
-      - app-network
 
 volumes:
   mysql_data:
   netdataconfig:
   netdatalib:
   netdatacache:
-
-networks:
-  app-network:
