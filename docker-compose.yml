@@ -44,9 +44,9 @@ services:
       GUACD_HOSTNAME: guacd
       MYSQL_HOSTNAME: mysql
       MYSQL_PORT: 3306
-      MYSQL_DATABASE: guacamole_db
-      MYSQL_USER: guacadmin
-      MYSQL_PASSWORD: guacpassword
+      MYSQL_DATABASE: ${MYSQL_GUACAMOLE_DB}
+      MYSQL_USER: ${MYSQL_GUACAMOLE_USER}
+      MYSQL_PASSWORD: ${MYSQL_GUACAMOLE_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     depends_on:
       - guacd
