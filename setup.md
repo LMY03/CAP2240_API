@@ -81,13 +81,17 @@ docker restart netdata
 
 # ANSIBLE
 
-sudo nano ~/inventory/hosts
+docker exec -it ansible /bin/sh
+
+vi ../inventory/hosts
 
 IP_ADDRESS_OF_NODE_VM ansible_user=USER_NAME
 
 ssh-copy-id USER_NAME@IP_ADDRESS_OF_NODE_VM
 
 docker exec -it ansible ansible all -i /inventory/hosts -m ping
+
+rm -rf ~/.ssh
 
 # References
 
