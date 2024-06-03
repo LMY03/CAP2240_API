@@ -74,6 +74,7 @@ vi /etc/netdata/stream.conf
 
 # logout of docker container
 exit
+
 exit
 
 docker restart netdata
