@@ -35,3 +35,13 @@ sudo systemctl restart netdata
 
 # Tiger VNC
 
+sudo apt update -y
+
+sudo apt upgrade -y
+
+sudo apt install lxqt sddm -y
+
+sudo apt install tigervnc-standalone-server tigervnc-common -y
+
+sudo nano /etc/systemd/system/vncserver@:1.service
+
