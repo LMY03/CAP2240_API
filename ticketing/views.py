@@ -1,14 +1,9 @@
 from typing import Any
 from django import forms
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
-from django.urls import reverse
+from django.shortcuts import get_object_or_404
 from django.views import generic
 from .models import VMTemplates
-from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
 from .models import RequestEntry, Comment
-from django.shortcuts import redirect
 
 # Create your views here.
 class IndexView(generic.ListView):
