@@ -9,14 +9,14 @@
   <body>
     <div class="container">
       <div class="mb-3">
-        <select class="form-select" onchange="window.location.href=this.value">
+        <!-- <select class="form-select" onchange="window.location.href=this.value">
           <option value="{% url 'ticketing:index' %}">All</option>
           <option value="{% url 'ticketing:home-filter' %}?status=CR" {% if status == 'CR' %} selected {% endif %}>Creating</option>
           <option value="{% url 'ticketing:home-filter' %}?status=P" {% if status == 'P' %} selected {% endif %}>Pending</option>
           <option value="{% url 'ticketing:home-filter' %}?status=FR" {% if status == 'FR' %} selected {% endif %}>For revision</option>
           <option value="{% url 'ticketing:home-filter' %}?status=CO" {% if status == 'CO' %} selected {% endif %}>Completed</option>
           <option value="{% url 'ticketing:home-filter' %}?status=D" {% if status == 'D' %} selected {% endif %}>Delete</option>
-        </select>
+        </select> -->
         
       </div>
       {% if request_list %}
