@@ -1,6 +1,8 @@
 from typing import Any
 from django import forms
-from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
 from django.views import generic
 from .models import VMTemplates
 from .models import RequestEntry, Comment
@@ -84,3 +86,49 @@ class RequestFormView(generic.edit.FormView):
         context['vmtemplate_list'] = list(vmtemplate_list)
         #print(context)
         return context
+    
+def new_form_submit(request):
+
+    # TODO: authenticate if valid user(logged in & faculty/tsg)
+    
+    if request.method == "POST":
+        # get data
+        # requester = get_object_or_404(User, username=request.user)
+        requester = 1
+        data = request.POST
+        template_id = data.get("template_id")
+        cores = data.get("cores")
+        ram = data.get("ram")
+        storage = data.get("storage")
+        has_internet = data.get("has_internet") == 'true'
+        use_case = data.get("use_case")
+        date_needed = data.get ('date_needed')
+        expiration_date = data.get('expiration_date')
+        other_config = data.get("other_configs")
+        vm_count = data.get("vm_count")
+        
+        vmTemplateID = VMTemplates.objects.get(id = template_id)
+        print("-----------------------")
+        print(data)
+
+        # TODO: data verification
+
+        # create request object
+        #print (vmTemplateID, requester)
+        new_request = RequestEntry(
+            requester = requester,
+            template = vmTemplateID,
+            cores = cores,
+            ram = ram,
+            storage = storage,
+            has_internet = has_internet,
+            use_case = use_case,
+            other_config = other_config,
+            vm_count = vm_count,
+            date_needed = date_needed,
+            expiration_date = expiration_date
+            # status = RequestEntry.Status.PENDING,
+        )
+        new_request.save()
+
+    return HttpResponseRedirect(reverse("ticketing:index"))
