@@ -41,8 +41,8 @@ sudo apt upgrade -y
 
 sudo apt install tigervnc-standalone-server -y
 
-<!-- vncserver -->
 vncpasswd
+
 nano ~/.vnc/xstartup
 
 #!/bin/sh
@@ -59,8 +59,9 @@ chmod +x ~/.vnc/xstartup
 
 <!-- sudo nano /etc/tigervnc/vncserver-config-defaults -->
 
-<!-- vncserver --localhost no -->
+<!-- vncserver -localhost no -->
 
+sudo nano /etc/systemd/system/vncserver@.service
 sudo nano /etc/systemd/system/vncserver@:1.service
 
 sudo systemctl daemon-reload
