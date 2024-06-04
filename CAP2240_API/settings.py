@@ -35,6 +35,8 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    "ticketing.apps.TicketingConfig",
+    "proxmoxs.apps.ProxmoxsConfig",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -84,6 +86,7 @@ DATABASES = {
         'USER': 'cap-2240',
         'PASSWORD': 'CAP_2240',
         'HOST': 'mysql',
+        # 'HOST': 'localhost',
         'PORT': 3306,
     }
 }

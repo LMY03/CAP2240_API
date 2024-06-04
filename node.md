@@ -35,3 +35,41 @@ sudo systemctl restart netdata
 
 # Tiger VNC
 
+sudo apt update -y
+
+sudo apt upgrade -y
+
+sudo apt install tigervnc-standalone-server -y
+
+vncpasswd
+
+nano ~/.vnc/xstartup
+
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+
+/usr/bin/gnome-session
+
+[ -x /etc/vnc/xstartup ] && exec /etc/vnc/xstartup
+[ -r $HOME/.Xresources ] && xrdb $HOME/.Xresources
+x-window-manager &
+
+chmod +x ~/.vnc/xstartup
+
+<!-- sudo nano /etc/tigervnc/vncserver-config-defaults -->
+
+<!-- vncserver -localhost no -->
+
+sudo nano /etc/systemd/system/vncserver@.service
+sudo nano /etc/systemd/system/vncserver@:1.service
+
+sudo systemctl daemon-reload
+sudo systemctl enable vncserver@:1.service
+sudo systemctl start vncserver@:1.service
+sudo systemctl status vncserver@:1.service
+
+
+# References
+
+https://raspberrytips.com/tigervnc-server-on-ubuntu/

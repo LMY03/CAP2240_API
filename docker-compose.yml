@@ -92,8 +92,8 @@ services:
     volumes:
       - ./playbooks:/playbooks
       - ./inventory:/inventory
-      - /home/jin/.ssh/id_rsa:/root/.ssh/id_rsa
-      - /home/jin/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub
+      - /home/${USERNAME}/.ssh/id_rsa:/root/.ssh/id_rsa:ro
+      - /home/${USERNAME}/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub:ro
     environment:
       ANSIBLE_HOST_KEY_CHECKING: "False"
     working_dir: /playbooks
