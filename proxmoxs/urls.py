@@ -4,5 +4,5 @@ from . import views
 
 app_name = "proxmoxs"
 urlpatterns = {
-    path("", views.form, name="index"),
+    path("", views.form),
 }
