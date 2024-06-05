@@ -33,13 +33,15 @@ def get_vm_status(node, vmid):
     return response.json()
 
 # clone VM POST
-def clone_vm(node, vmid, newid):                    # TODO: how to keep track on the available vmid, need new name
-                                                    # TODO: need to make sure there are enough disk space in the server before cloning the machine
+# TODO: how to keep track on the available vmid, need new name
+# TODO: need to make sure there are enough disk space in the server before cloning the machine
+def clone_vm(node, vmid, newid):                    
     session = get_authenticated_session()
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/clone"
     config = {
         'newid': newid,
         'full': 1,
+        # 'name': name,
         # 'target': ''
         # 'storage': 'local-lvm',
     }
