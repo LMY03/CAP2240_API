@@ -25,7 +25,7 @@ def get_authenticated_session():
     return session
 
 # get VM status
-async def get_vm_status(node, vmid):
+def get_vm_status(node, vmid):
     session = get_authenticated_session()
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/status/current"
     response = session.get(url)
@@ -34,7 +34,7 @@ async def get_vm_status(node, vmid):
 # clone VM POST
 # TODO: how to keep track on the available vmid, need new name
 # TODO: need to make sure there are enough disk space in the server before cloning the machine
-async def clone_vm(node, vmid, newid):                    
+def clone_vm(node, vmid, newid):                    
     session = get_authenticated_session()
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/clone"
     config = {
@@ -49,7 +49,7 @@ async def clone_vm(node, vmid, newid):
 
 
 # delete VM DELETE
-async def delete_vm(node, vmid):
+def delete_vm(node, vmid):
     session = get_authenticated_session()
     # shutdown vm before deleting them
     #   1. check status
@@ -62,14 +62,14 @@ async def delete_vm(node, vmid):
     return response.json()
 
 # start VM POST
-async def start_vm(node, vmid):
+def start_vm(node, vmid):
     session = get_authenticated_session()
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/status/start"
     response = session.post(url)
     return response.json()
 
 # shutdown VM POST
-async def shutdown_vm(node, vmid):
+def shutdown_vm(node, vmid):
     session = get_authenticated_session()
     node = "pve"
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/status/shutdown"
@@ -77,14 +77,14 @@ async def shutdown_vm(node, vmid):
     return response.json()
 
 # stop VM POST - only on special occasion like the vm get stuck
-async def stop_vm(node, vmid):              
+def stop_vm(node, vmid):              
     session = get_authenticated_session()
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/status/stop"
     response = session.post(url)
     return response.json()
 
 # shutdown VM PUT
-async def config_vm(node, vmid, cpu_cores, memory_mb):
+def config_vm(node, vmid, cpu_cores, memory_mb):
     session = get_authenticated_session()
     node = "pve"
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/status/shutdown"
@@ -96,7 +96,7 @@ async def config_vm(node, vmid, cpu_cores, memory_mb):
     return response.json()
 
 # get vm ip # TODO: have not test yet
-async def get_vm_ip(node, vmid):
+def get_vm_ip(node, vmid):
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/agent/network-get-interfaces"
     # headers = {
     #     'Authorization': 'Bearer YOUR_ACCESS_TOKEN',
