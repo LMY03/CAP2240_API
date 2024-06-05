@@ -105,9 +105,8 @@ def config_vm(node, vmid, cpu_cores, memory_mb):
 def get_proxmox_ticket():
     url = f"{PROXMOX_HOST}/api2/json/access/ticket",
     data = {
-        'username': "root",
-        'password': PASSWORD,
-        'realm': "pam"
+        'username': USERNAME,
+        'password': PASSWORD
     }
     response = requests.post(url, data=data, verify=False)  # verify=False is for self-signed certificates
     response.raise_for_status()  # Raise an exception for HTTP errors
