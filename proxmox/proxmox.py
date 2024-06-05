@@ -29,6 +29,14 @@ def get_vm_status(node, vmid):
     session = get_authenticated_session()
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/status/current"
     response = session.get(url)
+    response.raise_for_status()
+    
+    interfaces = response.json()['data']
+    
+    # Assuming the first IP address of the first interface is what you want
+    ip_address = interfaces[0]['ip-addresses'][0]['ip-address']
+    
+    return JsonResponse({'ip_address': ip_address})
     return response.json()
 
 # clone VM POST
