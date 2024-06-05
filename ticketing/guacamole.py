@@ -1,7 +1,8 @@
 import requests
 import json
 
-GUACAMOLE_HOST = 'http://192.168.43.147'
+# GUACAMOLE_HOST = 'http://192.168.43.147'
+GUACAMOLE_HOST = 'http://192.168.254.25'
 USERNAME = 'guacadmin'
 PASSWORD = 'guacadmin'
 
