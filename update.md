@@ -1,6 +1,6 @@
-df -h
+sudo df -h
 
-du -ah / | sort -rh | head -n 20
+sudo du -ah / | sort -rh | head -n 20
 
 sudo apt-get clean
 
