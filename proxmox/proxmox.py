@@ -97,7 +97,7 @@ def config_vm(node, vmid, cpu_cores, memory_mb):
 def get_proxmox_ticket():
     url = f"{PROXMOX_HOST}/api2/json/access/ticket",
     data = {
-        'username': USERNAME,
+        'username': "root",
         'password': PASSWORD,
         'realm': "pam"
     }
