@@ -1,4 +1,4 @@
-<form action="{% url 'ticketing:guacamole_create_user' %}" method="post">
+<form action="{% url 'guacamole:create_user' %}" method="post">
     {% csrf_token %}
     <h1>Create User</h1>
     <label for="username">Username: </label>

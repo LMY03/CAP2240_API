@@ -2,10 +2,10 @@ from django.urls import path
 
 from . import views
 
-app_name = "proxmox"
+app_name = "guacamole"
 
 urlpatterns = [
     path("", views.render, name="form"),
     path("success", views.success, name="success"),
-    path("clone_vm", views.clone_vm, name="clone_vm"),
+    path("create_user", views.create_user, name="create_user"),
 ]

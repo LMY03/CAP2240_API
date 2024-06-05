@@ -19,7 +19,7 @@ from django.urls import include, path
 from django.urls import path
 
 urlpatterns = [
-    path('ticketing/', include("ticketing.urls")),
+    path('guacamole/', include("guacamole.urls")),
     path('proxmox/', include("proxmox.urls")),
     path('admin/', admin.site.urls),
 ]

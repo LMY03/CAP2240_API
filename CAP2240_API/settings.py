@@ -35,7 +35,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    "ticketing.apps.TicketingConfig",
+    "guacamole.apps.GuacamoleConfig",
     "proxmox.apps.ProxmoxConfig",
     'django.contrib.admin',
     'django.contrib.auth',
