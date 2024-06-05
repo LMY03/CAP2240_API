@@ -4,10 +4,7 @@ from . import views
 
 app_name = "ticketing"
 urlpatterns = [
-    # path("", views.IndexView.as_view(), name="index"), #request list
-    # path("new-form/", views.RequestFormView.as_view(), name="new-form"),
-    # path("new-form-submit/", views.new_form_submit, name="new-form-submit"),
-    # path("<int:pk>/details/", views.DetailView.as_view(), name="details"),
-    path("", views.guacamole_render, name="home"),
-    path("submit", views.guacamole_submit, name="submit"),
+
+    path("", views.guacamole_render, name="guacamole"),
+    path("submit", views.guacamole_create_user, name="guacamole_create_user"),
 ]

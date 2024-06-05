@@ -20,5 +20,6 @@ from django.urls import path
 
 urlpatterns = [
     path('ticketing/', include("ticketing.urls")),
+    path('proxmox/', include("proxmox.urls")),
     path('admin/', admin.site.urls),
 ]

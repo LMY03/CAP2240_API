@@ -1,5 +1,6 @@
-<form action="{% url 'ticketing:submit' %}" method="post">
+<form action="{% url 'ticketing:guacamole_create_user' %}" method="post">
     {% csrf_token %}
+    <h1>Create User</h1>
     <label for="username">Username: </label>
     <input type="text" name="username" id="username" /><br /><br />
     <label for="password">Password: </label>

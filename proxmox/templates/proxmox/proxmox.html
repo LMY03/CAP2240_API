@@ -1,0 +1,10 @@
+<form action="{% url 'proxmox:clone_vm' %}" method="post">
+    {% csrf_token %}
+    <h1>Clone VM</h1>
+    <label for="vmid">Original VM ID: </label>
+    <input type="text" name="vmid" id="vmid" /><br /><br />
+    <label for="newid">New VM ID: </label>
+    <input type="text" name="newid" id="newid" /><br /><br />
+
+    <input type="submit" value="submit" />
+</form>

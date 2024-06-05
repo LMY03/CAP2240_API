@@ -6,12 +6,12 @@ from . import guacamole
 def guacamole_render(request) : 
     return render(request, "ticketing/guacamole.html")
 
-def guacamole_submit(request) : 
+def guacamole_create_user(request) : 
     if request.method == "POST":
 
         data = request.POST
         username = data.get("username")
         password = data.get("password")
         guacamole.create_user(username, password)
-        return redirect("/tickting")
-    return redirect("/tickting")
+        return redirect("/ticketing")
+    return redirect("/ticketing")

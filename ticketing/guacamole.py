@@ -7,7 +7,7 @@ GUACAMOLE_HOST = 'http://guacamole:8080'
 USERNAME = 'guacadmin'
 PASSWORD = 'guacadmin'
 
-# get token
+# get token /
 def get_token():
     # CA_CRT = '/path/to/ca_bundle.crt'
     # CA_CRT = False # Disable SSL certificate verification
@@ -37,7 +37,7 @@ def get_session_info():
 
     return response.text
 
-# create user
+# create user /
 def create_user(username, password):
     token = get_token()
     url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/users?token={token}"
