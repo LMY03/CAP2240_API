@@ -104,7 +104,7 @@ def ip_vm(request) :
 
         context = { "ip" : ip }
 
-        return render(request, "ip_vm.html", context)
+        return render(request, "ip_add.html", context)
         
     return redirect("/proxmox")
 
