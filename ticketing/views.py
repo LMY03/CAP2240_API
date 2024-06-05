@@ -13,5 +13,5 @@ def guacamole_submit(request) :
         username = data.get("username")
         password = data.get("password")
         guacamole.create_user(username, password)
-        return redirect("home")
-    return redirect("home")
+        return redirect("/tickting")
+    return redirect("/tickting")
