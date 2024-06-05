@@ -33,7 +33,7 @@ def delete_vm(request) :
         data = request.POST
         vmid = data.get("vmid")
 
-        proxmox.shutdown_vm(node, vmid)
+        proxmox.delete_vm(node, vmid)
 
         return redirect("/proxmox/success")
         
