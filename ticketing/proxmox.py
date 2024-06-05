@@ -25,19 +25,17 @@ def get_authenticated_session():
     })
     return session
 
-# create VM POST
-def create_vm(node, vmid, config):
+# get VM status
+def get_vm_status(node, vmid):
     session = get_authenticated_session()
-    url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/config"
-    config = {
-    }
-    response = session.post(url, data=config)
+    url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/status/current"
+    response = session.get(url)
     return response.json()
 
 # clone VM POST
-def clone_vm(node, vmid, newid):
+def clone_vm(node, vmid, newid):                    # TODO: how to keep track on the available vmid, need new name
+                                                    # TODO: need to make sure there are enough disk space in the server before cloning the machine
     session = get_authenticated_session()
-    node = "pve"
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/clone"
     config = {
         'newid': newid,
@@ -52,7 +50,11 @@ def clone_vm(node, vmid, newid):
 # delete VM DELETE
 def delete_vm(node, vmid):
     session = get_authenticated_session()
-    node = "pve"
+    # shutdown vm before deleting them
+    #   1. check status
+    #   2. if status is running -> shutdown (response['data']['qmpstatus'] = running) 
+    #   3. wait for it to shut down
+    shutdown_vm(node, vmid)
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}"
     response = session.delete(url)
     return response.json()
@@ -60,7 +62,6 @@ def delete_vm(node, vmid):
 # start VM POST
 def start_vm(node, vmid):
     session = get_authenticated_session()
-    node = "pve"
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/status/start"
     response = session.post(url)
     return response.json()
@@ -73,20 +74,26 @@ def shutdown_vm(node, vmid):
     response = session.post(url)
     return response.json()
 
+# stop VM POST - only on special occasion like the vm get stuck
+def stop_vm(node, vmid):              
+    session = get_authenticated_session()
+    url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/status/stop"
+    response = session.post(url)
+    return response.json()
+
 # shutdown VM PUT
-def config_vm(node, vmid, cpu_cores, memory_mb, disk_mb):
+def config_vm(node, vmid, cpu_cores, memory_mb):
     session = get_authenticated_session()
     node = "pve"
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/status/shutdown"
     config = {
         'cores': cpu_cores,
         'memory': memory_mb,
-        'virtio0': disk_mb # example diskmb = 'local-lvm:vm-100-disk-1,size=32G' # TODO angline check 
     }
-    response = session.put(url)
+    response = session.put(url, data=config)
     return response.json()
 
-# get vm ip 
+# get vm ip # TODO: have not test yet
 def get_vm_ip(node, vmid):
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/agent/network-get-interfaces"
     # headers = {
