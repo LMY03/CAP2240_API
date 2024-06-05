@@ -1,4 +1,5 @@
 from django.shortcuts import redirect, render
+
 from . import guacamole
 
 # Create your views here.
@@ -10,6 +11,7 @@ def success(request) :
     return render(request, "success.html")
 
 def create_user(request) : 
+
     if request.method == "POST":
 
         data = request.POST

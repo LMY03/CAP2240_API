@@ -13,6 +13,7 @@ def success(request) :
     return render(request, "success.html")
 
 def clone_vm(request) :
+
     if request.method == "POST":
 
         data = request.POST
