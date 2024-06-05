@@ -1,5 +1,5 @@
 import requests
-import time
+from django.http import JsonResponse
 
 # Parameters
 PROXMOX_HOST = 'https://10.1.200.11:8006'
@@ -94,23 +94,55 @@ def config_vm(node, vmid, cpu_cores, memory_mb):
     response = session.put(url, data=config)
     return response.json()
 
-# get vm ip # TODO: have not test yet
+def get_proxmox_ticket():
+    url = f"{PROXMOX_HOST}/api2/json/access/ticket",
+    data = {
+        'username': USERNAME,
+        'password': PASSWORD,
+        'realm': "pam"
+    }
+    response = requests.post(url, data=data, verify=False)  # verify=False is for self-signed certificates
+    response.raise_for_status()  # Raise an exception for HTTP errors
+    return response.json()
+
 def get_vm_ip(node, vmid):
+    # Get authentication ticket
+    ticket_response = get_proxmox_ticket()
+    ticket = ticket_response['data']['ticket']
+    csrf_token = ticket_response['data']['CSRFPreventionToken']
+    
+    # Get VM status to retrieve the IP address
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/agent/network-get-interfaces"
-    # headers = {
-    #     'Authorization': 'Bearer YOUR_ACCESS_TOKEN',
-    #     'CSRFPreventionToken': 'YOUR_CSRF_TOKEN'
-    # }
-    # response = requests.get(url, headers=headers, verify=False)  # Verify should ideally be True in production
-    response = requests.get(url, verify=False)
-    data = response.json()
-    return data
-    # Parsing the response to extract IP addresses
-    if 'result' in data:
-        interfaces = data['result']
-        for interface in interfaces:
-            if 'ip-addresses' in interface:
-                for ip in interface['ip-addresses']:
-                    if ip['ip-address-type'] == 'ipv4':  # or ipv6 if you prefer
-                        return ip['ip-address']
-    return "No IP address found"
+    headers = {
+        'Authorization': f'PVEAuthCookie={ticket}',
+        'CSRFPreventionToken': csrf_token
+    }
+    response = requests.get(url, headers=headers, verify=False)
+    response.raise_for_status()
+    
+    interfaces = response.json()['data']
+    
+    # Assuming the first IP address of the first interface is what you want
+    ip_address = interfaces[0]['ip-addresses'][0]['ip-address']
+    
+    return JsonResponse({'ip_address': ip_address})
+
+# get vm ip # TODO: have not test yet
+# def get_vm_ip(node, vmid):
+#     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/agent/network-get-interfaces"
+#     # headers = {
+#     #     'Authorization': 'Bearer YOUR_ACCESS_TOKEN',
+#     #     'CSRFPreventionToken': 'YOUR_CSRF_TOKEN'
+#     # }
+#     # response = requests.get(url, headers=headers, verify=False)  # Verify should ideally be True in production
+#     response = requests.get(url, verify=False)
+#     data = response.json()
+#     # Parsing the response to extract IP addresses
+#     if 'result' in data:
+#         interfaces = data['result']
+#         for interface in interfaces:
+#             if 'ip-addresses' in interface:
+#                 for ip in interface['ip-addresses']:
+#                     if ip['ip-address-type'] == 'ipv4':  # or ipv6 if you prefer
+#                         return ip['ip-address']
+#     return "No IP address found"
