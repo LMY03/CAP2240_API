@@ -3,11 +3,11 @@ from . import guacamole
 
 # Create your views here.
 
-def render(request) : 
-    return render("guacamole/guacamole.html")
+def renders(request) : 
+    return render(request, "guacamole.html")
 
 def success(request) : 
-    return render("guacamole/success.html")
+    return render(request, "success.html")
 
 def create_user(request) : 
     if request.method == "POST":
