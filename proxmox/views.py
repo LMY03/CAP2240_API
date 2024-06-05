@@ -34,6 +34,8 @@ def start_vm(request) :
         vmid = data.get("vmid")
 
         proxmox.start_vm(node, vmid)
+
+        return redirect("/proxmox/success")
         
     return redirect("/proxmox")
 
@@ -45,6 +47,8 @@ def shutdown_vm(request) :
         vmid = data.get("vmid")
 
         proxmox.shutdown_vm(node, vmid)
+
+        return redirect("/proxmox/success")
         
     return redirect("/proxmox")
 
@@ -56,6 +60,8 @@ def delete_vm(request) :
         vmid = data.get("vmid")
 
         proxmox.delete_vm(node, vmid)
+
+        return redirect("/proxmox/success")
         
     return redirect("/proxmox")
 
@@ -67,6 +73,8 @@ def stop_vm(request) :
         vmid = data.get("vmid")
 
         proxmox.stop_vm(node, vmid)
+
+        return redirect("/proxmox/success")
         
     return redirect("/proxmox")
 
@@ -81,7 +89,7 @@ def status_vm(request) :
 
         context = { "status" : status }
 
-        return render(request, "/proxmox/status_vm", context)
+        return render(request, "status_vm.html", context)
         
     return redirect("/proxmox")
 
@@ -96,7 +104,7 @@ def ip_vm(request) :
 
         context = { "ip" : ip }
 
-        return render(request, "/proxmox/ip_vm", context)
+        return render(request, "ip_vm.html", context)
         
     return redirect("/proxmox")
 
@@ -110,5 +118,7 @@ def config_vm(request) :
         memory = data.get("memory")
 
         proxmox.config_vm(node, vmid, cpu, memory)
+
+        return redirect("/proxmox/success")
         
     return redirect("/proxmox")
