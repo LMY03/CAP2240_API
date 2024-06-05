@@ -69,7 +69,26 @@ sudo systemctl enable vncserver@:1.service
 sudo systemctl start vncserver@:1.service
 sudo systemctl status vncserver@:1.service
 
+# XRDP
+
+sudo apt update -y
+
+sudo apt upgrade -y
+
+sudo apt install xfce4 xfce4-goodies -y
+
+sudo apt install xrdp -y
+
+sudo systemctl status xrdp
+
+sudo systemctl start xrdp
+
+sudo nano /etc/xrdp/xrdp.ini
+
+sudo systemctl restart xrdp
 
 # References
 
 https://raspberrytips.com/tigervnc-server-on-ubuntu/
+https://www.digitalocean.com/community/tutorials/how-to-enable-remote-desktop-protocol-using-xrdp-on-ubuntu-22-04
+https://phoenixnap.com/kb/xrdp-ubuntu#ftoc-heading-3
