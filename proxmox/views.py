@@ -26,6 +26,32 @@ def clone_vm(request) :
         
     return redirect("/proxmox")
 
+def start_vm(request) :
+
+    if request.method == "POST":
+
+        data = request.POST
+        vmid = data.get("vmid")
+
+        proxmox.start_vm(node, vmid)
+
+        return redirect("/proxmox/success")
+        
+    return redirect("/proxmox")
+
+def shutdown_vm(request) :
+
+    if request.method == "POST":
+
+        data = request.POST
+        vmid = data.get("vmid")
+
+        proxmox.delete_vm(node, vmid)
+
+        return redirect("/proxmox/success")
+        
+    return redirect("/proxmox")
+
 def delete_vm(request) :
 
     if request.method == "POST":
