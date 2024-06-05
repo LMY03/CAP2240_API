@@ -14,7 +14,7 @@
 <form action="{% url 'proxmox:start_vm' %}" method="post">
     {% csrf_token %}
     <h1>Start VM</h1>
-    <label for="vmid">Original VM ID: </label>
+    <label for="vmid">VM ID: </label>
     <input type="text" name="vmid" id="vmid" /><br /><br />
 
     <input type="submit" value="submit" />
@@ -25,7 +25,7 @@
 <form action="{% url 'proxmox:shutdown_vm' %}" method="post">
     {% csrf_token %}
     <h1>Shutdown VM</h1>
-    <label for="vmid">Original VM ID: </label>
+    <label for="vmid">VM ID: </label>
     <input type="text" name="vmid" id="vmid" /><br /><br />
 
     <input type="submit" value="submit" />
@@ -36,7 +36,7 @@
 <form action="{% url 'proxmox:delete_vm' %}" method="post">
     {% csrf_token %}
     <h1>Delete VM</h1>
-    <label for="vmid">Original VM ID: </label>
+    <label for="vmid">VM ID: </label>
     <input type="text" name="vmid" id="vmid" /><br /><br />
 
     <input type="submit" value="submit" />

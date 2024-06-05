@@ -83,7 +83,7 @@ def stop_vm(node, vmid):
     response = session.post(url)
     return response.json()
 
-# shutdown VM PUT
+# shutdown VM PUT # ?
 def config_vm(node, vmid, cpu_cores, memory_mb):
     session = get_authenticated_session()
     node = "pve"
