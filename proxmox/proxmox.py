@@ -83,11 +83,10 @@ def stop_vm(node, vmid):
     response = session.post(url)
     return response.json()
 
-# shutdown VM PUT # ?
+# configure VM PUT 
 def config_vm(node, vmid, cpu_cores, memory_mb):
     session = get_authenticated_session()
-    node = "pve"
-    url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/status/shutdown"
+    url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/config"
     config = {
         'cores': cpu_cores,
         'memory': memory_mb,

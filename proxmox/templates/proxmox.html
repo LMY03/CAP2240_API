@@ -41,3 +41,16 @@
 
     <input type="submit" value="submit" />
 </form>
+
+<hr />
+
+<form action="{% url 'proxmox:stop_vm' %}" method="post">
+    {% csrf_token %}
+    <h1>Stop VM</h1>
+    <label for="vmid">VM ID: </label>
+    <input type="text" name="vmid" id="vmid" /><br /><br />
+
+    <input type="submit" value="submit" />
+</form>
+
+<hr />

@@ -64,3 +64,59 @@ def delete_vm(request) :
         return redirect("/proxmox/success")
         
     return redirect("/proxmox")
+
+def stop_vm(request) :
+
+    if request.method == "POST":
+
+        data = request.POST
+        vmid = data.get("vmid")
+
+        proxmox.stop_vm(node, vmid)
+
+        return redirect("/proxmox/success")
+        
+    return redirect("/proxmox")
+
+def stop_vm(request) :
+
+    if request.method == "POST":
+
+        data = request.POST
+        vmid = data.get("vmid")
+
+        proxmox.stop_vm(node, vmid)
+
+        return redirect("/proxmox/success")
+        
+    return redirect("/proxmox")
+
+def status_vm(request) :
+
+    if request.method == "POST":
+
+        data = request.POST
+        vmid = data.get("vmid")
+
+        status = proxmox.get_vm_status(node, vmid)
+
+        context = { "status" : status }
+
+        return render(request, "/proxmox/status_vm", context)
+        
+    return redirect("/proxmox")
+
+def ip_vm(request) :
+
+    if request.method == "POST":
+
+        data = request.POST
+        vmid = data.get("vmid")
+
+        ip = proxmox.get_vm_ip(node, vmid)
+
+        context = { "ip" : ip }
+
+        return render(request, "/proxmox/ip_vm", context)
+        
+    return redirect("/proxmox")
