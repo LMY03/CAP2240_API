@@ -126,6 +126,8 @@ def get_vm_ip(node, vmid):
     }
     response = requests.get(url, headers=headers, verify=False)
     response.raise_for_status()
+
+    return response.json() 
     
     interfaces = response.json()['data']
     
