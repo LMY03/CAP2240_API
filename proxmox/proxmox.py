@@ -14,7 +14,7 @@ def get_authenticated_session():
     session = requests.Session()
     session.verify = CA_CRT
     response = session.post(
-        f"{PROXMOX_HOST}/api2/json/access/ticket",
+        f"https://10.1.200.11:8006/api2/json/access/ticket",
         data={'username': USERNAME, 'password': PASSWORD},
         verify=CA_CRT
     )
