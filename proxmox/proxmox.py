@@ -55,12 +55,7 @@ async def delete_vm(node, vmid):
     #   1. check status
     #   2. if status is running -> shutdown (response['data']['qmpstatus'] = running) 
     #   3. wait for it to shut down
-    await shutdown_vm(node, vmid)
-
-    while True:
-        status = get_vm_status(node, vmid)
-        if status == 'stopped' : break
-        time.sleep(5) # Wait for 5 seconds before checking again
+    shutdown_vm(node, vmid)
 
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}"
     response = session.delete(url)
