@@ -54,3 +54,40 @@
 </form>
 
 <hr />
+
+<form action="{% url 'proxmox:status_vm' %}" method="post">
+    {% csrf_token %}
+    <h1>Status VM</h1>
+    <label for="vmid">VM ID: </label>
+    <input type="text" name="vmid" id="vmid" /><br /><br />
+
+    <input type="submit" value="submit" />
+</form>
+
+<hr />
+
+<form action="{% url 'proxmox:ip_vm' %}" method="post">
+    {% csrf_token %}
+    <h1>VM IP Add</h1>
+    <label for="vmid">VM ID: </label>
+    <input type="text" name="vmid" id="vmid" /><br /><br />
+
+    <input type="submit" value="submit" />
+</form>
+
+<hr />
+
+<form action="{% url 'proxmox:config_vm' %}" method="post">
+    {% csrf_token %}
+    <h1>VM IP Add</h1>
+    <label for="vmid">VM ID: </label>
+    <input type="text" name="vmid" id="vmid" /><br /><br />
+    <label for="cpu">CPU Cores: </label>
+    <input type="text" name="cpu" id="cpu" /><br /><br />
+    <label for="memory">Memory in MB: </label>
+    <input type="text" name="memory" id="memory" /><br /><br />
+
+    <input type="submit" value="submit" />
+</form>
+
+<hr />

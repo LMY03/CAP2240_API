@@ -114,12 +114,3 @@ def get_vm_ip(node, vmid):
                     if ip['ip-address-type'] == 'ipv4':  # or ipv6 if you prefer
                         return ip['ip-address']
     return "No IP address found"
-
-
-
-
-# Create Template - 1. upload ISO, 2. set existing vm to template
-
-
-
-
