@@ -79,7 +79,7 @@
 
 <form action="{% url 'proxmox:config_vm' %}" method="post">
     {% csrf_token %}
-    <h1>VM IP Add</h1>
+    <h1>Reonfigure</h1>
     <label for="vmid">VM ID: </label>
     <input type="text" name="vmid" id="vmid" /><br /><br />
     <label for="cpu">CPU Cores: </label>

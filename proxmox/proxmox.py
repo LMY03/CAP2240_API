@@ -104,7 +104,7 @@ def get_vm_ip(node, vmid):
     # response = requests.get(url, headers=headers, verify=False)  # Verify should ideally be True in production
     response = requests.get(url, verify=False)
     data = response.json()
-
+    return data
     # Parsing the response to extract IP addresses
     if 'result' in data:
         interfaces = data['result']

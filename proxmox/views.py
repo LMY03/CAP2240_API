@@ -34,8 +34,6 @@ def start_vm(request) :
         vmid = data.get("vmid")
 
         proxmox.start_vm(node, vmid)
-
-        return redirect("/proxmox/success")
         
     return redirect("/proxmox")
 
@@ -47,8 +45,6 @@ def shutdown_vm(request) :
         vmid = data.get("vmid")
 
         proxmox.shutdown_vm(node, vmid)
-
-        return redirect("/proxmox/success")
         
     return redirect("/proxmox")
 
@@ -60,8 +56,6 @@ def delete_vm(request) :
         vmid = data.get("vmid")
 
         proxmox.delete_vm(node, vmid)
-
-        return redirect("/proxmox/success")
         
     return redirect("/proxmox")
 
@@ -73,8 +67,6 @@ def stop_vm(request) :
         vmid = data.get("vmid")
 
         proxmox.stop_vm(node, vmid)
-
-        return redirect("/proxmox/success")
         
     return redirect("/proxmox")
 
@@ -118,7 +110,5 @@ def config_vm(request) :
         memory = data.get("memory")
 
         proxmox.config_vm(node, vmid, cpu, memory)
-
-        return redirect("/proxmox/success")
         
     return redirect("/proxmox")
