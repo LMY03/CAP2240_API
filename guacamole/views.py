@@ -45,7 +45,7 @@ def create_connection(request) :
 
         data = request.POST
         name = data.get("name")
-        protocol = data.get("name")
+        protocol = data.get("protocol")
         hostname = data.get("hostname")
         username = data.get("username")
         password = data.get("password")
