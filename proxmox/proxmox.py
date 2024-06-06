@@ -36,8 +36,6 @@ def get_vm_ip(node, vmid, port="ens18"):
     response = session.get(url)
     response.raise_for_status()
 
-    # return response.json()['data']['result']['name']
-
     ip_address = None
     for interface in response.json()['data']['result']:
         if interface['name'] == port:
@@ -46,9 +44,8 @@ def get_vm_ip(node, vmid, port="ens18"):
                     ip_address = ip['ip-address']
                     break
 
-    if ip_address is None:
-        return JsonResponse({'error': 'IPv4 address not found for interface ens18'}, status=404)
-
+    if ip_address is None: return 
+        # return JsonResponse({'error': 'IPv4 address not found for interface ens18'}, status=404)
 
     return ip_address
 
