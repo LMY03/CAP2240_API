@@ -131,28 +131,11 @@ def get_vm_ip(node, vmid):
     response = requests.get(url, headers=headers, verify=False)
     response.raise_for_status()
 
+
+
     interfaces = response.json()['data']['result'][1]['ip-addresses'][0]['ip-address']
 
     return interfaces
-
-    # Find the interface with the specified port name
-    ip_address = None
-    for interface in interfaces:
-        if interface.get('name') == "ens18":
-            # Assuming you want the first IP address from the interface
-            ip_address = interface['ip-addresses'][0]['ip-address']
-            break
-
-    return ip_address
-
-    return response.json()
-    
-    interfaces = response.json()['data']
-    
-    # Assuming the first IP address of the first interface is what you want
-    ip_address = interfaces[0]['ip-addresses'][0]['ip-address']
-    
-    return JsonResponse({'ip_address': ip_address})
 
 # get vm ip # TODO: have not test yet
 # def get_vm_ip(node, vmid):
