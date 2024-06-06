@@ -96,14 +96,12 @@ def delete_connection(connection_id):
 # assign connection
 def assign_connection(username, connection_id):
     token = get_token()
-    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/users/{username}/permissions?token={token}"
-    config = [
-          {
-            "op": "add",
-            "path": f"/connectionPermissions/{connection_id}",
-            "value": "READ"
-          }
-        ]
+    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/userPermissions/{username}?token={token}"
+    config = [{
+        "op": "add",
+        "path": f"/connectionPermissions/{connection_id}",
+        "value": "READ"
+    }]
     headers = {'Content-Type': 'application/json'}
     response = requests.patch(url, data=json.dumps(config), headers=headers)
     return response
