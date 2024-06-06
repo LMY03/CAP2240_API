@@ -22,7 +22,7 @@ def get_proxmox_ticket():
 def get_authenticated_session():
     data = get_proxmox_ticket()
     session = requests.Session()
-    # session.verify = CA_CRT
+    session.verify = CA_CRT
     session.headers.update({
         'CSRFPreventionToken': data['data']['CSRFPreventionToken'],
         'Authorization': f"PVEAuthCookie={data['data']['ticket']}",
