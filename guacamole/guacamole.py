@@ -84,7 +84,6 @@ def create_connection(name, protocol, port, hostname, username, password, parent
 
     # get connection id
     data = response.json()
-    return data
     return data["identifier"]
 
 # delete connection
@@ -92,7 +91,7 @@ def delete_connection(connection_id):
     token = get_token()
     url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/connections/{connection_id}?token={token}"
     response = requests.delete(url)
-    return response
+    return response.status_code
 
 # assign connection
 def assign_connection(username, connection_id):
