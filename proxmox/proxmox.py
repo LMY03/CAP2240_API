@@ -10,10 +10,7 @@ CA_CRT = False # Disable SSL certificate verification / self-signed certificates
 
 def get_proxmox_ticket():
     url = f"{PROXMOX_HOST}/api2/json/access/ticket"
-    data = {
-        'username': USERNAME,
-        'password': PASSWORD
-    }
+    data = { 'username': USERNAME, 'password': PASSWORD }
     response = requests.post(url, data=data, verify=CA_CRT)  
     response.raise_for_status()  # Raise an exception for HTTP errors
     return response.json()
@@ -122,23 +119,3 @@ def config_vm(node, vmid, cpu_cores, memory_mb):
     }
     response = session.put(url, data=config)
     return response.json()
-
-# get vm ip # TODO: have not test yet
-# def get_vm_ip(node, vmid):
-#     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/agent/network-get-interfaces"
-#     # headers = {
-#     #     'Authorization': 'Bearer YOUR_ACCESS_TOKEN',
-#     #     'CSRFPreventionToken': 'YOUR_CSRF_TOKEN'
-#     # }
-#     # response = requests.get(url, headers=headers, verify=False)  # Verify should ideally be True in production
-#     response = requests.get(url, verify=False)
-#     data = response.json()
-#     # Parsing the response to extract IP addresses
-#     if 'result' in data:
-#         interfaces = data['result']
-#         for interface in interfaces:
-#             if 'ip-addresses' in interface:
-#                 for ip in interface['ip-addresses']:
-#                     if ip['ip-address-type'] == 'ipv4':  # or ipv6 if you prefer
-#                         return ip['ip-address']
-#     return "No IP address found"
