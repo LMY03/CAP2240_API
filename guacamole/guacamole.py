@@ -56,14 +56,14 @@ def create_user(username, password):
     response = requests.post(url, data=json.dumps(config), headers=headers)
     return response
 
-# delete user
+# delete user /
 def delete_user(username):
     token = get_token()
     url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/users/{username}?token={token}"
     response = requests.delete(url)
     return response
 
-# create connection
+# create connection /
 def create_connection(name, protocol, port, hostname, username, password, parentIdentifier):
     token = get_token()
     url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/connections?token={token}"
@@ -90,19 +90,9 @@ def create_connection(name, protocol, port, hostname, username, password, parent
 def delete_connection(connection_id):
     token = get_token()
     url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/connections/{connection_id}?token={token}"
-    response = requests.delete(url)
+    headers = {'Content-Type': 'application/json'}
+    response = requests.delete(url, headers=headers)
     return response.status_code
-
-def get_user_id(username): 
-    token = get_token()
-    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/users/{username}?token={token}"
-    response = requests.get(url)
-
-    if response.status_code == 200:
-        user_data = response.json()
-        return user_data#['identifier']
-    
-    return "null"
 
 # assign connection
 def assign_connection(username, connection_id):
