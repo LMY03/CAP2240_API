@@ -8,30 +8,22 @@ USERNAME = 'guacadmin'
 PASSWORD = 'guacadmin'
 
 # get token /
-def get_token():
-    # CA_CRT = '/path/to/ca_bundle.crt'
-    # CA_CRT = False # Disable SSL certificate verification
+def get_token() :
     session = requests.Session()
     # session.verify = CA_CRT
     response = session.post(
         f"{GUACAMOLE_HOST}/guacamole/api/tokens",
-        data={'username': USERNAME, 'password': PASSWORD},
+        data={ 'username' : USERNAME, 'password' : PASSWORD },
         # verify=CA_CRT
     )
     data = response.json()
-    return  data['authToken']
+    return data['authToken']
 
 # get session info TODO: avoid request again here
 def get_session_info():
     session = requests.Session()
-    response = session.post(
-        f"{GUACAMOLE_HOST}/guacamole/api/tokens",
-        data={'username': USERNAME, 'password': PASSWORD},
-    )
-    data = response.json()    
-    session.headers.update({
-      'Guacamole-Token': data['authToken'],
-    })
+    token = get_token()
+    session.headers.update({ 'Guacamole-Token' : token })
     url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/connections"
     response = session.get(url)
 
