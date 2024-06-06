@@ -30,19 +30,17 @@ def get_authenticated_session():
     })
     return session
 
-def get_vm_ip(node, vmid):
+def get_vm_ip(node, vmid, port="ens18"):
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/agent/network-get-interfaces"
     session = get_authenticated_session()
     response = session.get(url)
     response.raise_for_status()
 
-    interfaces = response.json()['data']['result'][1]['ip-addresses'][0]['ip-address']
-
     # return response.json()['data']['result']['name']
 
     ip_address = None
     for interface in response.json()['data']['result']:
-        if interface['name'] == 'ens18':
+        if interface['name'] == port:
             for ip in interface['ip-addresses']:
                 if ip['ip-address-type'] == 'ipv4':
                     ip_address = ip['ip-address']
