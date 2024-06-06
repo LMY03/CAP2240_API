@@ -87,9 +87,7 @@ def status_vm(request) :
 
         status = proxmox.get_vm_status(node, vmid)
 
-        context = { "status" : status }
-
-        return render(request, "status_vm.html", context)
+        return render(request, "status_vm.html", { "status" : status })
         
     return redirect("/proxmox")
 

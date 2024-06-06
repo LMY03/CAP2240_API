@@ -8,4 +8,8 @@ urlpatterns = [
     path("", views.renders, name="form"),
     path("success", views.success, name="success"),
     path("create_user", views.create_user, name="create_user"),
+    path("delete_user", views.delete_user, name="delete_user"),
+    path("create_connection", views.create_connection, name="create_connection"),
+    path("delete_connection", views.delete_connection, name="delete_connection"),
+    path("assign_connection", views.assign_connection, name="assign_connection"),
 ]
