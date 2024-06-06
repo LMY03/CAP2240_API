@@ -36,13 +36,21 @@ def get_vm_ip(node, vmid):
     response = session.get(url)
     response.raise_for_status()
 
-    data = response.json()['data']
-    result = data['result']
-
-
     interfaces = response.json()['data']['result'][1]['ip-addresses'][0]['ip-address']
 
-    return result
+    ip_address = None
+    for interface in response.json()['data']:
+        if interface['name'] == 'ens18':
+            for ip in interface['ip-addresses']:
+                if ip['ip-address-type'] == 'ipv4':
+                    ip_address = ip['ip-address']
+                    break
+
+    if ip_address is None:
+        return JsonResponse({'error': 'IPv4 address not found for interface ens18'}, status=404)
+
+
+    return ip_address
 
 # get VM status
 def get_vm_status(node, vmid):
