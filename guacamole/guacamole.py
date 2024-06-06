@@ -114,4 +114,4 @@ def assign_connection(username, connection_id):
     }]
     headers = {'Content-Type': 'application/json'}
     response = requests.patch(url, data=json.dumps(config), headers=headers)
-    return response.status_code
+    return user_id
