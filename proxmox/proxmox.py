@@ -20,35 +20,18 @@ def get_proxmox_ticket():
 
 # Authenticate
 def get_authenticated_session():
-    session = requests.Session()
-    session.verify = CA_CRT
-    # response = session.post(
-    #     f"{PROXMOX_HOST}/api2/json/access/ticket",
-    #     data={'username': USERNAME, 'password': PASSWORD},
-    #     verify=CA_CRT
-    # )
-    # data = response.json()
     data = get_proxmox_ticket()
+    session = requests.Session()
+    # session.verify = CA_CRT
     session.headers.update({
         'CSRFPreventionToken': data['data']['CSRFPreventionToken'],
-        'Cookie': f"PVEAuthCookie={data['data']['ticket']}"
+        'Authorization': f"PVEAuthCookie={data['data']['ticket']}",
+        # 'Cookie': f"PVEAuthCookie={data['data']['ticket']}",
     })
     return session
 
 def get_vm_ip(node, vmid):
-    # Get authentication ticket
-    # ticket_response = get_proxmox_ticket()
-    # ticket = ticket_response['data']['ticket']
-    # csrf_token = ticket_response['data']['CSRFPreventionToken']
-    # data = get_proxmox_ticket()
-    
-    # # Get VM status to retrieve the IP address
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/agent/network-get-interfaces"
-    # headers = {
-    #     'CSRFPreventionToken': data['data']['CSRFPreventionToken'],
-    #     'Authorization': f"PVEAuthCookie={data['data']['ticket']}"
-    # }
-    # response = requests.get(url, headers=headers, verify=CA_CRT)
     session = get_authenticated_session()
     response = session.get(url)
     response.raise_for_status()
