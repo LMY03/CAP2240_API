@@ -84,6 +84,7 @@ def create_connection(name, protocol, port, hostname, username, password, parent
 
     # get connection id
     data = response.json()
+    return data
     return data["identifier"]
 
 # delete connection
