@@ -93,10 +93,20 @@ def delete_connection(connection_id):
     response = requests.delete(url)
     return response.status_code
 
+def get_user_id(username): 
+    token = get_token()
+    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/users/{username}?token={token}"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        user_data = response.json()
+        return user_data['identifier']
+
 # assign connection
 def assign_connection(username, connection_id):
     token = get_token()
-    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/userPermissions/{username}?token={token}"
+    user_id = get_user_id(username)
+    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/userPermissions/{user_id}/permissions?token={token}"
     config = [{
         "op": "add",
         "path": f"/connectionPermissions/{connection_id}",
