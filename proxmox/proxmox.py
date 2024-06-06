@@ -36,9 +36,13 @@ def get_vm_ip(node, vmid):
     response = session.get(url)
     response.raise_for_status()
 
+    data = response.json()['data']
+    result = data['result']
+
+
     interfaces = response.json()['data']['result'][1]['ip-addresses'][0]['ip-address']
 
-    return interfaces
+    return result
 
 # get VM status
 def get_vm_status(node, vmid):
@@ -75,7 +79,7 @@ def delete_vm(node, vmid):
     #   1. check status
     #   2. if status is running -> shutdown (response['data']['qmpstatus'] = running) 
     #   3. wait for it to shut down
-    shutdown_vm(node, vmid)
+    stop_vm(node, vmid)
 
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}"
     response = session.delete(url)
