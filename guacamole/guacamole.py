@@ -100,7 +100,7 @@ def get_user_id(username):
 
     if response.status_code == 200:
         user_data = response.json()
-        return user_data['identifier']
+        return user_data#['identifier']
     
     return "null"
 
