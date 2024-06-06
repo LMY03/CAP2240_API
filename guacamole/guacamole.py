@@ -101,6 +101,8 @@ def get_user_id(username):
     if response.status_code == 200:
         user_data = response.json()
         return user_data['identifier']
+    
+    return "null"
 
 # assign connection
 def assign_connection(username, connection_id):
@@ -114,4 +116,4 @@ def assign_connection(username, connection_id):
     }]
     headers = {'Content-Type': 'application/json'}
     response = requests.patch(url, data=json.dumps(config), headers=headers)
-    return user_id
+    return response

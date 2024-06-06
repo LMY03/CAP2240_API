@@ -83,9 +83,10 @@ def assign_connection(request) :
     if request.method == "POST":
 
         data = request.POST
+        username = data.get("username")
         connection_id = data.get("connection_id")
 
-        status = guacamole.delete_connection(connection_id)
+        status = guacamole.assign_connection(username, connection_id)
 
         return render(request, "connection_id.html", { "connection_id" : status })
     
