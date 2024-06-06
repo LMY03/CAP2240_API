@@ -5,21 +5,32 @@ from django.http import JsonResponse
 PROXMOX_HOST = 'https://10.1.200.11:8006'
 USERNAME = 'root@pam'
 PASSWORD = 'cap2240'
+CA_CRT = False # Disable SSL certificate verification / self-signed certificates
+# CA_CRT = '/path/to/ca_bundle.crt'
+
+def get_proxmox_ticket():
+    url = f"{PROXMOX_HOST}/api2/json/access/ticket"
+    data = {
+        'username': USERNAME,
+        'password': PASSWORD
+    }
+    response = requests.post(url, data=data, verify=CA_CRT)  
+    response.raise_for_status()  # Raise an exception for HTTP errors
+    return response.json()
 
 # Authenticate
 def get_authenticated_session():
-    # CA_CRT = '/path/to/ca_bundle.crt'
-    CA_CRT = False # Disable SSL certificate verification
     session = requests.Session()
     session.verify = CA_CRT
-    response = session.post(
-        f"{PROXMOX_HOST}/api2/json/access/ticket",
-        data={'username': USERNAME, 'password': PASSWORD},
-        verify=CA_CRT
-    )
-    data = response.json()
+    # response = session.post(
+    #     f"{PROXMOX_HOST}/api2/json/access/ticket",
+    #     data={'username': USERNAME, 'password': PASSWORD},
+    #     verify=CA_CRT
+    # )
+    # data = response.json()
+    data = get_proxmox_ticket()
     session.headers.update({
-    'CSRFPreventionToken': data['data']['CSRFPreventionToken'],
+        'CSRFPreventionToken': data['data']['CSRFPreventionToken'],
         'Cookie': f"PVEAuthCookie={data['data']['ticket']}"
     })
     return session
@@ -106,16 +117,6 @@ def config_vm(node, vmid, cpu_cores, memory_mb):
     response = session.put(url, data=config)
     return response.json()
 
-def get_proxmox_ticket():
-    url = f"{PROXMOX_HOST}/api2/json/access/ticket"
-    data = {
-        'username': "root@pam",
-        'password': "cap2240"
-    }
-    response = requests.post(url, data=data, verify=False)  # verify=False is for self-signed certificates
-    response.raise_for_status()  # Raise an exception for HTTP errors
-    return response.json()
-
 def get_vm_ip(node, vmid):
     # Get authentication ticket
     ticket_response = get_proxmox_ticket()
@@ -130,8 +131,6 @@ def get_vm_ip(node, vmid):
     }
     response = requests.get(url, headers=headers, verify=False)
     response.raise_for_status()
-
-
 
     interfaces = response.json()['data']['result'][1]['ip-addresses'][0]['ip-address']
 
