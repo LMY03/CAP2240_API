@@ -38,10 +38,10 @@ def get_vm_ip(node, vmid):
 
     interfaces = response.json()['data']['result'][1]['ip-addresses'][0]['ip-address']
 
-    return response.json()['data']['result']['name']
+    # return response.json()['data']['result']['name']
 
     ip_address = None
-    for interface in response.json()['data']:
+    for interface in response.json()['data']['result']:
         if interface['name'] == 'ens18':
             for ip in interface['ip-addresses']:
                 if ip['ip-address-type'] == 'ipv4':
