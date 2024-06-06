@@ -35,6 +35,28 @@ def get_authenticated_session():
     })
     return session
 
+def get_vm_ip(node, vmid):
+    # Get authentication ticket
+    # ticket_response = get_proxmox_ticket()
+    # ticket = ticket_response['data']['ticket']
+    # csrf_token = ticket_response['data']['CSRFPreventionToken']
+    # data = get_proxmox_ticket()
+    
+    # # Get VM status to retrieve the IP address
+    url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/agent/network-get-interfaces"
+    # headers = {
+    #     'CSRFPreventionToken': data['data']['CSRFPreventionToken'],
+    #     'Authorization': f"PVEAuthCookie={data['data']['ticket']}"
+    # }
+    # response = requests.get(url, headers=headers, verify=CA_CRT)
+    session = get_authenticated_session()
+    response = session.get(url)
+    response.raise_for_status()
+
+    interfaces = response.json()['data']['result'][1]['ip-addresses'][0]['ip-address']
+
+    return interfaces
+
 # get VM status
 def get_vm_status(node, vmid):
     session = get_authenticated_session()
@@ -45,14 +67,6 @@ def get_vm_status(node, vmid):
     status = response.json()['data']['qmpstatus']
 
     return status
-    
-    interfaces = response.json()['data']
-    
-    # Assuming the first IP address of the first interface is what you want
-    ip_address = interfaces[0]['ip-addresses'][0]['ip-address']
-    
-    return JsonResponse({'ip_address': ip_address})
-    return response.json()
 
 # clone VM POST
 # TODO: how to keep track on the available vmid, need new name
@@ -116,25 +130,6 @@ def config_vm(node, vmid, cpu_cores, memory_mb):
     }
     response = session.put(url, data=config)
     return response.json()
-
-def get_vm_ip(node, vmid):
-    # Get authentication ticket
-    ticket_response = get_proxmox_ticket()
-    ticket = ticket_response['data']['ticket']
-    csrf_token = ticket_response['data']['CSRFPreventionToken']
-    
-    # Get VM status to retrieve the IP address
-    url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/agent/network-get-interfaces"
-    headers = {
-        'Authorization': f'PVEAuthCookie={ticket}',
-        'CSRFPreventionToken': csrf_token
-    }
-    response = requests.get(url, headers=headers, verify=False)
-    response.raise_for_status()
-
-    interfaces = response.json()['data']['result'][1]['ip-addresses'][0]['ip-address']
-
-    return interfaces
 
 # get vm ip # TODO: have not test yet
 # def get_vm_ip(node, vmid):
