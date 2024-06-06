@@ -31,7 +31,7 @@ def get_vm_status(node, vmid):
     response = session.get(url)
     response.raise_for_status()
 
-    status = response.json['data']['qmpstatus']
+    status = response.json()['data']['qmpstatus']
 
     return status
     
