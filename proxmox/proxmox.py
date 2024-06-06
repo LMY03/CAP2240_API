@@ -136,7 +136,7 @@ def get_vm_ip(node, vmid):
     # Find the interface with the specified port name
     ip_address = None
     for interface in interfaces:
-        if interface.get('name') == port_name:
+        if interface.get('name') == "ens18":
             # Assuming you want the first IP address from the interface
             ip_address = interface['ip-addresses'][0]['ip-address']
             break
