@@ -85,8 +85,8 @@ def assign_connection(request) :
         data = request.POST
         connection_id = data.get("connection_id")
 
-        guacamole.delete_connection(connection_id)
+        status = guacamole.delete_connection(connection_id)
 
-        return redirect("/guacamole/success")
+        return render(request, "connection_id.html", { "connection_id" : status })
     
     return redirect("/guacamole")
