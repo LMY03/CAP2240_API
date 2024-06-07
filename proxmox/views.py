@@ -15,7 +15,7 @@ def wait_for_task(node, upid):
     while True:
         task_status = proxmox.get_task_status(node, upid)
         if task_status['data']['status'] == 'stopped':
-            return task_status['data']['exitstatus']
+            return task_status['data']['exitstatus'] # OK
         time.sleep(5)
 
 def wait_for_vm_start(node, vmid):
@@ -32,14 +32,18 @@ def clone_vm(request) :
 
         data = request.POST
         vmid = data.get("vmid")
-        newid = data.get("newid")
+        new_vm_id = data.get("newid")
 
-        clone_vm_response = proxmox.clone_vm(node, vmid, newid)
+        clone_vm_response = proxmox.clone_vm(node, vmid, new_vm_id)
         upid = clone_vm_response['data']
 
         clone_status  = wait_for_task(node, upid)
 
-        return render(request, "data.html", { "data" : clone_status })
+        start_status = proxmox.start_vm(node, new_vm_id)
+
+        wait_for_vm_start(node, new_vm_id) 
+
+        return render(request, "data.html", { "data" : start_status })
         
     return redirect("/proxmox")
 
