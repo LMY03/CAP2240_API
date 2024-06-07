@@ -23,7 +23,7 @@ def wait_for_vm_start(node, vmid):
         status_response = proxmox.get_vm_status(node, vmid)
         status = status_response
         if status == 'running':
-            break
+            return status
         time.sleep(5)
 
 def clone_vm(request) :
