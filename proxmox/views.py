@@ -9,9 +9,6 @@ node = "pve"
 def renders(request) : 
     return render(request, "proxmox.html")
 
-def success(request) : 
-    return render(request, "success.html")
-
 def clone_vm(request) :
 
     if request.method == "POST":
