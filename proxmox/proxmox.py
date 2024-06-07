@@ -38,7 +38,8 @@ def get_vm_ip(node, vmid, port="ens18"):
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/agent/network-get-interfaces"
     session = get_authenticated_session()
     response = session.get(url)
-    response.raise_for_status()
+    # response.raise_for_status()
+    if response.status_code is 500 : get_vm_ip(node, vmid)
 
     ip_address = None
     for interface in response.json()['data']['result']:

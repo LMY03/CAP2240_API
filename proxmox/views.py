@@ -20,11 +20,14 @@ def wait_for_task(node, upid):
 
 def wait_for_vm_start(node, vmid):
     while True:
-        status_response = proxmox.get_vm_status(node, vmid)
-        status = status_response
-        if status == 'running':
-            return status
+        status = proxmox.get_vm_status(node, vmid)
+        if status == "running" : return status
         time.sleep(5)
+
+# def get_vm_ip():
+#     while True:
+#         if status == 
+#         time.sleep(5)
 
 def clone_vm(request) :
 
