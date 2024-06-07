@@ -6,7 +6,7 @@ from guacamole import guacamole
 # Create your views here.
 
 def renders(request) : 
-    return render(request, "form.html")
+    return render(request, "vm_provision.html")
 
 def vm_provision(request) : 
 
