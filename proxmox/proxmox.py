@@ -1,4 +1,4 @@
-import requests, time
+import requests
 from django.http import JsonResponse
 
 # Parameters
