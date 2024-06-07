@@ -2,12 +2,16 @@
     {% csrf_token %}
     <h1>VM Request</h1>
 
+    <label for="vmid">Choose VM Template: </label>
     <select id="vm" name="vm">
-        <option value="110">Ubuntu 24</option>
-        <option value="100">Ubuntu 22</option>
-    </select>
+        <option value="111">Ubuntu 24</option>
+        <option value="101">Ubuntu 22</option>
+    </select><br /><br />
 
-    <input type="text" name="class" id="class" />
+    <label for="vmid">Class Name: </label>
+    <input type="text" name="class" id="class" /><br /><br />
 
     <input type="submit" value="submit" />
 </form>
+
+<hr />

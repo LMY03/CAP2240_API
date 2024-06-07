@@ -1,3 +1,5 @@
+import time
+
 from django.shortcuts import redirect, render
 
 from . import proxmox
@@ -9,6 +11,21 @@ node = "pve"
 def renders(request) : 
     return render(request, "proxmox.html")
 
+def wait_for_task(node, upid): 
+    while True:
+        task_status = proxmox.get_task_status(node, upid)
+        if task_status['data']['status'] == 'stopped':
+            return task_status['data']['exitstatus']
+        time.sleep(5)
+
+def wait_for_vm_start(node, vmid):
+    while True:
+        status_response = proxmox.get_vm_status(node, vmid)
+        status = status_response
+        if status == 'running':
+            break
+        time.sleep(5)
+
 def clone_vm(request) :
 
     if request.method == "POST":
@@ -17,9 +34,12 @@ def clone_vm(request) :
         vmid = data.get("vmid")
         newid = data.get("newid")
 
-        proxmox.clone_vm(node, vmid, newid)
+        clone_vm_response = proxmox.clone_vm(node, vmid, newid)
+        upid = clone_vm_response['data']
 
-        return redirect("/proxmox/success")
+        clone_status  = wait_for_task(node, upid)
+
+        return render(request, "data.html", { "data" : clone_status })
         
     return redirect("/proxmox")
 

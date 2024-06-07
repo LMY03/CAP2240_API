@@ -1,4 +1,4 @@
-import requests
+import requests, time
 from django.http import JsonResponse
 
 # Parameters
@@ -26,6 +26,28 @@ def get_authenticated_session():
         # 'Cookie': f"PVEAuthCookie={data['data']['ticket']}",
     })
     return session
+
+def get_task_status(node, upid):
+    url = f"{PROXMOX_HOST}:8006/api2/json/nodes/{node}/tasks/{upid}/status"
+    session = get_authenticated_session()
+    response = session.get(url)
+
+    return response.json()
+
+
+def wait_for_task(node, upid):
+    url = f"{PROXMOX_HOST}:8006/api2/json/nodes/{node}/tasks/{upid}/status"
+    session = get_authenticated_session()
+    while True:
+        response = session.get(url)
+        response.raise_for_status()
+        status = response.json()["data"]
+        if status["status"] == "stopped":
+            if status["exitstatus"] == "OK":
+                return True
+            else:
+                raise Exception(f"Task failed with exit status: {status['exitstatus']}")
+        time.sleep(5)
 
 def get_vm_ip(node, vmid, port="ens18"):
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/agent/network-get-interfaces"
