@@ -1,0 +1,13 @@
+<form action="{% url 'ticketing:vm_provision' %}" method="post">
+    {% csrf_token %}
+    <h1>VM Request</h1>
+
+    <select id="vm" name="vm">
+        <option value="110">Ubuntu 24</option>
+        <option value="100">Ubuntu 22</option>
+    </select>
+
+    <input type="text" name="class" id="class" />
+
+    <input type="submit" value="submit" />
+</form>

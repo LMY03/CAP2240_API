@@ -1,7 +1,9 @@
 import requests
 import json
 
-GUACAMOLE_HOST = 'http://guacamole:8080'
+# GUACAMOLE_HOST = 'http://guacamole:8080'
+GUACAMOLE_HOST = 'http://192.168.254.125:8080'
+GUACAMOLE_HOST = 'http://10.63.132.128:8080'
 USERNAME = 'guacadmin'
 PASSWORD = 'guacadmin'
 
@@ -35,7 +37,7 @@ def get_session_info():
 
     return response.text
 
-# create user /
+# create user 200
 def create_user(username, password):
     token = get_token()
     url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/users?token={token}"
@@ -54,21 +56,21 @@ def create_user(username, password):
     }
     headers = {'Content-Type': 'application/json'}
     response = requests.post(url, data=json.dumps(config), headers=headers)
-    return response
+    return response.status_code
 
-# delete user /
+# delete user 204
 def delete_user(username):
     token = get_token()
     url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/users/{username}?token={token}"
     response = requests.delete(url)
     return response
 
-# create connection /
-def create_connection(name, protocol, port, hostname, username, password, parentIdentifier):
+# create connection 200
+def create_connection(name, protocol, port, hostname, username, password, parent_identifier):
     token = get_token()
     url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/connections?token={token}"
     config = {
-      "parentIdentifier": parentIdentifier,
+      "parentIdentifier": parent_identifier,
       "name": name,
       "protocol": protocol,
       "parameters": {
@@ -86,24 +88,54 @@ def create_connection(name, protocol, port, hostname, username, password, parent
     data = response.json()
     return data["identifier"]
 
-# delete connection
+# delete connection 204
 def delete_connection(connection_id):
     token = get_token()
     url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/connections/{connection_id}?token={token}"
-    headers = {'Content-Type': 'application/json'}
-    response = requests.delete(url, headers=headers)
-    return response.status_code
+    response = requests.delete(url)
+    return response
 
-# assign connection
-def assign_connection(username, connection_id):
+def get_connection_details(connection_id):
     token = get_token()
-    user_id = get_user_id(username)
-    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/userPermissions/{user_id}/permissions?token={token}"
-    config = [{
+    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/connections/{connection_id}?token={token}"
+    # headers = {'Authorization': f'Bearer {token}'}
+    # response = requests.get(url, headers=headers)
+    response = requests.get(url)
+    print(response)
+    response.raise_for_status()
+    return response.json()
+
+# update connection 204
+def update_connection(connection_id, hostname):
+    token = get_token()
+    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/connections/{connection_id}?token={token}"
+    headers = {'Content-Type': 'application/json'}
+    connection_details = get_connection_details(connection_id)
+    connection_details['parameters']['hostname'] = hostname
+    updated_data=json.dumps(connection_details)
+    response = requests.put(url, data=updated_data, headers=headers)
+    return response
+
+# assign connection 204
+def assign_connection(username, connection_id):
+    return set_permission(username, config=[{
         "op": "add",
         "path": f"/connectionPermissions/{connection_id}",
         "value": "READ"
-    }]
+    }])
+
+# revoke connection 204
+def revoke_connection(username, connection_id):
+    return set_permission(username, config=[{
+        "op": "remove",
+        "path": f"/connectionPermissions/{connection_id}",
+        "value": "READ"
+    }])
+
+# set permission
+def set_permission(username, config):
+    token = get_token()
+    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/users/{username}/permissions?token={token}"
     headers = {'Content-Type': 'application/json'}
-    response = requests.patch(url, data=json.dumps(config), headers=headers)
-    return user_id
+    response = requests.patch(url, data=config, headers=headers)
+    return response.status_code

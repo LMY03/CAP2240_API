@@ -9,9 +9,6 @@ parent_identifier = "ROOT"
 def renders(request) : 
     return render(request, "guacamole.html")
 
-def success(request) : 
-    return render(request, "success.html")
-
 def create_user(request) : 
 
     if request.method == "POST":
@@ -20,9 +17,9 @@ def create_user(request) :
         username = data.get("username")
         password = data.get("password")
 
-        guacamole.create_user(username, password)
+        status_code = guacamole.create_user(username, password)
 
-        return redirect("/guacamole/success")
+        return render(request, "data.html", { "data" : status_code })
     
     return redirect("/guacamole")
 
@@ -33,9 +30,9 @@ def delete_user(request) :
         data = request.POST
         username = data.get("username")
 
-        guacamole.delete_user(username)
+        status_code = guacamole.delete_user(username)
 
-        return redirect("/guacamole/success")
+        return render(request, "data.html", { "data" : status_code })
     
     return redirect("/guacamole")
 
@@ -58,7 +55,7 @@ def create_connection(request) :
 
         connection_id = guacamole.create_connection(name, protocol, port, hostname, username, password, parent_identifier)
 
-        return render(request, "connection_id.html", { "connection_id" : connection_id })
+        return render(request, "data.html", { "data" : connection_id })
     
     return redirect("/guacamole")
 
@@ -69,11 +66,9 @@ def delete_connection(request) :
         data = request.POST
         connection_id = data.get("connection_id")
 
-        status = guacamole.delete_connection(connection_id)
+        status_code = guacamole.delete_connection(connection_id)
 
-        return render(request, "connection_id.html", { "connection_id" : status })
-
-        return redirect("/guacamole/success")
+        return render(request, "data.html", { "data" : status_code })
     
     return redirect("/guacamole")
 
@@ -86,8 +81,23 @@ def assign_connection(request) :
         username = data.get("username")
         connection_id = data.get("connection_id")
 
-        status = guacamole.assign_connection(username, connection_id)
+        status_code = guacamole.assign_connection(username, connection_id)
 
-        return render(request, "connection_id.html", { "connection_id" : status })
+        return render(request, "data.html", { "data" : status_code })
+    
+    return redirect("/guacamole")
+
+
+def revoke_connection(request) : 
+
+    if request.method == "POST":
+
+        data = request.POST
+        username = data.get("username")
+        connection_id = data.get("connection_id")
+
+        status_code = guacamole.revoke_connection(username, connection_id)
+
+        return render(request, "data.html", { "data" : status_code })
     
     return redirect("/guacamole")
