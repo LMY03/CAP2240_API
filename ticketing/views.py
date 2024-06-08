@@ -10,7 +10,29 @@ from guacamole import guacamole
 def renders(request) : 
     return render(request, "vm_provision.html")
 
-def vm_provision(request) : 
+def vm_test(request):
+    if request.method == "POST":
+        node = "pve"
+        new_vm_id = 999
+        proxmox.start_vm(node, new_vm_id)
+
+        views.wait_for_vm_start(node, new_vm_id) 
+
+        hostname = views.wait_for_qemu_start(node, new_vm_id) 
+
+        # guacamole_password = User.objects.make_random_password()
+        # guacamole_connection_id = guacamole.create_connection(classname, protocol, port, hostname, username, password, parent_identifier)
+        # guacamole_username = guacamole.create_user(classname, guacamole_password)
+        # guacamole.assign_connection(guacamole_username, guacamole_connection_id)
+
+        # data = {
+        #     'username': guacamole_username,
+        #     'password': guacamole_password,
+        # }
+
+        return render(request, "data.html", { "data" : hostname })
+
+def vm_provision(request): 
 
     if request.method == "POST":
 
