@@ -46,7 +46,7 @@ def get_vm_ip(node, vmid, port="ens18"):
         if interface['name'] == port:
             for ip in interface['ip-addresses']:
                 if ip['ip-address-type'] == 'ipv4':
-                    ip_address = ip['ip-address']
+                    # ip_address = ip['ip-address']
                     break
 
     if ip_address is None: return 
