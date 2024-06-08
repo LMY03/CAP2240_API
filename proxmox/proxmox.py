@@ -34,6 +34,13 @@ def get_task_status(node, upid):
 
     return response.json()
 
+def get_qemu_status(node, vmid):
+    url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/agent/info"
+    session = get_authenticated_session()
+    response = session.get(url)
+
+    return response.status_code
+
 def get_vm_ip(node, vmid, port="ens18"):
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/agent/network-get-interfaces"
     session = get_authenticated_session()

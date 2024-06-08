@@ -26,13 +26,15 @@ def wait_for_vm_start(node, vmid):
 
 def wait_for_qemu_start(node, vmid):
     while True:
-        response = proxmox.get_vm_ip(node, vmid)
-        if response != 500 :
-            for interface in response.json()['data']['result']:
-                if interface['name'] == "ens18":
-                    for ip in interface['ip-addresses']:
-                        if ip['ip-address-type'] == 'ipv4':
-                            return ip['ip-address']
+        qemu_status_code = proxmox.get_qemu_status(node, vmid)
+        if qemu_status_code == 200:
+            response = proxmox.get_vm_ip(node, vmid)
+            if response != 500 :
+                for interface in response.json()['data']['result']:
+                    if interface['name'] == "ens18":
+                        for ip in interface['ip-addresses']:
+                            if ip['ip-address-type'] == 'ipv4':
+                                return ip['ip-address']
         time.sleep(5)
 
 # def get_vm_ip():
