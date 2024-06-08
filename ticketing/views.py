@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 
 from django.contrib.auth.models import User
 
-from proxmox import proxmox
+from proxmox import proxmox, views
 from guacamole import guacamole
 
 # Create your views here.
@@ -39,13 +39,13 @@ def vm_provision(request) :
         clone_vm_response = proxmox.clone_vm(node, vmid, new_vm_id)
         upid = clone_vm_response['data']
 
-        proxmox.wait_for_task(node, upid)
+        views.wait_for_task(node, upid)
 
         proxmox.start_vm(node, new_vm_id)
 
-        proxmox.wait_for_vm_start(node, new_vm_id) 
+        views.wait_for_vm_start(node, new_vm_id) 
 
-        hostname = proxmox.wait_for_qemu_start(node, new_vm_id) 
+        hostname = views.wait_for_qemu_start(node, new_vm_id) 
 
         guacamole_password = User.objects.make_random_password()
         guacamole_connection_id = guacamole.create_connection(classname, protocol, port, hostname, username, password, parent_identifier)
