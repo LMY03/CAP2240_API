@@ -24,6 +24,12 @@ def wait_for_vm_start(node, vmid):
         if status == "running" : return status
         time.sleep(5)
 
+def wait_for_qemu_start(node, vmid):
+    while True:
+        response = proxmox.get_vm_ip(node, vmid)
+        if response.status_code != 500 : return response
+        time.sleep(5)
+
 # def get_vm_ip():
 #     while True:
 #         if status == 
@@ -46,7 +52,10 @@ def clone_vm(request) :
 
         wait_for_vm_start(node, new_vm_id) 
 
-        response = proxmox.get_vm_ip(node, new_vm_id)
+        response = wait_for_qemu_start(node, new_vm_id) 
+        # response = proxmox.get_vm_ip(node, new_vm_id)
+
+        
 
         return render(request, "data.html", { "data" : response })
         
