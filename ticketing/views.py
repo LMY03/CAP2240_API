@@ -31,9 +31,22 @@ def vm_provision(request) :
             'ssh': 22
         }.get(protocol)
 
-        new_vm_id = proxmox.clone_vm("pve", vmid, 999)
+        new_vm_id = vmid + 2
 
-        hostname = proxmox.get_vm_ip(node, new_vm_id)
+        # new_vm_id = proxmox.clone_vm("pve", vmid, 999)
+
+        # hostname = proxmox.get_vm_ip(node, new_vm_id)
+        clone_vm_response = proxmox.clone_vm(node, vmid, new_vm_id)
+        upid = clone_vm_response['data']
+
+        proxmox.wait_for_task(node, upid)
+
+        proxmox.start_vm(node, new_vm_id)
+
+        proxmox.wait_for_vm_start(node, new_vm_id) 
+
+        hostname = proxmox.wait_for_qemu_start(node, new_vm_id) 
+
         guacamole_password = User.objects.make_random_password()
         guacamole_connection_id = guacamole.create_connection(classname, protocol, port, hostname, username, password, parent_identifier)
         guacamole_username = guacamole.create_user(classname, guacamole_password)
