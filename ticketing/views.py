@@ -54,7 +54,7 @@ def vm_provision_process(node, vm_id, classname, no_of_vm):
         guacamole.create_user(guacamole_username[i], guacamole_password[i])
         guacamole.assign_connection(guacamole_username[i], guacamole_connection_id[i])
 
-    return [new_vm_id, guacamole_connection_id, guacamole_username]
+    return { new_vm_id, guacamole_connection_id, guacamole_username }
     
 def vm_provision(request): 
 
@@ -108,13 +108,25 @@ def vm_deletion(request):
         node = "pve"
 
         data = request.POST
-        vm_id = data.get("vmid")
+        vm_ids = data.getlist("vm_id")
+        guacamole_usernames = data.getlist("guacamole_username")
+        guacamole_ids = data.getlist("guacamole_id")
 
-        proxmox.stop_vm(node, vm_id)
-        proxmox.delete_vm(node, vm_id)
-        # guacamole.delete_user(guacamole_username)
-        # guacamole.delete_connection(guacamole_id)
+        for vm_id in range(vm_ids):
+            proxmox.stop_vm(node, vm_id)
+            
+        for vm_id in range(vm_ids):
+            proxmox.delete_vm(node, vm_id)
+
+        for guacamole_username in range(guacamole_usernames):
+            guacamole.delete_user(guacamole_username)
+
+        for guacamole_id in range(guacamole_ids):
+            guacamole.delete_connection(guacamole_id)
 
         return render(request, "data.html", { "data" : data })
     
     return redirect("/ticketing")
+
+def render_delete_form(request) : 
+    return render(request, "vm_provision.html")

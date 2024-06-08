@@ -1,15 +1,18 @@
 <form action="{% url 'ticketing:vm_deletion' %}" method="post">
     {% csrf_token %}
-    <h1>VM Request</h1>
+    <h1>Delete VM Form</h1>
 
-    <label for="vmid">Delete VM: </label>
+    {% for vm_id in data.vm_id %}
+    <input type="text" name="vm_id" value="{{ vm_id }}" />
+    {% endfor %}
 
-    <label for="vmid">Class Name: </label>
-    <input type="text" name="class" id="class" /><br /><br />
+    {% for guacamole_username in data.guacamole_username %}
+    <input type="text" name="guacamole_username" value="{{ guacamole_username }}" />
+    {% endfor %}
 
-    <input type="hidden" name="" id="" />
-    <input type="hidden" name="" id="" />
-    <input type="hidden" name="" id="" />
+    {% for guacamole_id in data.guacamole_id %}
+    <input type="text" name="guacamole_id" value="{{ guacamole_id }}" />
+    {% endfor %}
 
     <input type="submit" value="submit" />
 </form>
