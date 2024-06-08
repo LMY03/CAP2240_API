@@ -21,8 +21,8 @@ def vm_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
     for i in range(no_of_vm):
         proxmox.wait_for_task(node, upids[i])
 
-    # for i in range(no_of_vm):
-    #     proxmox.config_vm(node, new_vm_id[i], cpu_cores, ram)
+    for i in range(no_of_vm):
+        proxmox.config_vm(node, new_vm_id[i], cpu_cores, ram)
 
     for i in range(no_of_vm):
         proxmox.start_vm(node, new_vm_id[i])
@@ -139,11 +139,13 @@ def start_vm(request):
 
         data = request.POST
         vm_id = data.get("vm_id")
+        connection_id = data.get("connection_id")
 
         proxmox.start_vm(node, vm_id)
         hostname = proxmox.wait_and_get_ip(node, vm_id)
-        # connection_details = guacamole.get_connection_details(connection_id)
-        # if hostname != connection_details:
-
+        connection_details = guacamole.get_connection_details(connection_id)
+        if hostname != connection_details : guacamole.update_connection(connection_id, hostname)
+        # guacamole login
+        # guacamole redirect
     
     return redirect("/ticketing")

@@ -22,3 +22,17 @@
 
     <input type="submit" value="submit" />
 </form>
+
+<hr />
+
+<form action="{% url 'ticketing:start_vm' %}" method="post">
+    {% csrf_token %}
+    <h1>Start VM</h1>
+
+    <label for="vm_id">VM ID: </label>
+    <input type="text" name="vm_id" id="vm_id" /><br /><br />
+    <label for="connection_id">Guacamole Connection ID: </label>
+    <input type="text" name="connection_id" id="connection_id" /><br /><br />
+
+    <input type="submit" value="submit" />
+</form>
