@@ -31,7 +31,7 @@ def vm_provision(request) :
             'ssh': 22
         }.get(protocol)
 
-        new_vm_id = vmid + 2
+        new_vm_id = 999
 
         # new_vm_id = proxmox.clone_vm("pve", vmid, 999)
 
