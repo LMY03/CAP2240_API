@@ -2,17 +2,23 @@
     {% csrf_token %}
     <h1>VM Request</h1>
 
-    <label for="vmid">Choose VM Template: </label>
-    <select id="vm" name="vm">
+    <label for="template_vm_id">Choose VM Template: </label>
+    <select id="template_vm_id" name="template_vm_id">
         <option value="111">Ubuntu 24</option>
         <option value="101">Ubuntu 22</option>
     </select><br /><br />
 
-    <label for="vmid">Class Name: </label>
+    <label for="class">Class Name: </label>
     <input type="text" name="class" id="class" /><br /><br />
 
-    <label for="no">Number of VM: </label>
-    <input type="text" name="no" id="no" /><br /><br />
+    <label for="no_of_vm">Number of VM: </label>
+    <input type="number" name="no_of_vm" id="no_of_vm" /><br /><br />
+
+    <label for="cpu_cores">CPU Cores: </label>
+    <input type="number" name="cpu_cores" id="cpu_cores" /><br /><br />
+
+    <label for="ram">RAM: </label>
+    <input type="number" name="ram" id="ram" /><br /><br />
 
     <input type="submit" value="submit" />
 </form>

@@ -10,7 +10,7 @@ from guacamole import guacamole
 def renders(request) : 
     return render(request, "vm_provision.html")
 
-def vm_provision_process(node, vm_id, classname, no_of_vm):
+def vm_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
 
     upids = []
     new_vm_id = []
@@ -22,7 +22,7 @@ def vm_provision_process(node, vm_id, classname, no_of_vm):
         proxmox.wait_for_task(node, upids[i])
 
     # for i in range(no_of_vm):
-    #     proxmox.config_vm(node, new_vm_id[i], 2, 2024)
+    #     proxmox.config_vm(node, new_vm_id[i], cpu_cores, ram)
 
     for i in range(no_of_vm):
         proxmox.start_vm(node, new_vm_id[i])
@@ -63,11 +63,13 @@ def vm_provision(request):
         node = "pve"
 
         data = request.POST
-        vm_id = int(data.get("vm"))
+        vm_id = int(data.get("template_vm_id"))
         classname = data.get("class")
-        no_of_vm = int(data.get("no"))
+        no_of_vm = int(data.get("no_of_vm"))
+        cpu_cores = int(data.get("cpu_cores"))
+        ram = int(data.get("ram"))
 
-        data = vm_provision_process(node, vm_id, classname, no_of_vm)
+        data = vm_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram)
         
         # return render(request, "vm_deletion.html", { "data" : data })
     
