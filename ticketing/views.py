@@ -55,8 +55,6 @@ def vm_provision_process(node, vm_id, classname, no_of_vm):
         guacamole_connection_id = guacamole.create_connection(guacamole_username[i], protocol, port, hostname[i], username, password, parent_identifier)
         guacamole.create_user(guacamole_username[i], guacamole_password[i])
         guacamole.assign_connection(guacamole_username[i], guacamole_connection_id)
-
-    return { guacamole_username, guacamole_password }
     
 def vm_provision(request): 
 
