@@ -8,7 +8,7 @@ from guacamole import guacamole
 # Create your views here.
 
 def renders(request) : 
-    return render(request, "vm_provision.html")
+    return render(request, "form.html")
 
 def vm_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
 
@@ -127,5 +127,23 @@ def vm_deletion(request):
             guacamole.delete_connection(guacamole_id)
 
         return render(request, "data.html", { "data" : data })
+    
+    return redirect("/ticketing")
+
+# Start VM -> Check IP -> Update Connection (if needed) -> Open Connection
+def start_vm(request):
+
+    if request.method == "POST":
+
+        node = "pve"
+
+        data = request.POST
+        vm_id = data.get("vm_id")
+
+        proxmox.start_vm(node, vm_id)
+        hostname = proxmox.wait_and_get_ip(node, vm_id)
+        # connection_details = guacamole.get_connection_details(connection_id)
+        # if hostname != connection_details:
+
     
     return redirect("/ticketing")
