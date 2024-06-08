@@ -45,19 +45,7 @@ def get_vm_ip(node, vmid, port="ens18"):
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/agent/network-get-interfaces"
     session = get_authenticated_session()
     response = session.get(url)
-    # response.raise_for_status()
-    # print("-------------------------")
-    # print("get vm ip")
-    # print(response.json())
-    # print("-------------------------")
     return response.json()
-
-    ip_address = None
-
-    if ip_address is None: return 
-        # return JsonResponse({'error': 'IPv4 address not found for interface ens18'}, status=404)
-
-    return ip_address
 
 # get VM status
 def get_vm_status(node, vmid):

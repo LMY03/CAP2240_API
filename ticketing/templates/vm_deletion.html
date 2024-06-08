@@ -1,0 +1,15 @@
+<form action="{% url 'ticketing:vm_deletion' %}" method="post">
+    {% csrf_token %}
+    <h1>VM Request</h1>
+
+    <label for="vmid">Delete VM: </label>
+
+    <label for="vmid">Class Name: </label>
+    <input type="text" name="class" id="class" /><br /><br />
+
+    <input type="hidden" name="" id="" />
+    <input type="hidden" name="" id="" />
+    <input type="hidden" name="" id="" />
+
+    <input type="submit" value="submit" />
+</form>
