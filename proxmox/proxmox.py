@@ -41,13 +41,20 @@ def get_vm_ip(node, vmid, port="ens18"):
     # response.raise_for_status()
     if response.status_code == 500 : return response.status_code
 
-    print(response.json())
-    print("----------------------------")
     ip_address = None
     for interface in response.json()['data']['result']:
         if interface['name'] == port:
+            print("interface")
+            print(interface)
+            print("----------------------------")
             for ip in interface['ip-addresses']:
+                print("ip")
+                print(ip)
+                print("----------------------------")
                 if ip['ip-address-type'] == 'ipv4':
+                    print("ip-address-type")
+                    print(ip['ip-address-type'])
+                    print("----------------------------")
                     # ip_address = ip['ip-address']
                     return ip_address
 
