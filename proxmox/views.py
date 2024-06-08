@@ -34,10 +34,15 @@ def wait_for_qemu_start(node, vmid):
                     print("interface")
                     print(interface)
                     print("-------------------------")
+                    if 'ip-addresses' not in interface: continue  
                     for ip in interface['ip-addresses']:
                         if ip['ip-address-type'] == 'ipv4':
+                            print("ip")
+                            print(ip)
+                            print("ipv4")
+                            print(ip['ip-address-type'])
+                            print("-------------------------")
                             return ip['ip-address']
-                        else : continue  
         time.sleep(5)
 
 # def get_vm_ip():
