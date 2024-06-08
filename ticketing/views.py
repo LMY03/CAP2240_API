@@ -16,10 +16,10 @@ def vm_provision_process(node, vm_id, classname, no_of_vm):
     new_vm_id = []
     for i in range(no_of_vm):
         new_vm_id.append(vm_id + i + 1)
-        # upids.append(proxmox.clone_vm(node, vm_id, new_vm_id[i])['data'])
+        upids.append(proxmox.clone_vm(node, vm_id, new_vm_id[i])['data'])
 
-    # for i in range(no_of_vm):
-    #     views.wait_for_task(node, upids[i])
+    for i in range(no_of_vm):
+        views.wait_for_task(node, upids[i])
 
     for i in range(no_of_vm):
         proxmox.start_vm(node, new_vm_id[i])
