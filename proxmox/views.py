@@ -27,8 +27,7 @@ def wait_for_vm_start(node, vmid):
 def wait_for_qemu_start(node, vmid):
     while True:
         response = proxmox.get_vm_ip(node, vmid)
-        if response != 500 : 
-            if response['ip-address'] : return response
+        if response != 500 : return response
         time.sleep(5)
 
 # def get_vm_ip():
