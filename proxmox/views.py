@@ -32,16 +32,16 @@ def wait_for_qemu_start(node, vmid):
             for interface in response['data']['result']:
                 if interface['name'] == "ens18":
                     print("interface")
-                    print(interface)
-                    print("-------------------------")
+                    # print(interface)
+                    # print("-------------------------")
                     if 'ip-addresses' not in interface: continue  
                     for ip in interface['ip-addresses']:
                         if ip['ip-address-type'] == 'ipv4':
-                            print("ip")
-                            print(ip)
-                            print("ipv4")
-                            print(ip['ip-address'])
-                            print("-------------------------")
+                            # print("ip")
+                            # print(ip)
+                            # print("ipv4")
+                            # print(ip['ip-address'])
+                            # print("-------------------------")
                             return ip['ip-address']
         time.sleep(5)
 

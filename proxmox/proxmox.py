@@ -46,10 +46,10 @@ def get_vm_ip(node, vmid, port="ens18"):
     session = get_authenticated_session()
     response = session.get(url)
     # response.raise_for_status()
-    print("-------------------------")
-    print("get vm ip")
-    print(response.json())
-    print("-------------------------")
+    # print("-------------------------")
+    # print("get vm ip")
+    # print(response.json())
+    # print("-------------------------")
     return response.json()
 
     ip_address = None
