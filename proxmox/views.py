@@ -40,7 +40,7 @@ def wait_for_qemu_start(node, vmid):
                             print("ip")
                             print(ip)
                             print("ipv4")
-                            print(ip['ip-address-type'])
+                            print(ip['ip-address'])
                             print("-------------------------")
                             return ip['ip-address']
         time.sleep(5)
