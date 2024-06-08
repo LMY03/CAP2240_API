@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 
 from django.contrib.auth.models import User
 
-from proxmox import proxmox, views
+from proxmox import proxmox
 from guacamole import guacamole
 
 # Create your views here.
@@ -19,17 +19,17 @@ def vm_provision_process(node, vm_id, classname, no_of_vm):
         upids.append(proxmox.clone_vm(node, vm_id, new_vm_id[i])['data'])
 
     for i in range(no_of_vm):
-        views.wait_for_task(node, upids[i])
+        proxmox.wait_for_task(node, upids[i])
 
     for i in range(no_of_vm):
         proxmox.start_vm(node, new_vm_id[i])
 
     for i in range(no_of_vm):
-        views.wait_for_vm_start(node, new_vm_id[i]) 
+        proxmox.wait_for_vm_start(node, new_vm_id[i]) 
 
     hostname = []
     for i in range(no_of_vm):
-        hostname.append(views.wait_for_qemu_start(node, new_vm_id[i]) )
+        hostname.append(proxmox.wait_for_qemu_start(node, new_vm_id[i]) )
 
     protocol = "rdp"
     port = {
@@ -70,13 +70,13 @@ def vm_provision(request):
         # clone_vm_response = proxmox.clone_vm(node, vmid, new_vm_id)
         # upid = clone_vm_response['data']
 
-        # views.wait_for_task(node, upid)
+        # proxmox.wait_for_task(node, upid)
 
         # proxmox.start_vm(node, new_vm_id)
 
-        # views.wait_for_vm_start(node, new_vm_id) 
+        # proxmox.wait_for_vm_start(node, new_vm_id) 
 
-        # hostname = views.wait_for_qemu_start(node, new_vm_id) 
+        # hostname = proxmox.wait_for_qemu_start(node, new_vm_id) 
 
         # guacamole_username = classname
         # guacamole_password = User.objects.make_random_password()
@@ -99,9 +99,9 @@ def vm_test(request):
         new_vm_id = 999
         proxmox.start_vm(node, new_vm_id)
 
-        views.wait_for_vm_start(node, new_vm_id) 
+        proxmox.wait_for_vm_start(node, new_vm_id) 
 
-        hostname = views.wait_for_qemu_start(node, new_vm_id) 
+        hostname = proxmox.wait_for_qemu_start(node, new_vm_id) 
 
         # print("hostname")
         # print(hostname)

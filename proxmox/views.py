@@ -8,49 +8,6 @@ from . import proxmox
 
 node = "pve"
 
-def renders(request) : 
-    return render(request, "proxmox.html")
-
-def wait_for_task(node, upid): 
-    while True:
-        task_status = proxmox.get_task_status(node, upid)
-        if task_status['data']['status'] == 'stopped':
-            return task_status['data']['exitstatus'] # OK
-        time.sleep(5)
-
-def wait_for_vm_start(node, vmid):
-    while True:
-        status = proxmox.get_vm_status(node, vmid)
-        if status == "running" : return status
-        time.sleep(5)
-
-def wait_for_qemu_start(node, vmid):
-    while True:
-        # qemu_status_code = proxmox.get_qemu_status(node, vmid)
-        # if qemu_status_code == 200:
-        response = proxmox.get_vm_ip(node, vmid)
-        if response['data'] != None :
-            for interface in response['data']['result']:
-                if interface['name'] == "ens18":
-                    print("interface")
-                    # print(interface)
-                    # print("-------------------------")
-                    if 'ip-addresses' not in interface: continue  
-                    for ip in interface['ip-addresses']:
-                        if ip['ip-address-type'] == 'ipv4':
-                            # print("ip")
-                            # print(ip)
-                            # print("ipv4")
-                            # print(ip['ip-address'])
-                            # print("-------------------------")
-                            return ip['ip-address']
-        time.sleep(5)
-
-# def get_vm_ip():
-#     while True:
-#         if status == 
-#         time.sleep(5)
-
 def clone_vm(request) :
 
     if request.method == "POST":
@@ -59,19 +16,7 @@ def clone_vm(request) :
         vmid = data.get("vmid")
         new_vm_id = data.get("newid")
 
-        clone_vm_response = proxmox.clone_vm(node, vmid, new_vm_id)
-        upid = clone_vm_response['data']
-
-        wait_for_task(node, upid)
-
-        proxmox.start_vm(node, new_vm_id)
-
-        wait_for_vm_start(node, new_vm_id) 
-
-        response = wait_for_qemu_start(node, new_vm_id) 
-        # response = proxmox.get_vm_ip(node, new_vm_id)
-
-        
+        response = proxmox.clone_vm(node, vmid, new_vm_id)
 
         return render(request, "data.html", { "data" : response })
         
