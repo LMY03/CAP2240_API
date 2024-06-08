@@ -31,7 +31,7 @@ def wait_for_qemu_start(node, vmid):
             response = proxmox.get_vm_ip(node, vmid)
             print(response)
             if response != 500 :
-                for interface in response.json()['data']['result']:
+                for interface in response['data']['result']:
                     if interface['name'] == "ens18":
                         for ip in interface['ip-addresses']:
                             if ip['ip-address-type'] == 'ipv4':
