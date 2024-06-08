@@ -10,6 +10,80 @@ from guacamole import guacamole
 def renders(request) : 
     return render(request, "vm_provision.html")
 
+def vm_provision_process(node, vm_id, new_vm_id, classname):
+    clone_vm_response = proxmox.clone_vm(node, vm_id, new_vm_id)
+    upid = clone_vm_response['data']
+
+    views.wait_for_task(node, upid)
+
+    proxmox.start_vm(node, new_vm_id)
+
+    views.wait_for_vm_start(node, new_vm_id) 
+
+    hostname = views.wait_for_qemu_start(node, new_vm_id) 
+
+    guacamole_username = classname
+    guacamole_password = User.objects.make_random_password()
+
+    protocol = "rdp"
+    port = {
+        'vnc': 5901,
+        'rdp': 3389,
+        'ssh': 22
+    }.get(protocol)
+    username = "jin"
+    password = "123456"
+    parent_identifier = "ROOT"
+
+    guacamole_connection_id = guacamole.create_connection(classname, protocol, port, hostname, username, password, parent_identifier)
+    guacamole.create_user(guacamole_username, guacamole_password)
+    guacamole.assign_connection(guacamole_username, guacamole_connection_id)
+
+    return { guacamole_username, guacamole_password }
+    
+def vm_provision(request): 
+
+    if request.method == "POST":
+
+        node = "pve"
+
+        data = request.POST
+        vm_id = int(data.get("vm"))
+        classname = data.get("class")
+        no_of_vm = int(data.get("no"))
+
+        data = []
+        for i in range(no_of_vm):
+            data[i] = vm_provision_process(node, vm_id, vm_id + 1 + i, f"{classname}-{i}")
+        
+
+        
+        # clone_vm_response = proxmox.clone_vm(node, vmid, new_vm_id)
+        # upid = clone_vm_response['data']
+
+        # views.wait_for_task(node, upid)
+
+        # proxmox.start_vm(node, new_vm_id)
+
+        # views.wait_for_vm_start(node, new_vm_id) 
+
+        # hostname = views.wait_for_qemu_start(node, new_vm_id) 
+
+        # guacamole_username = classname
+        # guacamole_password = User.objects.make_random_password()
+        # guacamole_connection_id = guacamole.create_connection(classname, protocol, port, hostname, username, password, parent_identifier)
+        # guacamole.create_user(guacamole_username, guacamole_password)
+        # guacamole.assign_connection(guacamole_username, guacamole_connection_id)
+
+        # data = {
+        #     'username': guacamole_username,
+        #     'password': guacamole_password,
+        # }
+
+        return render(request, "data.html", { "data" : data })
+    
+    return redirect("/ticketing")
+
 def vm_test(request):
     if request.method == "POST":
         node = "pve"
@@ -48,55 +122,3 @@ def vm_test(request):
         # }
 
         return render(request, "data.html", { "data" : hostname })
-
-def vm_provision(request): 
-
-    if request.method == "POST":
-
-        node = "pve"
-
-        data = request.POST
-        vmid = data.get("vm")
-        classname = data.get("class")
-
-        protocol = "rdp"
-        username = "jin"
-        password = "123456"
-        parent_identifier = "ROOT"
-
-        port = {
-            'vnc': 5901,
-            'rdp': 3389,
-            'ssh': 22
-        }.get(protocol)
-
-        new_vm_id = 999
-
-        # new_vm_id = proxmox.clone_vm("pve", vmid, 999)
-
-        # hostname = proxmox.get_vm_ip(node, new_vm_id)
-        clone_vm_response = proxmox.clone_vm(node, vmid, new_vm_id)
-        upid = clone_vm_response['data']
-
-        views.wait_for_task(node, upid)
-
-        proxmox.start_vm(node, new_vm_id)
-
-        views.wait_for_vm_start(node, new_vm_id) 
-
-        hostname = views.wait_for_qemu_start(node, new_vm_id) 
-
-        guacamole_username = classname
-        guacamole_password = User.objects.make_random_password()
-        guacamole_connection_id = guacamole.create_connection(classname, protocol, port, hostname, username, password, parent_identifier)
-        guacamole_username = guacamole.create_user(guacamole_username, guacamole_password)
-        guacamole.assign_connection(guacamole_username, guacamole_connection_id)
-
-        data = {
-            'username': guacamole_username,
-            'password': guacamole_password,
-        }
-
-        return render(request, "data.html", { "data" : data })
-    
-    return redirect("/ticketing")

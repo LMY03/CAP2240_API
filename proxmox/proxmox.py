@@ -1,4 +1,4 @@
-import requests
+import requests, time
 from django.http import JsonResponse
 
 # Parameters
@@ -132,3 +132,29 @@ def config_vm(node, vmid, cpu_cores, memory_mb):
     }
     response = session.put(url, data=config)
     return response.json()
+
+def wait_for_task(node, upid): 
+    while True:
+        task_status = get_task_status(node, upid)
+        if task_status['data']['status'] == 'stopped':
+            return task_status['data']['exitstatus'] # OK
+        time.sleep(5)
+
+def wait_for_vm_start(node, vmid):
+    while True:
+        status = get_vm_status(node, vmid)
+        if status == "running" : return status
+        time.sleep(5)
+
+def wait_and_get_ip(node, vmid):
+    while True:
+        response = get_vm_ip(node, vmid)
+        if response['data'] != None :
+            for interface in response['data']['result']:
+                if interface['name'] == "ens18":
+                    print("interface")
+                    if 'ip-addresses' not in interface: continue  
+                    for ip in interface['ip-addresses']:
+                        if ip['ip-address-type'] == 'ipv4':
+                            return ip['ip-address']
+        time.sleep(5)
