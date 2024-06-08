@@ -56,9 +56,9 @@ def get_vm_ip(node, vmid, port="ens18"):
                     print(ip['ip-address-type'])
                     print("----------------------------")
                     # ip_address = ip['ip-address']
-                    return ip_address
+                    return ip
 
-    return ip_address
+    # return ip_address
 
 # get VM status
 def get_vm_status(node, vmid):
