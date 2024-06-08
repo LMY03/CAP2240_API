@@ -48,10 +48,6 @@ def clone_vm(request) :
 
         response = proxmox.get_vm_ip(node, new_vm_id)
 
-        if response.status_code == 500 : proxmox.get_vm_ip(node, new_vm_id)
-
-        
-
         return render(request, "data.html", { "data" : response })
         
     return redirect("/proxmox")
