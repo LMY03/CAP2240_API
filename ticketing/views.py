@@ -20,34 +20,34 @@ def vm_test(request):
 
         hostname = views.wait_for_qemu_start(node, new_vm_id) 
 
-        print("hostname")
-        print(hostname)
-        print("-------------------------")
+        # print("hostname")
+        # print(hostname)
+        # print("-------------------------")
 
-        guacamole_password = User.objects.make_random_password()
-        print("guacamole_password")
-        print(guacamole_password)
-        print("-------------------------")
-        guacamole_connection_id = guacamole.create_connection("Test", 'rdp', '3389', hostname, "jin", "123456", "ROOT")
-        print("guacamole_connection_id")
-        print(guacamole_connection_id)
-        print("-------------------------")
-        guacamole_username = guacamole.create_user("Test", guacamole_password)
-        print("guacamole_username")
-        print(guacamole_username)
-        print("-------------------------")
-        status = guacamole.assign_connection("Test", guacamole_connection_id)
-        print("status")
-        print(status)
-        print("-------------------------")
+        # guacamole_password = User.objects.make_random_password()
+        # print("guacamole_password")
+        # print(guacamole_password)
+        # print("-------------------------")
+        # guacamole_connection_id = guacamole.create_connection("Test", 'rdp', '3389', hostname, "jin", "123456", "ROOT")
+        # print("guacamole_connection_id")
+        # print(guacamole_connection_id)
+        # print("-------------------------")
+        # guacamole_username = guacamole.create_user("Test", guacamole_password)
+        # print("guacamole_username")
+        # print(guacamole_username)
+        # print("-------------------------")
+        # status = guacamole.assign_connection("Test", guacamole_connection_id)
+        # print("status")
+        # print(status)
+        # print("-------------------------")
 
-        data = {
-            'hostname': hostname,
-            'username': guacamole_username,
-            'password': guacamole_password,
-        }
+        # data = {
+        #     'hostname': hostname,
+        #     'username': guacamole_username,
+        #     'password': guacamole_password,
+        # }
 
-        return render(request, "data.html", { "data" : data })
+        return render(request, "data.html", { "data" : hostname })
 
 def vm_provision(request): 
 
@@ -86,9 +86,10 @@ def vm_provision(request):
 
         hostname = views.wait_for_qemu_start(node, new_vm_id) 
 
+        guacamole_username = classname
         guacamole_password = User.objects.make_random_password()
         guacamole_connection_id = guacamole.create_connection(classname, protocol, port, hostname, username, password, parent_identifier)
-        guacamole_username = guacamole.create_user(classname, guacamole_password)
+        guacamole_username = guacamole.create_user(guacamole_username, guacamole_password)
         guacamole.assign_connection(guacamole_username, guacamole_connection_id)
 
         data = {

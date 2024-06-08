@@ -26,9 +26,10 @@ def wait_for_vm_start(node, vmid):
 
 def wait_for_qemu_start(node, vmid):
     while True:
-        qemu_status_code = proxmox.get_qemu_status(node, vmid)
-        if qemu_status_code == 200:
-            response = proxmox.get_vm_ip(node, vmid)
+        # qemu_status_code = proxmox.get_qemu_status(node, vmid)
+        # if qemu_status_code == 200:
+        response = proxmox.get_vm_ip(node, vmid)
+        if response['data'] != 'None' :
             for interface in response['data']['result']:
                 if interface['name'] == "ens18":
                     print("interface")
