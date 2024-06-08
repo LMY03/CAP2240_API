@@ -129,6 +129,3 @@ def vm_deletion(request):
         return render(request, "data.html", { "data" : data })
     
     return redirect("/ticketing")
-
-def render_delete_form(request) : 
-    return render(request, "vm_provision.html")
