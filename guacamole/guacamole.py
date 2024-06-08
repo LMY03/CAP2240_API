@@ -137,5 +137,5 @@ def set_permission(username, config):
     token = get_token()
     url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/users/{username}/permissions?token={token}"
     headers = {'Content-Type': 'application/json'}
-    response = requests.patch(url, data=config, headers=headers)
+    response = requests.patch(url, data=json.dumps(config), headers=headers)
     return response.status_code
