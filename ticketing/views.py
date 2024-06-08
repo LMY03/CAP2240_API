@@ -40,6 +40,8 @@ def vm_provision_process(node, vm_id, classname, no_of_vm):
     username = "jin"
     password = "123456"
     parent_identifier = "ROOT"
+    
+    return hostname
 
     guacamole_username = []
     guacamole_password = []
