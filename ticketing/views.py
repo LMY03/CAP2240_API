@@ -52,8 +52,11 @@ def vm_provision(request) :
         guacamole_username = guacamole.create_user(classname, guacamole_password)
         guacamole.assign_connection(guacamole_username, guacamole_connection_id)
 
+        data = {
+            'username': guacamole_username,
+            'password': guacamole_password,
+        }
 
-
-        return render(request, "data.html", { "data" : None })
+        return render(request, "data.html", { "data" : data })
     
     return redirect("/ticketing")
