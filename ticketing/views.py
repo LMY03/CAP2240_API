@@ -10,20 +10,26 @@ from guacamole import guacamole
 def renders(request) : 
     return render(request, "vm_provision.html")
 
-def vm_provision_process(node, vm_id, new_vm_id, classname):
-    clone_vm_response = proxmox.clone_vm(node, vm_id, new_vm_id)
-    upid = clone_vm_response['data']
+def vm_provision_process(node, vm_id, classname, no_of_vm):
 
-    views.wait_for_task(node, upid)
+    upids = []
+    new_vm_id = []
+    for i in range(no_of_vm):
+        new_vm_id[i] = vm_id + i + 1
+        upids[i] = proxmox.clone_vm(node, vm_id, new_vm_id[i])['data']
 
-    proxmox.start_vm(node, new_vm_id)
+    for i in range(no_of_vm):
+        views.wait_for_task(node, upids[i])
 
-    views.wait_for_vm_start(node, new_vm_id) 
+    for i in range(no_of_vm):
+        proxmox.start_vm(node, new_vm_id[i])
 
-    hostname = views.wait_for_qemu_start(node, new_vm_id) 
+    for i in range(no_of_vm):
+        views.wait_for_vm_start(node, new_vm_id[i]) 
 
-    guacamole_username = classname
-    guacamole_password = User.objects.make_random_password()
+    hostname = []
+    for i in range(no_of_vm):
+        hostname[i] = views.wait_for_qemu_start(node, new_vm_id[i]) 
 
     protocol = "rdp"
     port = {
@@ -35,9 +41,14 @@ def vm_provision_process(node, vm_id, new_vm_id, classname):
     password = "123456"
     parent_identifier = "ROOT"
 
-    guacamole_connection_id = guacamole.create_connection(classname, protocol, port, hostname, username, password, parent_identifier)
-    guacamole.create_user(guacamole_username, guacamole_password)
-    guacamole.assign_connection(guacamole_username, guacamole_connection_id)
+    guacamole_username = []
+    guacamole_password = []
+    for i in range(no_of_vm):
+        guacamole_username[i] = f"{classname}-{i}"
+        guacamole_password[i] = User.objects.make_random_password()
+        guacamole_connection_id = guacamole.create_connection(guacamole_username[i], protocol, port, hostname[i], username, password, parent_identifier)
+        guacamole.create_user(guacamole_username[i], guacamole_password[i])
+        guacamole.assign_connection(guacamole_username[i], guacamole_connection_id)
 
     return { guacamole_username, guacamole_password }
     
@@ -52,9 +63,9 @@ def vm_provision(request):
         classname = data.get("class")
         no_of_vm = int(data.get("no"))
 
-        data = []
-        for i in range(no_of_vm):
-            data[i] = vm_provision_process(node, vm_id, vm_id + 1 + i, f"{classname}-{i}")
+        data = vm_provision_process(node, vm_id, classname, no_of_vm)
+        # for i in range(no_of_vm):
+        #     data[i] = vm_provision_process(node, vm_id, vm_id + 1 + i, f"{classname}-{i}")
         
 
         
