@@ -37,6 +37,7 @@ def wait_for_qemu_start(node, vmid):
                     for ip in interface['ip-addresses']:
                         if ip['ip-address-type'] == 'ipv4':
                             return ip['ip-address']
+                        else : continue  
         time.sleep(5)
 
 # def get_vm_ip():
