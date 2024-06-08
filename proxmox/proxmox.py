@@ -47,6 +47,9 @@ def get_vm_ip(node, vmid, port="ens18"):
     response = session.get(url)
     # response.raise_for_status()
     if response.status_code == 500 : return response.status_code
+    print("-------------------------")
+    print(response)
+    print("-------------------------")
     return response
 
     ip_address = None
