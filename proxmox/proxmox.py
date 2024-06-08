@@ -47,9 +47,9 @@ def get_vm_ip(node, vmid, port="ens18"):
     response = session.get(url)
     # response.raise_for_status()
     print("-------------------------")
-    print(response)
+    print(response.json())
     print("-------------------------")
-    return response
+    return response.json()
 
     ip_address = None
 
