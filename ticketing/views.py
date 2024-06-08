@@ -12,24 +12,24 @@ def renders(request) :
 
 def vm_provision_process(node, vm_id, classname, no_of_vm):
 
-    # upids = []
-    # new_vm_id = []
-    # for i in range(no_of_vm):
-    #     new_vm_id.append(vm_id + i + 1)
-    #     upids.append(proxmox.clone_vm(node, vm_id, new_vm_id[i])['data'])
+    upids = []
+    new_vm_id = []
+    for i in range(no_of_vm):
+        new_vm_id.append(vm_id + i + 1)
+        # upids.append(proxmox.clone_vm(node, vm_id, new_vm_id[i])['data'])
 
     # for i in range(no_of_vm):
     #     views.wait_for_task(node, upids[i])
 
-    # for i in range(no_of_vm):
-    #     proxmox.start_vm(node, new_vm_id[i])
+    for i in range(no_of_vm):
+        proxmox.start_vm(node, new_vm_id[i])
 
-    # for i in range(no_of_vm):
-    #     views.wait_for_vm_start(node, new_vm_id[i]) 
+    for i in range(no_of_vm):
+        views.wait_for_vm_start(node, new_vm_id[i]) 
 
-    # hostname = []
-    # for i in range(no_of_vm):
-    #     hostname.append(views.wait_for_qemu_start(node, new_vm_id[i]) )
+    hostname = []
+    for i in range(no_of_vm):
+        hostname.append(views.wait_for_qemu_start(node, new_vm_id[i]) )
 
     protocol = "rdp"
     port = {
@@ -40,12 +40,6 @@ def vm_provision_process(node, vm_id, classname, no_of_vm):
     username = "jin"
     password = "123456"
     parent_identifier = "ROOT"
-
-    hostname = [
-        '10.1.200.51',
-        '10.1.200.52',
-        '10.1.200.53',
-    ]
 
     guacamole_username = []
     guacamole_password = []
