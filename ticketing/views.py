@@ -20,18 +20,18 @@ def vm_test(request):
 
         hostname = views.wait_for_qemu_start(node, new_vm_id) 
 
-        # guacamole_password = User.objects.make_random_password()
-        # guacamole_connection_id = guacamole.create_connection("Test 1", 'rdp', '3389', hostname, username, password, parent_identifier)
-        # guacamole_username = guacamole.create_user("Test 1", guacamole_password)
-        # guacamole.assign_connection(guacamole_username, guacamole_connection_id)
+        guacamole_password = User.objects.make_random_password()
+        guacamole_connection_id = guacamole.create_connection("Test 1", 'rdp', '3389', hostname, username, password, parent_identifier)
+        guacamole_username = guacamole.create_user("Test 1", guacamole_password)
+        guacamole.assign_connection(guacamole_username, guacamole_connection_id)
 
-        # data = {
-        #     'hostname': hostname,
-        #     'username': guacamole_username,
-        #     'password': guacamole_password,
-        # }
+        data = {
+            'hostname': hostname,
+            'username': guacamole_username,
+            'password': guacamole_password,
+        }
 
-        return render(request, "data.html", { "data" : hostname })
+        return render(request, "data.html", { "data" : data })
 
 def vm_provision(request): 
 
