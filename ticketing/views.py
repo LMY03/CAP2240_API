@@ -19,6 +19,9 @@ def vm_test(request):
         views.wait_for_vm_start(node, new_vm_id) 
 
         hostname = views.wait_for_qemu_start(node, new_vm_id) 
+        print("hostname")
+        print(hostname)
+        print("----------------------")
 
         # guacamole_password = User.objects.make_random_password()
         # guacamole_connection_id = guacamole.create_connection(classname, protocol, port, hostname, username, password, parent_identifier)
