@@ -133,8 +133,6 @@ def vm_deletion(request):
 
         for guacamole_id in guacamole_ids:
             guacamole.delete_connection(guacamole_id)
-
-        return render(request, "data.html", { "data" : data })
     
     return redirect("/ticketing")
 
