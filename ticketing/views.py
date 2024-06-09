@@ -154,7 +154,8 @@ def start_vm(request):
         print(hostname)
         connection_details = guacamole.get_connection_parameter_details(connection_id)
         print(connection_details)
-        if hostname != connection_details : guacamole.update_connection(connection_id, hostname)
+        print(connection_details['hostname'])
+        if hostname != connection_details['hostname'] : guacamole.update_connection(connection_id, hostname)
         
         # redirect to new tab
         url =  guacamole.get_connection_url(connection_id, guacamole_username, guacamole_password)
