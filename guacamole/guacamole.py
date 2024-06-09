@@ -102,7 +102,6 @@ def get_connection_details(connection_id):
     # headers = {'Authorization': f'Bearer {token}'}
     # response = requests.get(url, headers=headers)
     response = requests.get(url)
-    print(response)
     response.raise_for_status()
     return response.json()
 
@@ -112,7 +111,6 @@ def get_connection_parameter_details(connection_id):
     # headers = {'Authorization': f'Bearer {token}'}
     # response = requests.get(url, headers=headers)
     response = requests.get(url)
-    print(response)
     response.raise_for_status()
     return response.json()
 
