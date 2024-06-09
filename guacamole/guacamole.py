@@ -151,11 +151,11 @@ def set_permission(username, config):
     return response.status_code
 
 def get_connection_url(connection_id, username, password):
-    token = get_token(username, password)
+    token = get_connection_token(username, password)
     GUACAMOLE_HOST = "http://10.1.200.20:8080"
     return f"{GUACAMOLE_HOST}/guacamole/#/client/{connection_id}?token={token}"
 
-def get_token(username, password):
+def get_connection_token(username, password):
     # CA_CRT = '/path/to/ca_bundle.crt'
     # CA_CRT = False # Disable SSL certificate verification
     # session.verify = CA_CRT
