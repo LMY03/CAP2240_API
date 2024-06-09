@@ -3,8 +3,7 @@ import json
 
 # GUACAMOLE_HOST = 'http://guacamole:8080'
 GUACAMOLE_HOST = "http://10.1.200.20:8080"
-# GUACAMOLE_HOST = 'http://192.168.254.125:8080'
-# GUACAMOLE_HOST = 'http://10.63.132.128:8080'
+GUACAMOLE_HOST = 'http://192.168.254.125:8080'
 USERNAME = 'guacadmin'
 PASSWORD = 'guacadmin'
 
@@ -119,11 +118,12 @@ def update_connection(connection_id, hostname):
     token = get_token()
     url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/connections/{connection_id}?token={token}"
     headers = {'Content-Type': 'application/json'}
-    connection_details = get_connection_parameter_details(connection_id)
-    print(connection_details)
+    connection_details = get_connection_details(connection_id)
+    connection_parameter_details = get_connection_parameter_details(connection_id)
+    print(connection_parameter_details)
     print("--------------------------------")
-    connection_details['hostname'] = hostname
-    print(connection_details)
+    connection_parameter_details['hostname'] = hostname
+    print(connection_parameter_details)
     print("--------------------------------")
     updated_data=json.dumps(connection_details)
     print(updated_data)
