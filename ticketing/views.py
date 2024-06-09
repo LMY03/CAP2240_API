@@ -14,6 +14,7 @@ def vm_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
 
     upids = []
     new_vm_id = []
+    # Check for available VM ID
     for i in range(no_of_vm):
         new_vm_id.append(vm_id + i + 1)
         upids.append(proxmox.clone_vm(node, vm_id, new_vm_id[i])['data'])
