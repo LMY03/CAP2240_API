@@ -3,7 +3,7 @@ import json
 
 # GUACAMOLE_HOST = 'http://guacamole:8080'
 GUACAMOLE_HOST = "http://10.1.200.20:8080"
-# GUACAMOLE_HOST = 'http://192.168.254.125:8080'
+GUACAMOLE_HOST = 'http://192.168.254.125:8080'
 # GUACAMOLE_HOST = 'http://10.63.132.128:8080'
 USERNAME = 'guacadmin'
 PASSWORD = 'guacadmin'
@@ -154,7 +154,6 @@ def set_permission(username, config):
 def get_connection_url(connection_id, username, password):
     # token = get_connection_token(username, password)
     token = get_token()
-    GUACAMOLE_HOST = "http://10.1.200.20:8080"
     return f"{GUACAMOLE_HOST}/guacamole/#/client/{connection_id}?token={token}"
 
 def get_connection_token(username, password):
