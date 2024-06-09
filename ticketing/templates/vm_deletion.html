@@ -5,15 +5,18 @@
     {{data}}
 
     {% for vm_id in data.vm_id %}
-        <input type="text" name="vm_id" value="{{ vm_id }}" />
+    <label for="vm_id-{{ forloop.counter }}">VM ID {{ forloop.counter }}: </label>
+        <input type="text" name="vm_id-{{ forloop.counter }}" value="{{ vm_id }}" /><br /><br />
     {% endfor %}
 
     {% for guacamole_username in data.guacamole_username %}
-        <input type="text" name="guacamole_username" value="{{ guacamole_username }}" />
+        <label for="guacamole_username-{{ forloop.counter }}">Guacamole Username {{ forloop.counter }}: </label>
+        <input type="text" name="guacamole_username-{{ forloop.counter }}" value="{{ guacamole_username }}" /><br /><br />
     {% endfor %}
 
-    {% for guacamole_id in data.guacamole_id %}
-        <input type="text" name="guacamole_id" value="{{ guacamole_id }}" />
+    {% for guacamole_username in data.guacamole_connection_id %}
+        <label for="guacamole_connection_id-{{ forloop.counter }}">Gucamole Connection {{ forloop.counter }}: </label>
+        <input type="text" name="guacamole_connection_id-{{ forloop.counter }}" value="{{ guacamole_connection_id }}" /><br /><br />
     {% endfor %}
 
     <input type="submit" value="submit" />

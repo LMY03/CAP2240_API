@@ -57,7 +57,7 @@ def vm_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
         guacamole.assign_connection(guacamole_username[i], guacamole_connection_id[i])
 
     return { 
-        'new_vm_id' : new_vm_id, 
+        'vm_id' : new_vm_id, 
         'guacamole_connection_id' : guacamole_connection_id, 
         'guacamole_username' : guacamole_username
     }
