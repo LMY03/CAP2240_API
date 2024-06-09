@@ -14,7 +14,7 @@
         <input type="text" name="guacamole_username-{{ forloop.counter }}" value="{{ guacamole_username }}" /><br /><br />
     {% endfor %}
 
-    {% for guacamole_username in data.guacamole_connection_id %}
+    {% for guacamole_connection_id in data.guacamole_connection_id %}
         <label for="guacamole_connection_id-{{ forloop.counter }}">Gucamole Connection {{ forloop.counter }}: </label>
         <input type="text" name="guacamole_connection_id-{{ forloop.counter }}" value="{{ guacamole_connection_id }}" /><br /><br />
     {% endfor %}
