@@ -12,29 +12,6 @@ def renders(request) :
 
 def vm_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
 
-    upids = []
-    new_vm_id = []
-    # Check for available VM ID
-    for i in range(no_of_vm):
-        new_vm_id.append(vm_id + i + 1)
-        upids.append(proxmox.clone_vm(node, vm_id, new_vm_id[i])['data'])
-
-    for i in range(no_of_vm):
-        proxmox.wait_for_task(node, upids[i])
-
-    for i in range(no_of_vm):
-        proxmox.config_vm(node, new_vm_id[i], cpu_cores, ram)
-
-    for i in range(no_of_vm):
-        proxmox.start_vm(node, new_vm_id[i])
-
-    for i in range(no_of_vm):
-        proxmox.wait_for_vm_start(node, new_vm_id[i]) 
-
-    hostname = []
-    for i in range(no_of_vm):
-        hostname.append(proxmox.wait_and_get_ip(node, new_vm_id[i]) )
-
     protocol = "rdp"
     port = {
         'vnc': 5901,
@@ -45,10 +22,34 @@ def vm_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
     password = "123456"
     parent_identifier = "ROOT"
 
+    upids = []
+    new_vm_id = []
+    hostname = []
     guacamole_connection_id = []
     guacamole_username = []
     guacamole_password = []
+
+
+
     for i in range(no_of_vm):
+        # clone vm
+        new_vm_id.append(vm_id + i + 1)
+        upids.append(proxmox.clone_vm(node, vm_id, new_vm_id[i])['data'])
+
+    for i in range(no_of_vm):
+        # wait for vm to clone
+        proxmox.wait_for_task(node, upids[i])
+        # change vm configuration
+        proxmox.config_vm(node, new_vm_id[i], cpu_cores, ram)
+        # start vm
+        proxmox.start_vm(node, new_vm_id[i])
+
+    
+    for i in range(no_of_vm):
+        # wait for vm to start
+        proxmox.wait_for_vm_start(node, new_vm_id[i])
+        hostname.append(proxmox.wait_and_get_ip(node, new_vm_id[i]) )
+        # create connection
         guacamole_username.append(f"{classname}-{i}")
         guacamole_password.append(User.objects.make_random_password())
         guacamole_connection_id.append(guacamole.create_connection(guacamole_username[i], protocol, port, hostname[i], username, password, parent_identifier))
