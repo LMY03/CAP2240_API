@@ -1,21 +1,21 @@
 import requests
 import json
 
-GUACAMOLE_HOST = 'http://guacamole:8080'
-# GUACAMOLE_HOST = 'http://192.168.254.125:8080'
+# GUACAMOLE_HOST = 'http://guacamole:8080'
+GUACAMOLE_HOST = 'http://192.168.254.125:8080'
 # GUACAMOLE_HOST = 'http://10.63.132.128:8080'
 USERNAME = 'guacadmin'
 PASSWORD = 'guacadmin'
 
 # get token /
-def get_token():
+def get_token(username = USERNAME, password = PASSWORD):
     # CA_CRT = '/path/to/ca_bundle.crt'
     # CA_CRT = False # Disable SSL certificate verification
     session = requests.Session()
     # session.verify = CA_CRT
     response = session.post(
         f"{GUACAMOLE_HOST}/guacamole/api/tokens",
-        data={'username': USERNAME, 'password': PASSWORD},
+        data={'username': username, 'password': password},
         # verify=CA_CRT
     )
     data = response.json()
@@ -105,6 +105,16 @@ def get_connection_details(connection_id):
     response.raise_for_status()
     return response.json()
 
+def get_connection_parameter_details(connection_id):
+    token = get_token()
+    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/connections/{connection_id}/parameters?token={token}"
+    # headers = {'Authorization': f'Bearer {token}'}
+    # response = requests.get(url, headers=headers)
+    response = requests.get(url)
+    print(response)
+    response.raise_for_status()
+    return response.json()
+
 # update connection 204
 def update_connection(connection_id, hostname):
     token = get_token()
@@ -139,3 +149,7 @@ def set_permission(username, config):
     headers = {'Content-Type': 'application/json'}
     response = requests.patch(url, data=json.dumps(config), headers=headers)
     return response.status_code
+
+def get_connection_url(connection_id, username, password):
+    token = get_token(username, password)
+    return f"{GUACAMOLE_HOST}/guacamole/#/client/{connection_id}?token={token}"

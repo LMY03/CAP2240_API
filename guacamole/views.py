@@ -101,3 +101,29 @@ def revoke_connection(request) :
         return render(request, "data.html", { "data" : status_code })
     
     return redirect("/guacamole")
+
+def get_connection_details(request) : 
+
+    if request.method == "POST":
+
+        data = request.POST
+        connection_id = data.get("connection_id")
+
+        data = guacamole.get_connection_details(connection_id)
+
+        return render(request, "data.html", { "data" : data })
+    
+    return redirect("/guacamole")
+
+def get_connection_parameter_details(request) : 
+
+    if request.method == "POST":
+
+        data = request.POST
+        connection_id = data.get("connection_id")
+
+        data = guacamole.get_connection_parameter_details(connection_id)
+
+        return render(request, "data.html", { "data" : data })
+    
+    return redirect("/guacamole")

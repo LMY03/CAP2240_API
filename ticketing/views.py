@@ -1,4 +1,5 @@
 from django.shortcuts import redirect, render
+from django.http import JsonResponse
 
 from django.contrib.auth.models import User
 
@@ -53,7 +54,8 @@ def vm_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
         hostname.append(proxmox.wait_and_get_ip(node, new_vm_id[i]) )
         # create connection
         guacamole_username.append(f"{classname}-{i}")
-        guacamole_password.append(User.objects.make_random_password())
+        # guacamole_password.append(User.objects.make_random_password())
+        guacamole_password.append("123456")
         guacamole_connection_id.append(guacamole.create_connection(guacamole_username[i], protocol, port, hostname[i], username, password, parent_identifier))
         guacamole.create_user(guacamole_username[i], guacamole_password[i])
         guacamole.assign_connection(guacamole_username[i], guacamole_connection_id[i])
@@ -146,12 +148,17 @@ def start_vm(request):
         data = request.POST
         vm_id = data.get("vm_id")
         connection_id = data.get("connection_id")
+        guacamole_username = data.get("username")
+        # guacamole_password = data.get("guacamole_password")
+        guacamole_password = "123456"
 
         proxmox.start_vm(node, vm_id)
         hostname = proxmox.wait_and_get_ip(node, vm_id)
         connection_details = guacamole.get_connection_details(connection_id)
         if hostname != connection_details : guacamole.update_connection(connection_id, hostname)
-        # guacamole login
-        # guacamole redirect
+        
+        # redirect to new tab
+        url =  guacamole.get_connection_url(connection_id, guacamole_username, guacamole_password)
+        return JsonResponse({"redirect_url": url})
     
     return redirect("/ticketing")

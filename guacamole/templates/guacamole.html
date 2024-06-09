@@ -82,13 +82,22 @@
 
 <hr />
 
-<form action="{% url 'guacamole:update_connection' %}" method="post">
+<form action="{% url 'guacamole:get_connection_details' %}" method="post">
     {% csrf_token %}
-    <h1>Update Connection</h1>
+    <h1>Get Connection Details</h1>
     <label for="connection_id">Connection ID: </label>
     <input type="text" name="connection_id" id="connection_id" /><br /><br />
-    <label for="hostname">IP Add: </label>
-    <input type="text" name="hostname" id="hostname" /><br /><br />
+
+    <input type="submit" value="submit" />
+</form>
+
+<hr />
+
+<form action="{% url 'guacamole:get_connection_parameter_details' %}" method="post">
+    {% csrf_token %}
+    <h1>Get Connection Parameter Details</h1>
+    <label for="connection_id">Connection ID: </label>
+    <input type="text" name="connection_id" id="connection_id" /><br /><br />
 
     <input type="submit" value="submit" />
 </form>
