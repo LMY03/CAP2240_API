@@ -154,7 +154,7 @@ def launch_vm(request):
         hostname = proxmox.wait_and_get_ip(node, vm_id)
         connection_details = guacamole.get_connection_parameter_details(connection_id)
         print(hostname)
-        print(connection_details)['hostname']
+        print(connection_details['hostname'])
         if hostname != connection_details['hostname'] : guacamole.update_connection(connection_id, hostname)
         
         # redirect to new tab
