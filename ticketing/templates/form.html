@@ -1,5 +1,7 @@
 <form action="{% url 'ticketing:vm_provision' %}" method="post">
+
     {% csrf_token %}
+
     <h1>VM Request</h1>
 
     <label for="template_vm_id">Choose VM Template: </label>
@@ -25,9 +27,11 @@
 
 <hr />
 
-<form id="vmForm" action="{% url 'ticketing:start_vm' %}" method="post" onsubmit="submitForm(event)">
+<form id="vmForm" action="{% url 'ticketing:launch_vm' %}" method="post" onsubmit="submitForm(event)">
+
     {% csrf_token %}
-    <h1>Start VM</h1>
+
+    <h1>Launch VM</h1>
 
     <label for="vm_id">VM ID: </label>
     <input type="text" name="vm_id" id="vm_id" /><br /><br />

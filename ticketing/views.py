@@ -136,7 +136,7 @@ def vm_deletion(request):
     return redirect("/ticketing")
 
 # Start VM -> Check IP -> Update Connection (if needed) -> Open Connection
-def start_vm(request):
+def launch_vm(request):
 
     if request.method == "POST":
 
