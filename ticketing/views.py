@@ -157,6 +157,7 @@ def start_vm(request):
         
         # redirect to new tab
         url =  guacamole.get_connection_url(connection_id, guacamole_username, guacamole_password)
+        print(url)
         return JsonResponse({"redirect_url": url})
     
     return redirect("/ticketing")
