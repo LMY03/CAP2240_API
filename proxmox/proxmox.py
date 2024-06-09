@@ -1,5 +1,4 @@
 import requests, time
-from django.http import JsonResponse
 
 # Parameters
 PROXMOX_HOST = 'https://10.1.200.11:8006'
@@ -62,7 +61,6 @@ def get_vm_status(node, vmid):
 # TODO: how to keep track on the available vmid, need new name
 # TODO: need to make sure there are enough disk space in the server before cloning the machine
 def clone_vm(node, vmid, newid):
-    print("--------------------------")
     session = get_authenticated_session()
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/clone"
     config = {
