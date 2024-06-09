@@ -89,7 +89,6 @@ def delete_vm(node, vmid):
 
 # start VM POST
 def start_vm(node, vmid):
-    print("starting")
     session = get_authenticated_session()
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/status/start"
     response = session.post(url)
@@ -146,7 +145,6 @@ def wait_and_get_ip(node, vmid):
         if response['data'] != None :
             for interface in response['data']['result']:
                 if interface['name'] == "ens18":
-                    print("interface")
                     if 'ip-addresses' not in interface: continue  
                     for ip in interface['ip-addresses']:
                         if ip['ip-address-type'] == 'ipv4':
