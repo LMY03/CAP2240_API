@@ -30,8 +30,6 @@ def vm_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
     guacamole_username = []
     guacamole_password = []
 
-
-
     for i in range(no_of_vm):
         # clone vm
         new_vm_id.append(vm_id + i + 1)
@@ -126,6 +124,7 @@ def vm_deletion(request):
             proxmox.stop_vm(node, vm_id)
             
         for vm_id in vm_ids:
+            proxmox.wait_for_vm_stop(node, vm_id)
             proxmox.delete_vm(node, vm_id)
 
         for guacamole_username in guacamole_usernames:
@@ -146,15 +145,14 @@ def start_vm(request):
         data = request.POST
         vm_id = data.get("vm_id")
         connection_id = data.get("connection_id")
-        # guacamole_username = data.get("username")
+        guacamole_username = data.get("username")
         # guacamole_password = data.get("guacamole_password")
-        guacamole_username = "guacadmin"
-        guacamole_password = "guacadmin"
+        guacamole_password = "123456"
 
-        # proxmox.start_vm(node, vm_id)
-        # hostname = proxmox.wait_and_get_ip(node, vm_id)
-        # connection_details = guacamole.get_connection_details(connection_id)
-        # if hostname != connection_details : guacamole.update_connection(connection_id, hostname)
+        proxmox.start_vm(node, vm_id)
+        hostname = proxmox.wait_and_get_ip(node, vm_id)
+        connection_details = guacamole.get_connection_details(connection_id)
+        if hostname != connection_details : guacamole.update_connection(connection_id, hostname)
         
         # redirect to new tab
         url =  guacamole.get_connection_url(connection_id, guacamole_username, guacamole_password)
