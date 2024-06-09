@@ -89,6 +89,7 @@ def delete_vm(node, vmid):
 
 # start VM POST
 def start_vm(node, vmid):
+    print("starting")
     session = get_authenticated_session()
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/status/start"
     response = session.post(url)
