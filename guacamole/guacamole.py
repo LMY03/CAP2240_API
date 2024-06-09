@@ -120,14 +120,9 @@ def update_connection(connection_id, hostname):
     headers = {'Content-Type': 'application/json'}
     connection_details = get_connection_details(connection_id)
     connection_parameter_details = get_connection_parameter_details(connection_id)
-    print(connection_parameter_details)
-    print("--------------------------------")
     connection_parameter_details['hostname'] = hostname
-    print(connection_parameter_details)
-    print("--------------------------------")
+    connection_details['parameters'] = connection_parameter_details
     updated_data=json.dumps(connection_details)
-    print(updated_data)
-    print("--------------------------------")
     response = requests.put(url, data=updated_data, headers=headers)
     return response
 
