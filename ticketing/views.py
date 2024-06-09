@@ -120,7 +120,7 @@ def vm_deletion(request):
         data = request.POST
         vm_ids = data.getlist("vm_id")
         guacamole_usernames = data.getlist("guacamole_username")
-        guacamole_ids = data.getlist("guacamole_id")
+        guacamole_ids = data.getlist("guacamole_connection_id")
 
         for vm_id in range(vm_ids):
             proxmox.stop_vm(node, vm_id)
