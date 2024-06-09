@@ -115,6 +115,7 @@ def get_connection_parameter_details(connection_id):
 
 # update connection 204
 def update_connection(connection_id, hostname):
+    print("updating")
     token = get_token()
     url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/connections/{connection_id}?token={token}"
     headers = {'Content-Type': 'application/json'}
