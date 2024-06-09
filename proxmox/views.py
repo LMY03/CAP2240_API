@@ -8,6 +8,9 @@ from . import proxmox
 
 node = "pve"
 
+def renders(request) : 
+    return render(request, "proxmox.html")
+
 def clone_vm(request) :
 
     if request.method == "POST":
