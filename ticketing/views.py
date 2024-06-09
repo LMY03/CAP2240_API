@@ -151,7 +151,9 @@ def start_vm(request):
 
         if proxmox.get_vm_status(node, vm_id) != "stopped" : proxmox.start_vm(node, vm_id)
         hostname = proxmox.wait_and_get_ip(node, vm_id)
+        print(hostname)
         connection_details = guacamole.get_connection_details(connection_id)
+        print(connection_details)
         if hostname != connection_details : guacamole.update_connection(connection_id, hostname)
         
         # redirect to new tab
