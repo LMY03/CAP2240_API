@@ -71,7 +71,7 @@ def vm_provision(request):
 
         data = vm_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram)
         
-        # return render(request, "vm_deletion.html", { "data" : data })
+        return render(request, "vm_deletion.html", { "data" : data })
     
         # for i in range(no_of_vm):
         #     data[i] = vm_provision_process(node, vm_id, vm_id + 1 + i, f"{classname}-{i}")
@@ -99,7 +99,7 @@ def vm_provision(request):
         #     'username': guacamole_username,
         #     'password': guacamole_password,
         # }
-        return render(request, "data.html", { "data" : data })
+        # return render(request, "data.html", { "data" : data })
     
     return redirect("/ticketing")
 
