@@ -150,7 +150,7 @@ def start_vm(request):
         # guacamole_password = data.get("guacamole_password")
         guacamole_password = "123456"
 
-        proxmox.start_vm(node, vm_id)
+        # proxmox.start_vm(node, vm_id)
         # hostname = proxmox.wait_and_get_ip(node, vm_id)
         # connection_details = guacamole.get_connection_details(connection_id)
         # if hostname != connection_details : guacamole.update_connection(connection_id, hostname)
