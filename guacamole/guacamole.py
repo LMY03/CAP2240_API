@@ -152,4 +152,4 @@ def set_permission(username, config):
 
 def get_connection_url(connection_id, username, password):
     token = get_token(username, password)
-    return f"10.1.200.20/guacamole/#/client/{connection_id}?token={token}"
+    return f"10.1.200.11:8080/guacamole/#/client/{connection_id}?token={token}"
