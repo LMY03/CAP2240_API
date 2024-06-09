@@ -8,18 +8,18 @@ USERNAME = 'guacadmin'
 PASSWORD = 'guacadmin'
 
 # get token /
-def get_token(username = USERNAME, password = PASSWORD):
+def get_token():
     # CA_CRT = '/path/to/ca_bundle.crt'
     # CA_CRT = False # Disable SSL certificate verification
     session = requests.Session()
     # session.verify = CA_CRT
     response = session.post(
         f"{GUACAMOLE_HOST}/guacamole/api/tokens",
-        data={'username': username, 'password': password},
+        data={'username': USERNAME, 'password': PASSWORD},
         # verify=CA_CRT
     )
     data = response.json()
-    return  data['authToken']
+    return data['authToken']
 
 # get session info TODO: avoid request again here
 def get_session_info():
@@ -154,3 +154,14 @@ def get_connection_url(connection_id, username, password):
     token = get_token(username, password)
     GUACAMOLE_HOST = "http://10.1.200.20:8080"
     return f"{GUACAMOLE_HOST}/guacamole/#/client/{connection_id}?token={token}"
+
+def get_token(username, password):
+    # CA_CRT = '/path/to/ca_bundle.crt'
+    # CA_CRT = False # Disable SSL certificate verification
+    # session.verify = CA_CRT
+    url = f"{GUACAMOLE_HOST}/guacamole/api/tokens"
+    config = { 'username': username, 'password': password }
+    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+    response = requests.post(url, data=json.dumps(config), headers=headers)
+    data = response.json()
+    return data['authToken']
