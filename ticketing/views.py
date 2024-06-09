@@ -122,16 +122,16 @@ def vm_deletion(request):
         guacamole_usernames = data.getlist("guacamole_username")
         guacamole_ids = data.getlist("guacamole_connection_id")
 
-        for vm_id in range(vm_ids):
+        for vm_id in vm_ids:
             proxmox.stop_vm(node, vm_id)
             
-        for vm_id in range(vm_ids):
+        for vm_id in vm_ids:
             proxmox.delete_vm(node, vm_id)
 
-        for guacamole_username in range(guacamole_usernames):
+        for guacamole_username in guacamole_usernames:
             guacamole.delete_user(guacamole_username)
 
-        for guacamole_id in range(guacamole_ids):
+        for guacamole_id in guacamole_ids:
             guacamole.delete_connection(guacamole_id)
 
         return render(request, "data.html", { "data" : data })
