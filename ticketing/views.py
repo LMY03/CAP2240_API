@@ -139,8 +139,6 @@ def vm_deletion(request):
 # Start VM -> Check IP -> Update Connection (if needed) -> Open Connection
 def start_vm(request):
 
-    print("----------------------")
-
     if request.method == "POST":
 
         node = "pve"
