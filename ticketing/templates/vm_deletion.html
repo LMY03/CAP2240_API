@@ -5,15 +5,15 @@
     {{data}}
 
     {% for vm_id in data.vm_id %}
-    <input type="text" name="vm_id" value="{{ vm_id }}" />
+        <input type="text" name="vm_id" value="{{ vm_id }}" />
     {% endfor %}
 
     {% for guacamole_username in data.guacamole_username %}
-    <input type="text" name="guacamole_username" value="{{ guacamole_username }}" />
+        <input type="text" name="guacamole_username" value="{{ guacamole_username }}" />
     {% endfor %}
 
     {% for guacamole_id in data.guacamole_id %}
-    <input type="text" name="guacamole_id" value="{{ guacamole_id }}" />
+        <input type="text" name="guacamole_id" value="{{ guacamole_id }}" />
     {% endfor %}
 
     <input type="submit" value="submit" />
