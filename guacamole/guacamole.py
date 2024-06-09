@@ -126,7 +126,7 @@ def update_connection(connection_id, hostname):
     print(connection_details)
     print("--------------------------------")
     updated_data=json.dumps(connection_details)
-    response = requests.put(url, data=updated_data, headers=headers)
+    response = requests.put(url, data=connection_details, headers=headers)
     return response
 
 # assign connection 204

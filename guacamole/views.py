@@ -102,6 +102,21 @@ def revoke_connection(request) :
     
     return redirect("/guacamole")
 
+
+def update_connection(request) : 
+
+    if request.method == "POST":
+
+        data = request.POST
+        hostname = data.get("hostname")
+        connection_id = data.get("connection_id")
+
+        response = guacamole.update_connection(connection_id, hostname)
+
+        return render(request, "data.html", { "data" : response })
+    
+    return redirect("/guacamole")
+
 def get_connection_details(request) : 
 
     if request.method == "POST":
