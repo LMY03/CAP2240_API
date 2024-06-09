@@ -164,4 +164,4 @@ def get_connection_token(username, password):
     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
     response = requests.post(url, data=json.dumps(config), headers=headers)
     data = response.json()
-    return data['authToken']
+    return data['identifier']
