@@ -13,7 +13,7 @@ def run(request):
         print(run_playbook())
         return
 
-def run_playbook(request):
+def run_playbook():
     playbook_path = '/playbooks/playbook.yml'
     inventory_path = '/inventory/hosts'
 
