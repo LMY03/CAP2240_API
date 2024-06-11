@@ -13,8 +13,8 @@ def run(request):
         return
 
 def run_playbook(request):
-    playbook_path = '/path/to/your/playbook.yml'
-    inventory_path = '/path/to/your/inventory/hosts'
+    playbook_path = '/playbooks/playbook.yml'
+    inventory_path = '/inventory/hosts'
 
     r = ansible_runner.run(private_data_dir='/tmp/', playbook=playbook_path, inventory=inventory_path)
 
