@@ -15,7 +15,7 @@ def run(request):
 def run_playbook():
     playbook_path = '/playbooks/playbook.yml'  # Updated path
     inventory_path = '/inventory/hosts'
-    private_data_dir = '/tmp/ansible_runner/'
+    private_data_dir = '/tmp/'
 
     r = ansible_runner.run(private_data_dir=private_data_dir, playbook=playbook_path, inventory=inventory_path)
 
