@@ -33,8 +33,11 @@ services:
     env_file:
       - .env
     depends_on:
+      - ansible
       mysql:
         condition: service_healthy
+    links:
+      - ansible
 
   guacamole:
     image: guacamole/guacamole:latest
