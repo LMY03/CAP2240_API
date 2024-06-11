@@ -12,7 +12,7 @@ def run(request):
     if request.method == "POST":
         return render(request, "data.html", { "data" : run_playbook() })
 
-def run_playbook(request):
+def run_playbook():
     playbook_path = '/playbooks/playbook.yml'  # Updated path
     inventory_path = '/inventory/hosts'
     private_data_dir = '/tmp/ansible_runner/'
