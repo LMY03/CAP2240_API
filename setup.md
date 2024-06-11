@@ -1,3 +1,7 @@
+sudo mkdir ./inventory
+sudo mkdir ./playbooks
+sudo touch ./inventory/hosts
+
 # Github Repository
 
 git clone https://github.com/LMY03/CAP2240_API.git ~/CAP2240_API
@@ -59,9 +63,7 @@ docker restart netdata
 
 # ANSIBLE
 
-docker exec -it ansible /bin/sh
-
-vi ../inventory/hosts
+sudo nano ~/inventory/hosts
 
 IP_ADDRESS_OF_NODE_VM ansible_user=USER_NAME
 
