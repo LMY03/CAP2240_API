@@ -36,7 +36,7 @@ services:
       mysql:
         condition: service_healthy
       ansible:
-        condition: running
+        condition: service_started
     links:
       - ansible
 
