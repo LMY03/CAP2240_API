@@ -6,5 +6,5 @@ def renders(request) :
     return render(request, "ansible.html")
 
 def run(request):
-    if request.method == "POST":
-        
+    return render(request, "ansible.html")
+    # if request.method == "POST":
