@@ -4,3 +4,7 @@ from django.shortcuts import render
 
 def renders(request) : 
     return render(request, "ansible.html")
+
+def run(request):
+    if request.method == "POST":
+        

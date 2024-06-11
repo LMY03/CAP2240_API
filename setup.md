@@ -1,6 +1,6 @@
 # Github Repository
 
-git clone https://github.com/LMY03/CAP2240_API.git
+git clone https://github.com/LMY03/CAP2240_API.git ~/CAP2240_API
 
 docker compose -f ~/CAP2240_API/docker-compose.yml up --build -d
 
@@ -69,7 +69,7 @@ ssh-copy-id USER_NAME@IP_ADDRESS_OF_NODE_VM
 
 docker exec -it ansible ansible all -i /inventory/hosts -m ping
 
-rm -rf ~/.ssh
+<!-- rm -rf ~/.ssh -->
 
 # References
 

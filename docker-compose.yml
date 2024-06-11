@@ -92,8 +92,8 @@ services:
     restart: always
     container_name: ansible
     volumes:
-      - ./playbooks:/playbooks
-      - ./inventory:/inventory
+      - /home/${USERNAME}/playbooks:/playbooks
+      - /home/${USERNAME}/inventory:/inventory
       - /home/${USERNAME}/.ssh/id_rsa:/root/.ssh/id_rsa:ro
       - /home/${USERNAME}/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub:ro
     environment:
