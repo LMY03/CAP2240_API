@@ -10,6 +10,7 @@ def renders(request) :
 
 def run(request):
     if request.method == "POST":
+        print(run_playbook())
         return
 
 def run_playbook(request):
