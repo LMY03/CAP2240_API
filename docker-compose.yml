@@ -34,7 +34,7 @@ services:
       - .env
     depends_on:
       - ansible
-      mysql:
+      - mysql:
         condition: service_healthy
     links:
       - ansible
