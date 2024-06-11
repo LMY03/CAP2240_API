@@ -10,8 +10,7 @@ def renders(request) :
 
 def run(request):
     if request.method == "POST":
-        print(run_playbook())
-        return
+        return render(request, "data.html", { "data" : run_playbook() })
 
 def run_playbook():
     playbook_path = '/playbooks/playbook.yml'
