@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     "ticketing.apps.TicketingConfig",
     "guacamole.apps.GuacamoleConfig",
     "proxmox.apps.ProxmoxConfig",
-    "autotool.apps.AutotoolConfig",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
