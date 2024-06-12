@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-import ansible_runner
+import ansible_runner, subprocess
 from django.http import JsonResponse
 
 # Create your views here.
@@ -11,6 +11,15 @@ def renders(request) :
 def run(request):
     if request.method == "POST":
         return render(request, "data.html", { "data" : run_playbook() })
+
+def run_ansible_playbook():
+    try:
+        command = "docker exec ansible_service ansible-playbook /playbooks/playbook.yml"
+        result = subprocess.run(command, shell=True, check=True, stdout=subprocess.PIPE)
+        return result.stdout.decode()
+    except subprocess.CalledProcessError as e:
+        return str(e)
+
 
 def run_playbook():
     playbook_path = '/playbooks/playbook.yml'
