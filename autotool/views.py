@@ -14,7 +14,8 @@ def run(request):
 
 def run_ansible_playbook():
     try:
-        command = "docker exec ansible_service ansible-playbook /playbooks/playbook.yml"
+        # command = "docker exec ansible_service ansible-playbook /playbooks/playbook.yml"
+        command = "docker exec -it ansible ansible all -i /inventory/hosts -m ping"
         result = subprocess.run(command, shell=True, check=True, stdout=subprocess.PIPE)
         return result.stdout.decode()
     except subprocess.CalledProcessError as e:
