@@ -15,6 +15,8 @@ RUN pip install -r requirements.txt
 
 COPY . /app/
 
+COPY CAP2240_API/inventory/hosts /inventory/hosts
+
 #############################################################
 
 # # Use an official Python runtime as a parent image
