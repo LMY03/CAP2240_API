@@ -10,7 +10,7 @@ def renders(request) :
 
 def run(request):
     if request.method == "POST":
-        return render(request, "data.html", { "data" : run_playbook() })
+        return render(request, "data.html", { "data" : run_ansible_playbook() })
 
 def run_ansible_playbook():
     try:
