@@ -10,17 +10,26 @@ def renders(request) :
 
 def run(request):
     if request.method == "POST":
-        return render(request, "data.html", { "data" : run_ansible_playbook() })
+        return render(request, "data.html", { "data" : run_ansible_playbook("playbook") })
 
-def run_ansible_playbook():
+# def run_ansible_playbook():
+#     try:
+#         # command = "docker exec ansible_service ansible-playbook /playbooks/playbook.yml"
+#         command = "docker exec -it ansible ansible all -i /inventory/hosts -m ping"
+#         result = subprocess.run(command, shell=True, check=True, stdout=subprocess.PIPE)
+#         return result.stdout.decode()
+#     except subprocess.CalledProcessError as e:
+#         return str(e)
+    
+def run_ansible_playbook(playbook):
+    return run_command("ansible-playbook " + "/playbook/" + playbook + ".yml")
+
+def run_command(command): 
     try:
-        # command = "docker exec ansible_service ansible-playbook /playbooks/playbook.yml"
-        command = "docker exec -it ansible ansible all -i /inventory/hosts -m ping"
         result = subprocess.run(command, shell=True, check=True, stdout=subprocess.PIPE)
         return result.stdout.decode()
     except subprocess.CalledProcessError as e:
         return str(e)
-
 
 def run_playbook():
     playbook_path = '/playbooks/playbook.yml'
