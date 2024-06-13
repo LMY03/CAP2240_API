@@ -41,8 +41,8 @@ services:
         condition: service_healthy
       # ansible:
       #   condition: service_started
-    links:
-      - ansible
+    # links:
+    #   - ansible
 
   guacamole:
     image: guacamole/guacamole:latest
