@@ -28,6 +28,8 @@ services:
     restart: always
     volumes:
       - .:/app
+      - .:/ansible/inventory
+      - .:/ansible/playbooks
       - /home/${USERNAME}/.ssh/id_rsa:/root/.ssh/id_rsa:ro
       - /home/${USERNAME}/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub:ro
     ports:
