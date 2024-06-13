@@ -93,20 +93,20 @@ services:
       - /var/log:/host/var/log:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
-  ansible:
-    image: cytopia/ansible:latest
-    restart: always
-    container_name: ansible
-    volumes:
-      - /home/${USERNAME}/playbooks:/playbooks
-      - /home/${USERNAME}/inventory:/inventory
-      - /home/${USERNAME}/.ssh/id_rsa:/root/.ssh/id_rsa:ro
-      - /home/${USERNAME}/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub:ro
-    environment:
-      ANSIBLE_HOST_KEY_CHECKING: "False"
-    working_dir: /playbooks
-    entrypoint: ["sh", "-c"]
-    command: ["apk update && apk add --no-cache openssh-client && tail -f /dev/null"]
+  # ansible:
+  #   image: cytopia/ansible:latest
+  #   restart: always
+  #   container_name: ansible
+  #   volumes:
+  #     - /home/${USERNAME}/playbooks:/playbooks
+  #     - /home/${USERNAME}/inventory:/inventory
+  #     - /home/${USERNAME}/.ssh/id_rsa:/root/.ssh/id_rsa:ro
+  #     - /home/${USERNAME}/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub:ro
+  #   environment:
+  #     ANSIBLE_HOST_KEY_CHECKING: "False"
+  #   working_dir: /playbooks
+  #   entrypoint: ["sh", "-c"]
+  #   command: ["apk update && apk add --no-cache openssh-client && tail -f /dev/null"]
 
 volumes:
   mysql_data:
