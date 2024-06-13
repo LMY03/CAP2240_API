@@ -1,5 +1,5 @@
 import subprocess
-import ansible_runner
+# import ansible_runner
 # ansible all -i /ansible/inventory/hosts -m ping -e 'ansible_ssh_common_args="-o StrictHostKeyChecking=no"'
 
 INVENTORY_HOSTS_PATH = '/ansible/inventory/hosts'

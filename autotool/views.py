@@ -1,7 +1,6 @@
 from django.shortcuts import render
 
 from . import ansible
-from django.http import JsonResponse
 
 # Create your views here.
 
