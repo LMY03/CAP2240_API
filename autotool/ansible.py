@@ -18,3 +18,6 @@ def run_command(command):
         return result.stdout.decode()
     except subprocess.CalledProcessError as e:
         return str(e)
+    
+def run_playbook():
+    run_command()
