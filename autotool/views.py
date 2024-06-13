@@ -13,8 +13,8 @@ def run(request):
 
         data = request.POST
         command = data.get("command")
+        ip_add = data.get("ip_add")
 
-        ip_add = "10.164.113.224"
         vm_user = "jin"
         ansible.update_inventory_hosts(ip_add, vm_user)
 
