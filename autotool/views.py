@@ -1,7 +1,6 @@
 from django.shortcuts import render
 
-# import ansible_runner
-import subprocess
+from . import ansible
 from django.http import JsonResponse
 
 # Create your views here.
@@ -14,9 +13,12 @@ def run(request):
 
         data = request.POST
         command = data.get("command")
-        edit_file()
 
-        return render(request, "data.html", { "data" : run_command(command) })
+        ip_add = "10.164.113.224"
+        vm_user = "jin"
+        ansible.update_inventory_hosts(ip_add, vm_user)
+
+        return render(request, "data.html", { "data" : ansible.run_command(command) })
 
 # def run_ansible_playbook():
 #     try:
@@ -27,21 +29,10 @@ def run(request):
 #     except subprocess.CalledProcessError as e:
 #         return str(e)
     
-def run_ansible_playbook(playbook):
-    return run_command("ansible-playbook " + "/playbooks/" + playbook + ".yml")
+# def run_ansible_playbook(playbook):
+#     return run_command("ansible-playbook " + "/playbooks/" + playbook + ".yml")
 
-def run_command(command): 
-    try:
-        result = subprocess.run(command, shell=True, check=True, stdout=subprocess.PIPE)
-        return result.stdout.decode()
-    except subprocess.CalledProcessError as e:
-        return str(e)
 
-def edit_file():
-    file_path = '/ansible/inventory/hosts'
-    with open(file_path, 'w') as file:
-        file.write('192.168.254.141 ansible_user=jin')
-    return "File has been edited successfully."
 
 # def run_playbook():
 #     playbook_path = '/playbooks/playbook.yml'
