@@ -39,8 +39,8 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-      ansible:
-        condition: service_started
+      # ansible:
+      #   condition: service_started
     links:
       - ansible
 
