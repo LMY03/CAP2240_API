@@ -12,6 +12,8 @@ services:
       MYSQL_PASSWORD: ${MYSQL_CAP2240_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
+      - /home/${USERNAME}/.ssh/id_rsa:/root/.ssh/id_rsa:ro
+      - /home/${USERNAME}/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub:ro
     healthcheck:
       test: ["CMD", "mysql", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}", "-e", "SELECT 1"]
       timeout: 20s
