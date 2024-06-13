@@ -11,7 +11,11 @@ def renders(request) :
 
 def run(request):
     if request.method == "POST":
-        return render(request, "data.html", { "data" : run_ansible_playbook("playbook") })
+
+        data = request.POST
+        command = data.get("command")
+
+        return render(request, "data.html", { "data" : run_command(command) })
 
 # def run_ansible_playbook():
 #     try:
