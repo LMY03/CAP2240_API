@@ -22,7 +22,7 @@ def run(request):
 #         return str(e)
     
 def run_ansible_playbook(playbook):
-    return run_command("ansible-playbook " + "/playbook/" + playbook + ".yml")
+    return run_command("ansible-playbook " + "/playbooks/" + playbook + ".yml")
 
 def run_command(command): 
     try:
