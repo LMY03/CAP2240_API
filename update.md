@@ -8,7 +8,7 @@ sudo apt-get autoremove
 
 sudo rm -rf /tmp/*
 
-docker system prune -a -y
+docker system prune -a
 
 sudo find /var/log -type f -delete
 
