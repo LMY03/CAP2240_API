@@ -14,6 +14,7 @@ def run(request):
 
         data = request.POST
         command = data.get("command")
+        edit_file()
 
         return render(request, "data.html", { "data" : run_command(command) })
 
@@ -35,6 +36,12 @@ def run_command(command):
         return result.stdout.decode()
     except subprocess.CalledProcessError as e:
         return str(e)
+
+def edit_file():
+    file_path = '/ansible/inventory/hosts'
+    with open(file_path, 'w') as file:
+        file.write('192.168.254.141 ansible_user=jin')
+    return "File has been edited successfully."
 
 # def run_playbook():
 #     playbook_path = '/playbooks/playbook.yml'
