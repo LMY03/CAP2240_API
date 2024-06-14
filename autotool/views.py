@@ -17,7 +17,10 @@ def run(request):
         vm_user = "jin"
         ansible.update_inventory_hosts(ip_add, vm_user)
 
-        return render(request, "data.html", { "data" : ansible.run_command(command) })
+        # ansible.run_command(command)
+        response = ansible.run_playbook("netdata_config")
+
+        return render(request, "data.html", { "data" : response })
 
 # def run_ansible_playbook():
 #     try:

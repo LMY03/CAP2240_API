@@ -19,6 +19,9 @@ def run_command(command):
     except subprocess.CalledProcessError as e:
         return str(e)
     
+def run_playbook(playbook):
+    run_command("ansible-playbook -i " + INVENTORY_HOSTS_PATH + " /app/playbooks/" + playbook + " .yaml")
+    
 def check_playbook(playbook):
     run_command("ansible-playbook --check " + playbook + ".yml")
 
