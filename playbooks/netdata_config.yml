@@ -4,11 +4,7 @@
   remote_user: root
 
   tasks:
-   - name: Ping my hosts
-     ansible.builtin.ping:
+  - name: Add HostName
 
-  # tasks:
-  # - name: Add HostName
-
-  # tasks:
-  # - name: Add Label
+  tasks:
+  - name: Add Label
