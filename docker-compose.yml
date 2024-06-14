@@ -34,6 +34,8 @@ services:
       - /home/${USERNAME}/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub:ro
     ports:
       - "8000:8000"
+    environment:
+      ANSIBLE_HOST_KEY_CHECKING: "False"
     env_file:
       - .env
     depends_on:

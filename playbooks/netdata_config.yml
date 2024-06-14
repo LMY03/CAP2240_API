@@ -1,0 +1,14 @@
+---
+- name: netdata basic config
+  hosts: 
+  remote_user: root
+
+  tasks:
+   - name: Ping my hosts
+     ansible.builtin.ping:
+
+  # tasks:
+  # - name: Add HostName
+
+  # tasks:
+  # - name: Add Label

@@ -19,5 +19,8 @@ def run_command(command):
     except subprocess.CalledProcessError as e:
         return str(e)
     
-def run_playbook():
-    run_command()
+def check_playbook(playbook):
+    run_command("ansible-playbook --check " + playbook + ".yml")
+
+def run_ansible_lint(playbook):
+    run_command("ansible-lint --check " + playbook + ".yml")
