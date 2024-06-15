@@ -6,7 +6,18 @@ import os
 
 INVENTORY_HOSTS_PATH = '/app/ansible/inventory/hosts'
 
-def update_inventory_hosts(ip_add, vm_user):
+# def update_inventory_hosts(ip_add, vm_user):
+#     inventory_content = """
+#     [all]
+#     10.10.10.11 ansible_user=jin
+#     10.10.10.12 ansible_user=jin
+#     """
+#     with open(INVENTORY_HOSTS_PATH, 'w') as file:
+#         file.write(inventory_content)
+#         # file.write(ip_add + ' ansible_user=' + vm_user)
+#     # return "File has been edited successfully."
+
+def update_inventory_hosts():
     inventory_content = """
     [all]
     10.10.10.11 ansible_user=jin
