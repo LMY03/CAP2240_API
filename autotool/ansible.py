@@ -49,15 +49,32 @@ def run_playbook():
 
     # Render the playbook content with dynamic values
     playbook_content = template.render(hosts=hosts)
+
+    # Define private_data_dir and create directory structure
     private_data_dir = '/app/ansible'
+    os.makedirs(f"{private_data_dir}/project", exist_ok=True)
+    os.makedirs(f"{private_data_dir}/inventory", exist_ok=True)
+
+    # Write the rendered playbook to the project directory
     playbook_path = f'{private_data_dir}/project/playbook.yml'
     with open(playbook_path, 'w') as playbook_file:
         playbook_file.write(playbook_content)
 
+    # Create the inventory file
+    inventory_content = """
+    [all]
+    192.168.254.151
+    192.168.254.152
+    """
+    inventory_path = f'{private_data_dir}/inventory/hosts'
+    with open(inventory_path, 'w') as inventory_file:
+        inventory_file.write(inventory_content)
+
+    # Run the playbook using ansible-runner
     result = ansible_runner.run(
         private_data_dir=private_data_dir,
         playbook='playbook.yml',
-        inventory=INVENTORY_HOSTS_PATH
+        inventory='hosts'
     )
 
     # Check the result

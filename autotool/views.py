@@ -19,7 +19,7 @@ def run(request):
 
         # ansible.run_command(command)
         # response = ansible.run_playbook(command)
-        ansible.update_inventory_hosts()
+        # ansible.update_inventory_hosts()
         response = ansible.run_playbook()
 
         return render(request, "data.html", { "data" : response })
