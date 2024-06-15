@@ -13,6 +13,7 @@ def update_inventory_hosts(ip_add, vm_user):
     return "File has been edited successfully."
 
 def run_command(command): 
+    print(command)
     try:
         result = subprocess.run(command, shell=True, check=True, stdout=subprocess.PIPE)
         return result.stdout.decode()
