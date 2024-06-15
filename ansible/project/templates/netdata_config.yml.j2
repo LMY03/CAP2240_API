@@ -1,9 +1,9 @@
 ---
 - name: netdata basic config
-  hosts: "{{ hosts.host }}"
+  hosts: "{{ item.host }}"
   vars:
-    hostname: "{{ hosts.hostname }}"
-    label: "{{ hosts.label }}"
+    hostname: "{{ item.hostname }}"
+    label: "{{ item.label }}"
   tasks:
     - name: Create a file and write content
       ansible.builtin.copy:
@@ -12,4 +12,4 @@
           [global]
             hostname = {{ hostname }}
             label = {{ label }}
-  with_items: "{{ hosts }}"
+  loop: "{{ hosts }}"
