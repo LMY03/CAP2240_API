@@ -7,12 +7,13 @@
 
   # tasks:
   # - name: Add Label
+  tasks:
     - name: Ensure the directory exists
-        ansible.builtin.file:
-          path: /path/to/directory
-          state: directory
-          mode: '0755'
-
+      ansible.builtin.file:
+        path: /path/to/directory
+        state: directory
+        mode: '0755'
+  tasks:
     - name: Create a file and write content
       ansible.builtin.copy:
         dest: /etc/netdata/netdata.conf
