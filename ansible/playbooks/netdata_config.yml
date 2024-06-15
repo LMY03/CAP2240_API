@@ -1,10 +1,27 @@
 ---
 - name: netdata basic config
-  hosts: 
+  hosts: all
   remote_user: root
 
-  tasks:
-  - name: Add HostName
+  # tasks:
+  # - name: Add HostName
 
+  # tasks:
+  # - name: Add Label
+
+- name: Create and write to a file
+  hosts: all
   tasks:
-  - name: Add Label
+    - name: Ensure the directory exists
+      ansible.builtin.file:
+        path: /etc/netdata/
+        state: directory
+        mode: '0755'
+
+    - name: Create a file and write content
+      ansible.builtin.copy:
+        dest: /etc/netdata/netdata.conf
+        content: |
+          [global]
+            hostname = HOST_NAME
+            label = node
