@@ -15,8 +15,8 @@ RUN pip install -r requirements.txt
 
 RUN mkdir /ansible/
 RUN mkdir /ansible/inventory/
-RUN mkdir /ansible/playbooks/
 RUN touch /ansible/inventory/hosts
+RUN mv /app/playbooks /ansible/
 
 COPY . /app/
 
