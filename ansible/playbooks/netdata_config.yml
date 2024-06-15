@@ -17,6 +17,8 @@
         path: /etc/netdata/
         state: directory
         mode: '0755'
+        owner: root
+        group: root
 
     - name: Create a file and write content
       ansible.builtin.copy:
@@ -25,3 +27,6 @@
           [global]
             hostname = HOST_NAME
             label = node
+        owner: root
+        group: root
+        mode: '0644'
