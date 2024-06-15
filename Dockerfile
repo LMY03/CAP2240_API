@@ -13,6 +13,11 @@ RUN pip install --upgrade pip
 
 RUN pip install -r requirements.txt
 
+RUN mkdir /ansible/
+RUN mkdir /ansible/inventory/
+RUN mkdir /ansible/playbooks/
+RUN touch /ansible/inventory/hosts
+
 COPY . /app/
 
 # COPY CAP2240_API/inventory/hosts /inventory/hosts
