@@ -1,4 +1,6 @@
-import subprocess, os
+from django.http import HttpResponse
+
+import subprocess
 # import ansible_runner
 # ansible all -i /ansible/inventory/hosts -m ping -e 'ansible_ssh_common_args="-o StrictHostKeyChecking=no"'
 
@@ -16,9 +18,11 @@ def run_command(command):
     print(command)
     try:
         result = subprocess.run(command, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        return result.stdout.decode() + "\n" + result.stderr.decode()
+        output = result.stdout.decode() + "\n" + result.stderr.decode()
     except subprocess.CalledProcessError as e:
-        return f"Command failed with error code {e.returncode}: {e.output.decode()}"
+        output = f"Command failed with error code {e.returncode}: {e.output.decode()}"
+    
+    return HttpResponse(output, content_type="text/plain")
     
 def run_playbook(playbook):
     run_command("ansible-playbook -i " + INVENTORY_HOSTS_PATH + " /app/ansible/playbooks/" + playbook + ".yml")
