@@ -1,4 +1,4 @@
-import subprocess
+import subprocess, os
 # import ansible_runner
 # ansible all -i /ansible/inventory/hosts -m ping -e 'ansible_ssh_common_args="-o StrictHostKeyChecking=no"'
 
@@ -10,9 +10,10 @@ def test_ping():
 
 def update_inventory_hosts(ip_add, vm_user):
     print("update inventory")
-    with open(INVENTORY_HOSTS_PATH, 'w') as file:
-        file.write(ip_add + ' ansible_user=' + vm_user)
-    return "File has been edited successfully."
+    if not os.path.exists(INVENTORY_HOSTS_PATH)
+        with open(INVENTORY_HOSTS_PATH, 'w') as file:
+            file.write(ip_add + ' ansible_user=' + vm_user)
+        return "File has been edited successfully."
 
 def run_command(command): 
     try:
