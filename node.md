@@ -26,8 +26,7 @@ sudo nano /etc/netdata/stream.conf
 
 sudo nano /etc/netdata/netdata.conf
 
-[global]
-    hostname = HOST_NAME
+sudo chown USERNAME /etc/netdata/
 
 sudo systemctl enable netdata
 
