@@ -9,8 +9,6 @@ def test_ping():
     run_command("ansible all -i " + INVENTORY_HOSTS_PATH + "")
 
 def update_inventory_hosts(ip_add, vm_user):
-    print("update inventory")
-    # if not os.path.exists(INVENTORY_HOSTS_PATH):
     with open(INVENTORY_HOSTS_PATH, 'w') as file:
         file.write(ip_add + ' ansible_user=' + vm_user)
     return "File has been edited successfully."
