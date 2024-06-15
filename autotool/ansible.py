@@ -15,10 +15,10 @@ def update_inventory_hosts(ip_add, vm_user):
 def run_command(command): 
     print(command)
     try:
-        result = subprocess.run(command, shell=True, check=True, stdout=subprocess.PIPE)
-        return result.stdout.decode()
+        result = subprocess.run(command, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        return result.stdout.decode() + "\n" + result.stderr.decode()
     except subprocess.CalledProcessError as e:
-        return str(e)
+        return f"Command failed with error code {e.returncode}: {e.output.decode()}"
     
 def run_playbook(playbook):
     run_command("ansible-playbook -i " + INVENTORY_HOSTS_PATH + " /app/ansible/playbooks/" + playbook + ".yml")
