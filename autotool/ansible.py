@@ -2,7 +2,7 @@ import subprocess, os
 # import ansible_runner
 # ansible all -i /ansible/inventory/hosts -m ping -e 'ansible_ssh_common_args="-o StrictHostKeyChecking=no"'
 
-INVENTORY_HOSTS_PATH = '/ansible/inventory/hosts'
+INVENTORY_HOSTS_PATH = '/app/ansible/inventory/hosts'
 
 def test_ping():
     run_command("ansible all -i " + INVENTORY_HOSTS_PATH + "")
@@ -20,7 +20,7 @@ def run_command(command):
         return str(e)
     
 def run_playbook(playbook):
-    run_command("ansible-playbook -i " + INVENTORY_HOSTS_PATH + " /ansible/playbooks/" + playbook + " .yml")
+    run_command("ansible-playbook -i " + INVENTORY_HOSTS_PATH + " /app/ansible/playbooks/" + playbook + " .yml")
     
 def check_playbook(playbook):
     run_command("ansible-playbook --check " + playbook + ".yml")

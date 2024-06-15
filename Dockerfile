@@ -15,9 +15,4 @@ RUN pip install -r requirements.txt
 
 COPY . /app/
 
-RUN mkdir /ansible/
-RUN mkdir /ansible/inventory/
-RUN touch /ansible/inventory/hosts
-RUN mv /app/playbooks /ansible/
-
 # COPY CAP2240_API/inventory/hosts /inventory/hosts
