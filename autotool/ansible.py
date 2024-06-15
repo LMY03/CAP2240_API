@@ -75,7 +75,7 @@ def run_playbook():
     result = ansible_runner.run(
         private_data_dir=private_data_dir,
         playbook='playbook.yml',
-        inventory='hosts'
+        inventory='inventory/hosts'
     )
 
     # Check the result
@@ -84,7 +84,7 @@ def run_playbook():
     else:
         return JsonResponse({
             'status': 'Playbook execution failed', 
-            'details': result.stdout.decode() if result.stdout else ''
+            'details': result.stdout.read() if result.stdout else ''
         })
 # def run_command(command): 
 #     print(command)
