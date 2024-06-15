@@ -19,6 +19,6 @@ RUN mkdir /ansible/
 RUN mkdir /ansible/inventory/
 RUN touch /ansible/inventory/hosts
 RUN mkdir /ansible/playbooks/
-RUN mv /app/playbooks /ansible/
+# RUN mv /app/playbooks /ansible/
 
 # COPY CAP2240_API/inventory/hosts /inventory/hosts
