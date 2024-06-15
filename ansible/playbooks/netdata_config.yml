@@ -1,7 +1,6 @@
 ---
 - name: netdata basic config
   hosts: all
-  become: true
 
   # tasks:
   # - name: Add HostName
