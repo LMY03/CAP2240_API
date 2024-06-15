@@ -30,6 +30,7 @@ def update_inventory_hosts():
 
 def run_playbook():
 
+    # Define your dynamic host variables
     hosts = [
         {
             "host": "192.168.254.151",
@@ -81,8 +82,10 @@ def run_playbook():
     if result.rc == 0:
         return JsonResponse({'status': 'Playbook executed successfully'})
     else:
-        return JsonResponse({'status': 'Playbook execution failed', 'details': result.stdout})
-
+        return JsonResponse({
+            'status': 'Playbook execution failed', 
+            'details': result.stdout.decode() if result.stdout else ''
+        })
 # def run_command(command): 
 #     print(command)
 #     try:
