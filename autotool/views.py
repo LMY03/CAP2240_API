@@ -11,14 +11,16 @@ def run(request):
     if request.method == "POST":
 
         data = request.POST
-        command = data.get("command")
-        ip_add = data.get("ip_add")
+        # command = data.get("command")
+        # ip_add = data.get("ip_add")
 
-        vm_user = "jin"
-        ansible.update_inventory_hosts(ip_add, vm_user)
+        # vm_user = "jin"
+        # ansible.update_inventory_hosts(ip_add, vm_user)
 
         # ansible.run_command(command)
-        response = ansible.run_playbook(command)
+        # response = ansible.run_playbook(command)
+        ansible.update_inventory_hosts()
+        response = ansible.run_playbook()
 
         return render(request, "data.html", { "data" : response })
 

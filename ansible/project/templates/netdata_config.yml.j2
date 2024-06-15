@@ -1,0 +1,15 @@
+---
+- name: netdata basic config
+  hosts: "{{ item.host }}"
+  vars:
+    hostname: "{{ item.hostname }}"
+    label: "{{ item.label }}"
+  tasks:
+    - name: Create a file and write content
+      ansible.builtin.copy:
+        dest: /etc/netdata/netdata.conf
+        content: |
+          [global]
+            hostname = {{ hostname }}
+            label = {{ label }}
+  with_items: "{{ hosts }}"
