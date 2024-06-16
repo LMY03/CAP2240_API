@@ -76,7 +76,7 @@ def get_inventory(hostname, vm_user, vm_name, label):
 
     inventory = "[test]\n"
     # Add each host with its variables inline
-    for i in range(hostname):
+    for i in range(len(hostname)):
         inventory += f"{hostname[i]} ansible_user={vm_user[i]} hostname={vm_name[i]} label={label[i]}\n"
 
     return inventory
