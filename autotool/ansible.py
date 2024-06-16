@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from jinja2 import Environment, FileSystemLoader
+# from jinja2 import Environment, FileSystemLoader
 import ansible_runner
 import json
 # ansible all -i /ansible/inventory/hosts -m ping -e 'ansible_ssh_common_args="-o StrictHostKeyChecking=no"'
@@ -28,7 +28,7 @@ def update_inventory_hosts():
         # file.write(ip_add + ' ansible_user=' + vm_user)
     # return "File has been edited successfully."
 
-def fetch_hosts(): 
+def fetch_hosts():
     hosts_data = [
         {"ip": "192.168.254.152", "ansible_user": "jin", "hostname": "Node_2", "label": "S12"},
         {"ip": "192.168.254.153", "ansible_user": "jin", "hostname": "Node_3", "label": "S13"}
@@ -55,7 +55,7 @@ def fetch_hosts():
             "label": host['label']
         }
 
-    return json.dumps(inventory)
+    return json.dumps(inventory, indent=4)
 
 def run_playbook(playbook):
     inventory = fetch_hosts()
