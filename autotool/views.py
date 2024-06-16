@@ -26,7 +26,18 @@ def run(request):
         # ansible.update_inventory_hosts()
         # response = ansible.run_playbook()
         playbook = "netdata_conf.yml"
-        response = ansible.run_playbook(playbook)
+        no_of_vm = 2
+        classname = "Test"
+        hostname = ["192.168.254.155", "192.168.254.156"]
+        vm_user = []
+        vm_name = []
+        label = []
+
+        for i in range(no_of_vm):
+            vm_user.append("jin")
+            vm_name.append(classname + "-" + str(i))
+            label.append(classname)
+        response = ansible.run_playbook(playbook, hostname, vm_user, vm_name, label)
 
         return render(request, "data.html", { "data" : response })
 

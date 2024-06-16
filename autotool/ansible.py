@@ -59,8 +59,8 @@ def update_inventory_hosts():
 
 def fetch_hosts():
     hosts_data = [
-        {"ip": "192.168.254.152", "ansible_user": "jin", "hostname": "Node_2", "label": "S12"},
-        {"ip": "192.168.254.153", "ansible_user": "jin", "hostname": "Node_3", "label": "S13"}
+        {"ip": "192.168.254.155", "ansible_user": "jin", "hostname": "Node_2", "label": "S12"},
+        {"ip": "192.168.254.156", "ansible_user": "jin", "hostname": "Node_3", "label": "S13"}
     ]
 
     # Start with the group header
