@@ -28,11 +28,37 @@ def update_inventory_hosts():
         # file.write(ip_add + ' ansible_user=' + vm_user)
     # return "File has been edited successfully."
 
+def fetch_hosts(): 
+    hosts_data = [
+        {"ip": "192.168.254.152", "ansible_user": "jin", "hostname": "Node_2", "label": "S12"},
+        {"ip": "192.168.254.153", "ansible_user": "jin", "hostname": "Node_3", "label": "S13"}
+    ]
+    inventory = {
+        "test": {
+            "hosts": [],
+            "vars": {}
+        },
+        "_meta": {
+            "hostvars": {}
+        }
+    }
+
+    for host in hosts_data:
+        # Append IP addresses under the 'test' group
+        inventory['test']['hosts'].append(host['ip'])
+        # Add variables specific to each host
+        inventory["_meta"]["hostvars"][host['ip']] = {
+            "ansible_user": host['ansible_user'],
+            "hostname": host['hostname'],
+            "label": host['label']
+        }
+    return inventory
+
 def run_playbook(playbook):
     result = ansible_runner.run(
         private_data_dir='/app/ansible',
         playbook=playbook,
-        inventory='dynamic_inventory.py'
+        inventory=fetch_hosts()
     )
 
     # print("{}: {}".format(r.status, r.rc))
