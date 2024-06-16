@@ -28,18 +28,20 @@ def update_inventory_hosts():
         # file.write(ip_add + ' ansible_user=' + vm_user)
     # return "File has been edited successfully."
 
-def run_playbook(inventory, playbook):
-    private_data_dir = '/app/ansible'
+def run_playbook(playbook):
     result = ansible_runner.run(
-        private_data_dir=private_data_dir,
+        private_data_dir='/app/ansible',
         playbook=playbook,
     )
+
     if result.rc == 0:
         return JsonResponse({'status': 'Playbook executed successfully'})
     else:
         return JsonResponse({
             'status': 'Playbook execution failed', 
-            'details': result.stdout.read() if result.stdout else ''
+            'details': result.stdout.read() if result.stdout else 'No output available',
+            # 'details': result.stdout.read() if result.stdout else ''
+            'message': 'Playbook execution failed'
         })
 
 

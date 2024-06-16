@@ -25,9 +25,8 @@ def run(request):
         # response = ansible.run_playbook(command)
         # ansible.update_inventory_hosts()
         # response = ansible.run_playbook()
-        inventory = "hosts"
         playbook = "netdata_conf.yml"
-        response = ansible.run_playbook(inventory, playbook)
+        response = ansible.run_playbook(playbook)
 
         return render(request, "data.html", { "data" : response })
 
