@@ -55,10 +55,12 @@ def fetch_hosts():
     return inventory
 
 def run_playbook(playbook):
+    inventory = fetch_hosts()
+    print(inventory)
     result = ansible_runner.run(
         private_data_dir='/app/ansible',
         playbook=playbook,
-        inventory=fetch_hosts()
+        inventory=inventory
     )
 
     # print("{}: {}".format(r.status, r.rc))
