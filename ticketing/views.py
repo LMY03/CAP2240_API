@@ -31,10 +31,10 @@ def vm_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
     guacamole_username = []
     guacamole_password = []
 
-    for i in range(no_of_vm):
-        # clone vm
-        new_vm_id.append(vm_id + i + 1)
-        upids.append(proxmox.clone_vm(node, vm_id, new_vm_id[i])['data'])
+    # for i in range(no_of_vm):
+    #     # clone vm
+    #     new_vm_id.append(vm_id + i + 1)
+    #     upids.append(proxmox.clone_vm(node, vm_id, new_vm_id[i])['data'])
 
     for i in range(no_of_vm):
         # wait for vm to clone
@@ -50,12 +50,12 @@ def vm_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
         proxmox.wait_for_vm_start(node, new_vm_id[i])
         hostname.append(proxmox.wait_and_get_ip(node, new_vm_id[i]) )
         # create connection
-        guacamole_username.append(f"{classname}-{i}")
-        # guacamole_password.append(User.objects.make_random_password())
-        guacamole_password.append("123456")
-        guacamole_connection_id.append(guacamole.create_connection(guacamole_username[i], protocol, port, hostname[i], username, password, parent_identifier))
-        guacamole.create_user(guacamole_username[i], guacamole_password[i])
-        guacamole.assign_connection(guacamole_username[i], guacamole_connection_id[i])
+        # guacamole_username.append(f"{classname}-{i}")
+        # # guacamole_password.append(User.objects.make_random_password())
+        # guacamole_password.append("123456")
+        # guacamole_connection_id.append(guacamole.create_connection(guacamole_username[i], protocol, port, hostname[i], username, password, parent_identifier))
+        # guacamole.create_user(guacamole_username[i], guacamole_password[i])
+        # guacamole.assign_connection(guacamole_username[i], guacamole_connection_id[i])
 
         # set hostname and label in netdata
     vm_user = []
