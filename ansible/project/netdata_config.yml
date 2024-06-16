@@ -1,9 +1,6 @@
 ---
 - name: netdata basic config
   hosts: "{{ target_hosts | default('all') }}"
-  vars:
-    hostname: "{{ hostname }}"
-    label: "{{ label }}"
   tasks:
     - name: Create a file and write content
       ansible.builtin.template:
