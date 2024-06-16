@@ -28,57 +28,13 @@ def update_inventory_hosts():
         # file.write(ip_add + ' ansible_user=' + vm_user)
     # return "File has been edited successfully."
 
-def run_playbook():
-
-    # Define your dynamic host variables
-    hosts = [
-        {
-            "host": "192.168.254.151",
-            "hostname": "Node 1",
-            "label": "S11"
-        },
-        {
-            "host": "192.168.254.152",
-            "hostname": "Node 2",
-            "label": "S12"
-        }
-    ]
-
-    # Setup Jinja2 environment
-    env = Environment(loader=FileSystemLoader('/app/ansible/project/templates'))
-    template = env.get_template('netdata_config.yml.j2')
-
-    # Render the playbook content with dynamic values
-    playbook_content = template.render(hosts=hosts)
-
-    # Define private_data_dir and create directory structure
+def run_playbook(inventory, playbook):
     private_data_dir = '/app/ansible'
-    os.makedirs(f"{private_data_dir}/project", exist_ok=True)
-    os.makedirs(f"{private_data_dir}/inventory", exist_ok=True)
-
-    # Write the rendered playbook to the project directory
-    playbook_path = f'{private_data_dir}/project/playbook.yml'
-    with open(playbook_path, 'w') as playbook_file:
-        playbook_file.write(playbook_content)
-
-    # Create the inventory file
-    inventory_content = """
-    [all]
-    192.168.254.151
-    192.168.254.152
-    """
-    inventory_path = f'{private_data_dir}/inventory/hosts'
-    with open(inventory_path, 'w') as inventory_file:
-        inventory_file.write(inventory_content)
-
-    # Run the playbook using ansible-runner
     result = ansible_runner.run(
         private_data_dir=private_data_dir,
-        playbook='playbook.yml',
-        inventory='inventory/hosts'
+        playbook=playbook,
+        inventory='/inventory/' + inventory
     )
-
-    # Check the result
     if result.rc == 0:
         return JsonResponse({'status': 'Playbook executed successfully'})
     else:
@@ -86,6 +42,67 @@ def run_playbook():
             'status': 'Playbook execution failed', 
             'details': result.stdout.read() if result.stdout else ''
         })
+
+
+# def run_playbook():
+
+#     # Define your dynamic host variables
+#     hosts = [
+#         {
+#             "host": "192.168.254.151",
+#             "hostname": "Node 1",
+#             "label": "S11"
+#         },
+#         {
+#             "host": "192.168.254.152",
+#             "hostname": "Node 2",
+#             "label": "S12"
+#         }
+#     ]
+
+#     # Setup Jinja2 environment
+#     env = Environment(loader=FileSystemLoader('/app/ansible/project/templates'))
+#     template = env.get_template('netdata_config.yml.j2')
+
+#     # Render the playbook content with dynamic values
+#     playbook_content = template.render(hosts=hosts)
+
+#     # Define private_data_dir and create directory structure
+#     private_data_dir = '/app/ansible'
+#     os.makedirs(f"{private_data_dir}/project", exist_ok=True)
+#     os.makedirs(f"{private_data_dir}/inventory", exist_ok=True)
+
+#     # Write the rendered playbook to the project directory
+#     playbook_path = f'{private_data_dir}/project/playbook.yml'
+#     with open(playbook_path, 'w') as playbook_file:
+#         playbook_file.write(playbook_content)
+
+#     # Create the inventory file
+#     inventory_content = """
+#     [all]
+#     192.168.254.151
+#     192.168.254.152
+#     """
+#     inventory_path = f'{private_data_dir}/inventory/hosts'
+#     with open(inventory_path, 'w') as inventory_file:
+#         inventory_file.write(inventory_content)
+
+#     # Run the playbook using ansible-runner
+#     result = ansible_runner.run(
+#         private_data_dir=private_data_dir,
+#         playbook='playbook.yml',
+#         inventory='inventory/hosts'
+#     )
+
+#     # Check the result
+#     if result.rc == 0:
+#         return JsonResponse({'status': 'Playbook executed successfully'})
+#     else:
+#         return JsonResponse({
+#             'status': 'Playbook execution failed', 
+#             'details': result.stdout.read() if result.stdout else ''
+#         })
+
 # def run_command(command): 
 #     print(command)
 #     try:

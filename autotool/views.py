@@ -7,6 +7,10 @@ from . import ansible
 def renders(request) : 
     return render(request, "ansible.html")
 
+# Create Inventory Hosts File by request
+# Generate Json Data for ansible playbook
+# Run playbook
+
 def run(request):
     if request.method == "POST":
 
@@ -20,9 +24,15 @@ def run(request):
         # ansible.run_command(command)
         # response = ansible.run_playbook(command)
         # ansible.update_inventory_hosts()
-        response = ansible.run_playbook()
+        # response = ansible.run_playbook()
+        inventory = "hosts"
+        playbook = "netdata_config.yml"
+        response = ansible.run_playbook(inventory, playbook)
 
         return render(request, "data.html", { "data" : response })
+
+def get_ansible_variables():
+    data = list()
 
 # def run_ansible_playbook():
 #     try:

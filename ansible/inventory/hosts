@@ -1,0 +1,19 @@
+{
+    "_meta": {
+        "hostvars": {
+            "vm1": {
+                "ansible_host": "192.168.254.152",
+                "hostname": "Node 2",
+                "label": "S12"
+            },
+            "vm2": {
+                "ansible_host": "192.168.1.153",
+                "hostname": "Node 3",
+                "label": "S13"
+            }
+        }
+    },
+    "vm_group": {
+        "hosts": ["vm1", "vm2"]
+    }
+}

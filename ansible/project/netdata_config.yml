@@ -1,11 +1,19 @@
 ---
 - name: netdata basic config
-  hosts: all
+  hosts: "{{ target_hosts | default('all') }}"
+  vars:
+    hostname: "{{ hostname }}"
+    label: "{{ label }}"
   tasks:
     - name: Create a file and write content
-      ansible.builtin.copy:
+      ansible.builtin.template:
+        src: netdata.conf.j2
         dest: /etc/netdata/netdata.conf
-        content: |
-          [global]
-            hostname = HOST_NAME
-            label = node
+  # tasks:
+  #   - name: Create a file and write content
+  #     ansible.builtin.copy:
+  #       dest: /etc/netdata/netdata.conf
+  #       content: |
+  #         [global]
+  #           hostname = {{ hostname }}
+  #           label = {{ label }}
