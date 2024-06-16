@@ -34,24 +34,23 @@ def fetch_hosts():
         {"ip": "192.168.254.153", "ansible_user": "jin", "hostname": "Node_3", "label": "S13"}
     ]
     inventory = {
-        "test": {
-            "hosts": [],
-            "vars": {}
-        },
         "_meta": {
             "hostvars": {}
+        },
+        "all": {
+            "hosts": [],
+            "vars": {}
         }
     }
 
     for host in hosts_data:
-        # Append IP addresses under the 'test' group
-        inventory['test']['hosts'].append(host['ip'])
-        # Add variables specific to each host
+        inventory['all']['hosts'].append(host['ip'])
         inventory["_meta"]["hostvars"][host['ip']] = {
             "ansible_user": host['ansible_user'],
             "hostname": host['hostname'],
             "label": host['label']
         }
+
     return inventory
 
 def run_playbook(playbook):
