@@ -46,8 +46,8 @@ def fetch_hosts():
     }
 
     for host in hosts_data:
-        # Append IP addresses under the 'test' group
-        inventory['test']['hosts'].append(host['ip'])
+        # Use IP as the key and assign an empty dict as its value
+        inventory['test']['hosts'][host['ip']] = {}
         # Add variables specific to each host
         inventory["_meta"]["hostvars"][host['ip']] = {
             "ansible_user": host['ansible_user'],
