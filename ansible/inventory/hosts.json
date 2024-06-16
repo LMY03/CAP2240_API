@@ -1,21 +1,25 @@
 {
+    "vm_group": {
+        "hosts": [
+            "vm1",
+            "vm2"
+        ],
+        "vars": {
+            "ansible_user": "jin"
+        }
+    },
     "_meta": {
         "hostvars": {
             "vm1": {
                 "ansible_host": "192.168.254.152",
-                "ansible_user": "jin",
                 "hostname": "Node 2",
                 "label": "S12"
             },
             "vm2": {
                 "ansible_host": "192.168.1.153",
-                "ansible_user": "jin",
                 "hostname": "Node 3",
                 "label": "S13"
             }
         }
-    },
-    "vm_group": {
-        "hosts": ["vm1", "vm2"]
     }
 }
