@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from jinja2 import Environment, FileSystemLoader
 import ansible_runner
-import os
+import json
 # ansible all -i /ansible/inventory/hosts -m ping -e 'ansible_ssh_common_args="-o StrictHostKeyChecking=no"'
 
 INVENTORY_HOSTS_PATH = '/app/ansible/inventory/hosts'
@@ -51,11 +51,12 @@ def fetch_hosts():
             "label": host['label']
         }
 
-    return inventory
+    return json.dumps(inventory)
 
 def run_playbook(playbook):
     inventory = fetch_hosts()
     print(inventory)
+    print('{"test": {"hosts": ["192.168.254.152", "192.168.254.153"], "vars": {}}, "_meta": {"hostvars": {"192.168.254.152": {"ansible_user": "jin", "hostname": "Node_2", "label": "S12"}, "192.168.254.153": {"ansible_user": "jin", "hostname": "Node_3", "label": "S13"}}}}')
     result = ansible_runner.run(
         private_data_dir='/app/ansible',
         playbook=playbook,
