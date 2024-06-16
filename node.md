@@ -32,6 +32,9 @@ sudo systemctl enable netdata
 
 sudo systemctl restart netdata
 
+# FOR Template
+sudo rm /var/lib/netdata/registry/netdata.public.unique.id
+
 # Tiger VNC
 
 sudo apt update -y
