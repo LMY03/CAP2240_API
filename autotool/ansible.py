@@ -37,7 +37,7 @@ def fetch_hosts():
     # The JSON structure expected by Ansible
     inventory = {
         "test": {
-            "hosts": [],
+            "hosts": {},
             "vars": {}
         },
         "_meta": {
@@ -62,29 +62,29 @@ def run_playbook(playbook):
     print(inventory)
     print('{"test": {"hosts": ["192.168.254.152", "192.168.254.153"], "vars": {}}, "_meta": {"hostvars": {"192.168.254.152": {"ansible_user": "jin", "hostname": "Node_2", "label": "S12"}, "192.168.254.153": {"ansible_user": "jin", "hostname": "Node_3", "label": "S13"}}}}')
     
-    inventory = {
-        "test": {
-            "hosts": [
-                "192.168.254.152",
-                "192.168.254.153"
-            ],
-            "vars": {}
-        },
-        "_meta": {
-            "hostvars": {
-                "192.168.254.152": {
-                    "ansible_user": "jin",
-                    "hostname": "Node_2",
-                    "label": "S12"
-                },
-                "192.168.254.153": {
-                    "ansible_user": "jin",
-                    "hostname": "Node_3",
-                    "label": "S13"
-                }
-            }
-        }
-    }
+    # inventory = {
+    #     "test": {
+    #         "hosts": [
+    #             "192.168.254.152",
+    #             "192.168.254.153"
+    #         ],
+    #         "vars": {}
+    #     },
+    #     "_meta": {
+    #         "hostvars": {
+    #             "192.168.254.152": {
+    #                 "ansible_user": "jin",
+    #                 "hostname": "Node_2",
+    #                 "label": "S12"
+    #             },
+    #             "192.168.254.153": {
+    #                 "ansible_user": "jin",
+    #                 "hostname": "Node_3",
+    #                 "label": "S13"
+    #             }
+    #         }
+    #     }
+    # }
     
     result = ansible_runner.run(
         private_data_dir='/app/ansible',
