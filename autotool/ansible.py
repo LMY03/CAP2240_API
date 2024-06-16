@@ -72,35 +72,17 @@ def fetch_hosts():
 
     return inventory
 
-def run_playbook(playbook):
-    inventory = fetch_hosts()
-    print(inventory)
-    print('{"test": {"hosts": ["192.168.254.152", "192.168.254.153"], "vars": {}}, "_meta": {"hostvars": {"192.168.254.152": {"ansible_user": "jin", "hostname": "Node_2", "label": "S12"}, "192.168.254.153": {"ansible_user": "jin", "hostname": "Node_3", "label": "S13"}}}}')
-    
-    # inventory = {
-    #     "test": {
-    #         "hosts": [
-    #             "192.168.254.152",
-    #             "192.168.254.153"
-    #         ],
-    #         "vars": {}
-    #     },
-    #     "_meta": {
-    #         "hostvars": {
-    #             "192.168.254.152": {
-    #                 "ansible_user": "jin",
-    #                 "hostname": "Node_2",
-    #                 "label": "S12"
-    #             },
-    #             "192.168.254.153": {
-    #                 "ansible_user": "jin",
-    #                 "hostname": "Node_3",
-    #                 "label": "S13"
-    #             }
-    #         }
-    #     }
-    # }
-    
+def get_inventory(hostname, vm_user, vm_name, label):
+
+    inventory = "[test]\n"
+    # Add each host with its variables inline
+    for i in range(hostname):
+        inventory += f"{hostname[i]} ansible_user={vm_user[i]} hostname={vm_name[i]} label={label[i]}\n"
+
+    return inventory
+
+def run_playbook(playbook, hostname, vm_user, vm_name, label):
+    inventory = get_inventory(hostname, vm_user, vm_name, label)
     result = ansible_runner.run(
         private_data_dir='/app/ansible',
         playbook=playbook,

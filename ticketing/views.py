@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 
 from proxmox import proxmox
 from guacamole import guacamole
+from autotool import ansible
 
 # Create your views here.
 
@@ -55,6 +56,18 @@ def vm_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
         guacamole_connection_id.append(guacamole.create_connection(guacamole_username[i], protocol, port, hostname[i], username, password, parent_identifier))
         guacamole.create_user(guacamole_username[i], guacamole_password[i])
         guacamole.assign_connection(guacamole_username[i], guacamole_connection_id[i])
+
+        # set hostname and label in netdata
+    vm_user = []
+    vm_name = []
+    label = []
+
+    for i in range(no_of_vm):
+        vm_user.append("jin")
+        vm_name.append(classname + "-" + i)
+        vm_name.append(classname)
+
+    ansible.run_playbook("netdata_conf.yml", hostname, vm_user, vm_name, label)
 
     return { 
         'vm_id' : new_vm_id, 
