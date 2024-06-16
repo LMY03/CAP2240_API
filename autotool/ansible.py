@@ -28,34 +28,49 @@ def update_inventory_hosts():
         # file.write(ip_add + ' ansible_user=' + vm_user)
     # return "File has been edited successfully."
 
+# def fetch_hosts():
+#     hosts_data = [
+#         {"ip": "192.168.254.152", "ansible_user": "jin", "hostname": "Node_2", "label": "S12"},
+#         {"ip": "192.168.254.153", "ansible_user": "jin", "hostname": "Node_3", "label": "S13"}
+#     ]
+
+#     # The JSON structure expected by Ansible
+#     inventory = {
+#         "test": {
+#             "hosts": {},
+#             "vars": {}
+#         },
+#         "_meta": {
+#             "hostvars": {}
+#         }
+#     }
+
+#     for host in hosts_data:
+#         # Use IP as the key and assign an empty dict as its value
+#         inventory['test']['hosts'][host['ip']] = {}
+#         # Add variables specific to each host
+#         inventory["_meta"]["hostvars"][host['ip']] = {
+#             "ansible_user": host['ansible_user'],
+#             "hostname": host['hostname'],
+#             "label": host['label']
+#         }
+
+#     return json.dumps(inventory, indent=4)
+
 def fetch_hosts():
     hosts_data = [
         {"ip": "192.168.254.152", "ansible_user": "jin", "hostname": "Node_2", "label": "S12"},
         {"ip": "192.168.254.153", "ansible_user": "jin", "hostname": "Node_3", "label": "S13"}
     ]
 
-    # The JSON structure expected by Ansible
-    inventory = {
-        "test": {
-            "hosts": {},
-            "vars": {}
-        },
-        "_meta": {
-            "hostvars": {}
-        }
-    }
-
+    # Start with the group header
+    inventory = "[test]\n"
+    
+    # Add each host with its variables inline
     for host in hosts_data:
-        # Use IP as the key and assign an empty dict as its value
-        inventory['test']['hosts'][host['ip']] = {}
-        # Add variables specific to each host
-        inventory["_meta"]["hostvars"][host['ip']] = {
-            "ansible_user": host['ansible_user'],
-            "hostname": host['hostname'],
-            "label": host['label']
-        }
+        inventory += f"{host['ip']} ansible_user={host['ansible_user']} hostname={host['hostname']} label={host['label']}\n"
 
-    return json.dumps(inventory, indent=4)
+    return inventory
 
 def run_playbook(playbook):
     inventory = fetch_hosts()
