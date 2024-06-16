@@ -59,8 +59,8 @@ def update_inventory_hosts():
 
 def fetch_hosts():
     hosts_data = [
-        {"ip": "192.168.254.155", "ansible_user": "jin", "hostname": "Node_2", "label": "S12"},
-        {"ip": "192.168.254.156", "ansible_user": "jin", "hostname": "Node_3", "label": "S13"}
+        {"ip": "192.168.254.155", "ansible_user": "jin", "hostname": "Node 2", "label": "S12"},
+        {"ip": "192.168.254.156", "ansible_user": "jin", "hostname": "Node 3", "label": "S13"}
     ]
 
     # Start with the group header
@@ -86,7 +86,8 @@ def run_playbook(playbook, hostname, vm_user, vm_name, label):
     result = ansible_runner.run(
         private_data_dir='/app/ansible',
         playbook=playbook,
-        inventory=inventory
+        inventory=inventory,
+        extravars={"ansible_become_pass": "123456"}
     )
 
     # print("{}: {}".format(r.status, r.rc))
