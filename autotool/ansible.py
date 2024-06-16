@@ -33,7 +33,6 @@ def run_playbook(inventory, playbook):
     result = ansible_runner.run(
         private_data_dir=private_data_dir,
         playbook=playbook,
-        inventory='inventory/hosts'
     )
     if result.rc == 0:
         return JsonResponse({'status': 'Playbook executed successfully'})
