@@ -34,12 +34,12 @@ def fetch_hosts():
         {"ip": "192.168.254.153", "ansible_user": "jin", "hostname": "Node_3", "label": "S13"}
     ]
     inventory = {
-        "_meta": {
-            "hostvars": {}
-        },
-        "all": {
+        "test": {
             "hosts": [],
             "vars": {}
+        },
+        "_meta": {
+            "hostvars": {}
         }
     }
 
