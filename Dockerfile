@@ -15,6 +15,4 @@ RUN pip install -r requirements.txt
 
 COPY . /app/
 
-RUN chmod +x /app/ansible/inventory/dynamic_inventory.py
-
 # COPY CAP2240_API/inventory/hosts /inventory/hosts
