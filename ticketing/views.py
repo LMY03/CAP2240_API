@@ -64,8 +64,8 @@ def vm_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
 
     for i in range(no_of_vm):
         vm_user.append("jin")
-        vm_name.append(classname + "-" + i)
-        vm_name.append(classname)
+        vm_name.append(classname + "-" + str(i))
+        label.append(classname)
 
     ansible.run_playbook("netdata_conf.yml", hostname, vm_user, vm_name, label)
 
