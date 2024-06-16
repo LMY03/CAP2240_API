@@ -32,7 +32,12 @@ def run_playbook(playbook):
     result = ansible_runner.run(
         private_data_dir='/app/ansible',
         playbook=playbook,
+        inventory='dynamic_inventory.py'
     )
+
+    # print("{}: {}".format(r.status, r.rc))
+    # # Output the stdout
+    # print("stdout: " + r.stdout.read())
 
     if result.rc == 0:
         return JsonResponse({'status': 'Playbook executed successfully'})
