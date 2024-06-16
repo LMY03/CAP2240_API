@@ -4,7 +4,7 @@
   tasks:
     - name: Create a file and write content
       ansible.builtin.template:
-        src: netdata.conf.j2
+        src: /app/ansible/project/templates/netdata.conf.j2
         dest: /etc/netdata/netdata.conf
   # tasks:
   #   - name: Create a file and write content
