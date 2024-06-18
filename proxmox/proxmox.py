@@ -51,7 +51,6 @@ def get_vm_status(node, vmid):
     session = get_authenticated_session()
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/status/current"
     response = session.get(url)
-    response.raise_for_status()
 
     status = response.json()['data']['qmpstatus']
 
@@ -215,7 +214,6 @@ def get_lxc_status(node, vmid):
     session = get_authenticated_session()
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/lxc/{vmid}/status/current"
     response = session.get(url)
-    response.raise_for_status()
 
     return response.json()['data']
 
