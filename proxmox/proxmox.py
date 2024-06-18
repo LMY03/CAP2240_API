@@ -187,11 +187,20 @@ def get_lxc_ip(node, vmid):
     session = get_authenticated_session()
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/lxc/{vmid}/interfaces"
     response = session.get(url)
-    network_data = response.json['data']
-    for item in network_data:
-        if 'inet' in item:
-            ip_address = item['inet'].split('/')[0]  # Split to remove subnet mask
-            return ip_address
+
+    return response.json()
+
+def get_lxc_ip(node, vmid):
+    session = get_authenticated_session()
+    url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/lxc/{vmid}/interfaces"
+    response = session.get(url)
+    response = response.json['data']
+    for interface in response['data']:
+        if interface['name'] == "eth0":
+            if 'inet' not in interface: continue
+            for ip in interface['inet']:
+                ip = interface['inet'].split('/')[0]  # Split to remove subnet mask
+                return ip
     return response.json()
 
 def wait_and_get_ip(node, vmid):
