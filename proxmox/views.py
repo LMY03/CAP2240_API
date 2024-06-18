@@ -118,7 +118,7 @@ def config_vm(request) :
     
     return redirect("/proxmox")
 
-def ip_vm(request) :
+def ip_lxc(request) :
 
     if request.method == "POST":
 
