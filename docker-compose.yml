@@ -72,6 +72,7 @@ services:
   netdata:
     image: netdata/netdata:latest
     container_name: netdata
+    hostname: CAP-2240
     pid: host
     network_mode: host
     restart: unless-stopped

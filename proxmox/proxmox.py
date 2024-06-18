@@ -57,9 +57,6 @@ def get_vm_status(node, vmid):
 
     return status
 
-# clone VM POST
-# TODO: how to keep track on the available vmid, need new name
-# TODO: need to make sure there are enough disk space in the server before cloning the machine
 def clone_vm(node, vmid, newid):
     session = get_authenticated_session()
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/clone"
@@ -73,16 +70,9 @@ def clone_vm(node, vmid, newid):
     response = session.post(url, data=config)
     return response.json()
 
-
 # delete VM DELETE
 def delete_vm(node, vmid):
     session = get_authenticated_session()
-    # shutdown vm before deleting them
-    #   1. check status
-    #   2. if status is running -> shutdown (response['data']['qmpstatus'] = running) 
-    #   3. wait for it to shut down
-    stop_vm(node, vmid)
-
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}"
     response = session.delete(url)
     return response.json()
@@ -150,3 +140,52 @@ def wait_and_get_ip(node, vmid):
                         if ip['ip-address-type'] == 'ipv4':
                             return ip['ip-address']
         time.sleep(5)
+
+def create_lxc(node, ostemplate, vmid, cores, memory, storage):
+    session = get_authenticated_session()
+    url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/lxc"
+    config = {
+        'ostemplate': ostemplate,
+        'vmid': vmid,
+        # 'hostname': hostname,
+        'cores': cores,
+        'memory': memory,
+        'storage': storage,
+        # 'ssh-public-keys': ,
+    }
+    response = session.post(url, data=config)
+    return response.json()
+
+def clone_lxc(node, vmid, newid):
+    session = get_authenticated_session()
+    url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/lxc/{vmid}/clone"
+    config = {
+        'newid': newid,
+        'full': 1,
+        # 'hostname': hostname,
+    }
+    response = session.post(url, data=config)
+    return response.json()
+
+def start_lxc(node, vmid):
+    session = get_authenticated_session()
+    url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/lxc/{vmid}/status/start"
+    response = session.post(url)
+    return response.json()
+
+def get_lxc_status(node, vmid):
+    session = get_authenticated_session()
+    url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/lxc/{vmid}/status/current"
+    response = session.get(url)
+    response.raise_for_status()
+
+    status = response.json()['data']['status']
+
+    return status
+
+def get_lxc_ip(node, vmid):
+    session = get_authenticated_session()
+    url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/lxc/{vmid}/status/current"
+    response = session.get(url)
+
+    return response

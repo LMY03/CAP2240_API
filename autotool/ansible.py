@@ -81,6 +81,9 @@ def get_inventory(hostname, vm_user, vm_name, label):
 
     return inventory
 
+# def change_vm_userpass():
+#     inventory = get_inventory(hostname, vm_user, vm_name, label)
+
 def run_playbook(playbook, hostname, vm_user, vm_name, label):
     inventory = get_inventory(hostname, vm_user, vm_name, label)
     result = ansible_runner.run(

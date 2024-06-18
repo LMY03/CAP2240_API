@@ -14,4 +14,5 @@ urlpatterns = [
     path("status_vm", views.status_vm, name="status_vm"),
     path("ip_vm", views.ip_vm, name="ip_vm"),
     path("config_vm", views.config_vm, name="config_vm"),
+    path("ip_lxc", views.ip_lxc, name="ip_lxc"),
 ]

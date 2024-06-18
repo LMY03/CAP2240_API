@@ -117,3 +117,16 @@ def config_vm(request) :
         return render(request, "data.html", { "data" : response })
     
     return redirect("/proxmox")
+
+def ip_vm(request) :
+
+    if request.method == "POST":
+
+        data = request.POST
+        vmid = data.get("vmid")
+
+        ip = proxmox.get_lxc_ip(node, vmid)
+
+        return render(request, "data.html", { "data" : ip })
+        
+    return redirect("/proxmox")

@@ -91,3 +91,14 @@
 </form>
 
 <hr />
+
+<form action="{% url 'proxmox:ip_lxc' %}" method="post">
+    {% csrf_token %}
+    <h1>LXC IP Add</h1>
+    <label for="vmid">LXC ID: </label>
+    <input type="text" name="vmid" id="vmid" /><br /><br />
+
+    <input type="submit" value="submit" />
+</form>
+
+<hr />

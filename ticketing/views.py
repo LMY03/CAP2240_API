@@ -12,6 +12,10 @@ from autotool import ansible
 def renders(request) : 
     return render(request, "form.html")
 
+# def container_provision(request): 
+#     if request.method == "POST":
+        
+
 def vm_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
 
     protocol = "rdp"
