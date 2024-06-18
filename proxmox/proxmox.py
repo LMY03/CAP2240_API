@@ -194,7 +194,6 @@ def get_lxc_ip(node, vmid):
     session = get_authenticated_session()
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/lxc/{vmid}/interfaces"
     response = session.get(url)
-    response = response.json['data']
     for interface in response['data']:
         if interface['name'] == "eth0":
             if 'inet' not in interface: continue
