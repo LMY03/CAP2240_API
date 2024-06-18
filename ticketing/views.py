@@ -252,3 +252,25 @@ def launch_lxc(request):
         return JsonResponse({"redirect_url": response})
     
     return redirect("/ticketing")
+
+def lxc_deletion(request):
+
+    if request.method == "POST":
+
+        node = "pve"
+
+        data = request.POST
+        vm_ids = data.getlist("vm_id")
+
+        # for vm_id in vm_ids:
+        #     proxmox.stop_lxc(node, vm_id)
+            
+        # for vm_id in vm_ids:
+        #     proxmox.wait_for_lxc_stop(node, vm_id)
+        #     proxmox.delete_;xc(node, vm_id)
+    
+        for vm_id in vm_ids:
+            proxmox.stop_lxc(node, vm_id)
+            proxmox.delete_lxc(node, vm_id)
+
+    return redirect("/ticketing")
