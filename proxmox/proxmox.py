@@ -188,4 +188,4 @@ def get_lxc_ip(node, vmid):
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/lxc/{vmid}/status/current"
     response = session.get(url)
 
-    return response
+    return response['data']
