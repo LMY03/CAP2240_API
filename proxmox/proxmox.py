@@ -227,7 +227,7 @@ def wait_for_lxc_lock(node, vmid):
     while True:
         response = get_lxc_status(node, vmid)
         if response != None :
-            if 'inet' not in response: continue
+            if 'lock' not in response: continue
             time.sleep(5)
 
 def wait_and_get_lxc_ip(node, vmid):
