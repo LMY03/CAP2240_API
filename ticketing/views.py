@@ -196,18 +196,18 @@ def lxc_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
     new_vm_id = []
     hostname = []
 
-    # for i in range(no_of_vm):
-    #     # clone vm
-    #     new_vm_id.append(vm_id + i + 1)
-    #     upids.append(proxmox.clone_lxc(node, vm_id, new_vm_id[i])['data'])
+    for i in range(no_of_vm):
+        # clone vm
+        new_vm_id.append(vm_id + i + 1)
+        upids.append(proxmox.clone_lxc(node, vm_id, new_vm_id[i])['data'])
 
-    # for i in range(no_of_vm):
-    #     # wait for vm to clone
-    #     proxmox.wait_for_task(node, upids[i])
-    #     # change vm configuration
-    #     proxmox.config_lxc(node, new_vm_id[i], cpu_cores, ram)
-    #     # start vm
-    #     proxmox.start_lxc(node, new_vm_id[i])
+    for i in range(no_of_vm):
+        # wait for vm to clone
+        proxmox.wait_for_task(node, upids[i])
+        # change vm configuration
+        proxmox.config_lxc(node, new_vm_id[i], cpu_cores, ram)
+        # start vm
+        proxmox.start_lxc(node, new_vm_id[i])
 
     
     # for i in range(no_of_vm):
@@ -216,10 +216,6 @@ def lxc_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
     #     hostname.append(proxmox.wait_and_get_lxc_ip(node, new_vm_id[i]))
 
     for i in range(no_of_vm):
-        new_vm_id.append(vm_id + i + 1)
-        proxmox.clone_lxc(node, vm_id, new_vm_id[i])['data']
-        proxmox.config_lxc(node, new_vm_id[i], cpu_cores, ram)
-        proxmox.start_lxc(node, new_vm_id[i])
         hostname.append(proxmox.wait_and_get_lxc_ip(node, new_vm_id[i]))
         # set hostname and label in netdata
     # vm_user = []
