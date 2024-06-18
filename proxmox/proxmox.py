@@ -218,8 +218,9 @@ def get_lxc_status(node, vmid):
     response.raise_for_status()
 
     status = response.json()['data']['status']
+    status = response.json()['data']['lock']
 
-    return status
+    return response.json()['data']
 
 def get_lxc_ip(node, vmid):
     session = get_authenticated_session()

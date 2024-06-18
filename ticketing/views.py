@@ -202,11 +202,8 @@ def lxc_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
     #     upids.append(upid)
         
     upids.append(proxmox.clone_lxc(node, vm_id, 204)['data'])
-    proxmox.unlock_lxc(node, vm_id)
     upids.append(proxmox.clone_lxc(node, vm_id, 202)['data'])
-    proxmox.unlock_lxc(node, vm_id)
     upids.append(proxmox.clone_lxc(node, vm_id, 203)['data'])
-    proxmox.unlock_lxc(node, vm_id)
 
     for i in range(no_of_vm):
         new_vm_id.append(vm_id + i + 1)
