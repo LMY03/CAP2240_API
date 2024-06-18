@@ -204,6 +204,7 @@ def lxc_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
         new_vm_id.append(vm_id + i + 1)
         proxmox.clone_lxc(node, vm_id, new_vm_id[i])
         proxmox.wait_for_lxc_lock(node, vm_id)
+        print("------------------------------------------------------------")
         proxmox.config_lxc(node, new_vm_id[i], cpu_cores, ram)
         proxmox.start_lxc(node, new_vm_id[i])
 
