@@ -217,9 +217,6 @@ def get_lxc_status(node, vmid):
     response = session.get(url)
     response.raise_for_status()
 
-    status = response.json()['data']['status']
-    # status = response.json()['data']['lock']
-
     return response.json()['data']
 
 def get_lxc_ip(node, vmid):
@@ -227,6 +224,12 @@ def get_lxc_ip(node, vmid):
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/lxc/{vmid}/interfaces"
     response = session.get(url)
     return response.json()
+
+def wait_for_lxc_lock(node, vmid):
+    while True:
+        response = get_lxc_status(node, vmid)
+        if response['lock'] : return
+        time.sleep(5)
 
 def wait_and_get_lxc_ip(node, vmid):
     while True:

@@ -192,7 +192,6 @@ def lxc_provision(request):
         return render(request, "vm_deletion.html", { "data" : data })
     
 def lxc_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
-    upids = []
     new_vm_id = []
     hostname = []
 
@@ -200,21 +199,20 @@ def lxc_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
     #     new_vm_id.append(vm_id + i + 1)
     #     upid = proxmox.clone_lxc(node, vm_id, new_vm_id[i])['data']
     #     upids.append(upid)
-        
-    upids.append(proxmox.clone_lxc(node, vm_id, 204)['data'])
-    upids.append(proxmox.clone_lxc(node, vm_id, 202)['data'])
-    upids.append(proxmox.clone_lxc(node, vm_id, 203)['data'])
 
     for i in range(no_of_vm):
         new_vm_id.append(vm_id + i + 1)
-        print(upids[i])
-
-
-    for i in range(no_of_vm):
-        # wait for vm to clone
-        proxmox.wait_for_task(node, upids[i])
-    #     # change vm configuration
+        proxmox.clone_lxc(node, vm_id, new_vm_id[i])
+        proxmox.wait_for_lxc_lock(node, new_vm_id[i])
         proxmox.config_lxc(node, new_vm_id[i], cpu_cores, ram)
+        proxmox.start_lxc(node, new_vm_id[i])
+
+
+    # for i in range(no_of_vm):
+    #     # wait for vm to clone
+    #     proxmox.wait_for_lxc_lock(node, upids[i])
+    # #     # change vm configuration
+    #     proxmox.config_lxc(node, new_vm_id[i], cpu_cores, ram)
     #     # start vm
     #     proxmox.start_lxc(node, new_vm_id[i])
 
