@@ -125,7 +125,7 @@ def ip_lxc(request) :
         data = request.POST
         vmid = data.get("vmid")
 
-        ip = proxmox.get_lxc_ip(node, vmid)
+        ip = proxmox.wait_and_get_lxc_ip(node, vmid)
 
         return render(request, "data.html", { "data" : ip })
         

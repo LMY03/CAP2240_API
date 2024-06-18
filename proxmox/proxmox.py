@@ -193,23 +193,23 @@ def get_lxc_ip(node, vmid):
 def get_lxc_ip(node, vmid):
     session = get_authenticated_session()
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/lxc/{vmid}/interfaces"
-    response = session.get(url).json()
-    for interface in response['data']:
-        if interface['name'] == "eth0":
-            if 'inet' not in interface: continue
-            for ip in interface['inet']:
-                ip = interface['inet'].split('/')[0]  # Split to remove subnet mask
-                return ip
+    response = session.get(url)
+    # for interface in response['data']:
+    #     if interface['name'] == "eth0":
+    #         if 'inet' not in interface: continue
+    #         for ip in interface['inet']:
+    #             ip = interface['inet'].split('/')[0]  # Split to remove subnet mask
+    #             return ip
     return response.json()
 
-def wait_and_get_ip(node, vmid):
+def wait_and_get_lxc_ip(node, vmid):
     while True:
         response = get_lxc_ip(node, vmid)
         if response['data'] != None :
-            for interface in response['data']['result']:
-                if interface['name'] == "ens18":
-                    if 'ip-addresses' not in interface: continue  
-                    for ip in interface['ip-addresses']:
-                        if ip['ip-address-type'] == 'ipv4':
-                            return ip['ip-address']
+            for interface in response['data']:
+                if interface['name'] == "eth0":
+                    if 'inet' not in interface: continue
+                    for ip in interface['inet']:
+                        ip = interface['inet'].split('/')[0]  # Split to remove subnet mask
+                        return ip
         time.sleep(5)
