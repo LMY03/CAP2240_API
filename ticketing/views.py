@@ -190,11 +190,12 @@ def lxc_provision(request):
         data = lxc_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram)
         
         return render(request, "lxc_deletion.html", { "data" : data })
-    
+
 def lxc_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
     new_vm_id = []
     hostname = []
 
+    # maybe use ansible to clone containers
     for i in range(no_of_vm):
         new_vm_id.append(vm_id + i + 1)
         proxmox.clone_lxc(node, vm_id, new_vm_id[i])
@@ -206,7 +207,7 @@ def lxc_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
         # wait for vm to start
         proxmox.wait_for_lxc_start(node, new_vm_id[i])
         hostname.append(proxmox.wait_and_get_lxc_ip(node, new_vm_id[i]))
-        # set hostname and label in netdata
+
     vm_user = []
     vm_name = []
     label = []
