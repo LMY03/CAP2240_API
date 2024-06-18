@@ -206,14 +206,15 @@ def lxc_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
     upids.append(proxmox.clone_lxc(node, vm_id, 203)['data'])
 
     for i in range(no_of_vm):
+        new_vm_id.append(vm_id + i + 1)
         print(upids[i])
 
 
-    # for i in range(no_of_vm):
-    #     # wait for vm to clone
-    #     proxmox.wait_for_task(node, upids[i])
+    for i in range(no_of_vm):
+        # wait for vm to clone
+        proxmox.wait_for_task(node, upids[i])
     #     # change vm configuration
-    #     proxmox.config_lxc(node, new_vm_id[i], cpu_cores, ram)
+        proxmox.config_lxc(node, new_vm_id[i], cpu_cores, ram)
     #     # start vm
     #     proxmox.start_lxc(node, new_vm_id[i])
 
