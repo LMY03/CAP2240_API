@@ -191,7 +191,7 @@ def status_lxc(request) :
         data = request.POST
         vmid = data.get("vmid")
 
-        status = proxmox.get_lxc_status(node, vmid)['lock']# [status]
+        status = proxmox.get_lxc_status(node, vmid)# [status]
 
         return render(request, "data.html", { "data" : status })
         
