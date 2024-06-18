@@ -219,24 +219,7 @@ def get_lxc_ip(node, vmid):
     session = get_authenticated_session()
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/lxc/{vmid}/interfaces"
     response = session.get(url)
-
     return response.json()
-
-def get_lxc_ip(node, vmid):
-    session = get_authenticated_session()
-    url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/lxc/{vmid}/interfaces"
-    response = session.get(url)
-    return response.json()
-
-def get_lxc_status(node, vmid):
-    session = get_authenticated_session()
-    url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/qemu/{vmid}/status/current"
-    response = session.get(url)
-    response.raise_for_status()
-
-    status = response.json()['data']['qmpstatus']
-
-    return status
 
 def wait_and_get_lxc_ip(node, vmid):
     while True:
