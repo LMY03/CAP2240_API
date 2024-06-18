@@ -196,12 +196,18 @@ def lxc_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
     new_vm_id = []
     hostname = []
 
+    # for i in range(no_of_vm):
+    #     new_vm_id.append(vm_id + i + 1)
+    #     upid = proxmox.clone_lxc(node, vm_id, new_vm_id[i])['data']
+    #     upids.append(upid)
+        
+    upids.append(proxmox.clone_lxc(node, vm_id, 201)['data'])
+    upids.append(proxmox.clone_lxc(node, vm_id, 202)['data'])
+    upids.append(proxmox.clone_lxc(node, vm_id, 203)['data'])
+
     for i in range(no_of_vm):
-        new_vm_id.append(vm_id + i + 1)
-    for i in range(no_of_vm):
-        upid = proxmox.clone_lxc(node, vm_id, new_vm_id[i])['data']
-        print(upid)
-        upids.append(upid)
+        print(upids[i])
+
 
     # for i in range(no_of_vm):
     #     # wait for vm to clone
