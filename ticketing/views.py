@@ -206,9 +206,6 @@ def lxc_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
         # wait for vm to start
         proxmox.wait_for_lxc_start(node, new_vm_id[i])
         hostname.append(proxmox.wait_and_get_lxc_ip(node, new_vm_id[i]))
-
-    for i in range(no_of_vm):
-        hostname.append(proxmox.wait_and_get_lxc_ip(node, new_vm_id[i]))
         # set hostname and label in netdata
     vm_user = []
     vm_name = []
