@@ -12,10 +12,6 @@ from autotool import ansible
 def renders(request) : 
     return render(request, "form.html")
 
-# def container_provision(request): 
-#     if request.method == "POST":
-        
-
 def vm_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
 
     protocol = "rdp"
@@ -35,10 +31,10 @@ def vm_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
     guacamole_username = []
     guacamole_password = []
 
-    # for i in range(no_of_vm):
-    #     # clone vm
-    #     new_vm_id.append(vm_id + i + 1)
-    #     upids.append(proxmox.clone_vm(node, vm_id, new_vm_id[i])['data'])
+    for i in range(no_of_vm):
+        # clone vm
+        new_vm_id.append(vm_id + i + 1)
+        upids.append(proxmox.clone_vm(node, vm_id, new_vm_id[i])['data'])
 
     for i in range(no_of_vm):
         # wait for vm to clone
@@ -54,12 +50,12 @@ def vm_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
         proxmox.wait_for_vm_start(node, new_vm_id[i])
         hostname.append(proxmox.wait_and_get_ip(node, new_vm_id[i]) )
         # create connection
-        # guacamole_username.append(f"{classname}-{i}")
-        # # guacamole_password.append(User.objects.make_random_password())
-        # guacamole_password.append("123456")
-        # guacamole_connection_id.append(guacamole.create_connection(guacamole_username[i], protocol, port, hostname[i], username, password, parent_identifier))
-        # guacamole.create_user(guacamole_username[i], guacamole_password[i])
-        # guacamole.assign_connection(guacamole_username[i], guacamole_connection_id[i])
+        guacamole_username.append(f"{classname}-{i}")
+        # guacamole_password.append(User.objects.make_random_password())
+        guacamole_password.append("123456")
+        guacamole_connection_id.append(guacamole.create_connection(guacamole_username[i], protocol, port, hostname[i], username, password, parent_identifier))
+        guacamole.create_user(guacamole_username[i], guacamole_password[i])
+        guacamole.assign_connection(guacamole_username[i], guacamole_connection_id[i])
 
         # set hostname and label in netdata
     vm_user = []
@@ -175,5 +171,76 @@ def launch_vm(request):
         url =  guacamole.get_connection_url(connection_id, guacamole_username, guacamole_password)
         
         return JsonResponse({"redirect_url": url})
+    
+    return redirect("/ticketing")
+
+def lxc_provision(request): 
+
+    if request.method == "POST":
+
+        node = "pve"
+
+        data = request.POST
+        vm_id = int(data.get("template_vm_id"))
+        classname = data.get("class")
+        no_of_vm = int(data.get("no_of_vm"))
+        cpu_cores = int(data.get("cpu_cores"))
+        ram = int(data.get("ram"))
+
+        data = lxc_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram)
+        
+        return render(request, "vm_deletion.html", { "data" : data })
+    
+def lxc_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
+    upids = []
+    new_vm_id = []
+    hostname = []
+
+    for i in range(no_of_vm):
+        # clone vm
+        new_vm_id.append(vm_id + i + 1)
+        upids.append(proxmox.clone_vm(node, vm_id, new_vm_id[i])['data'])
+
+    for i in range(no_of_vm):
+        # wait for vm to clone
+        proxmox.wait_for_task(node, upids[i])
+        # change vm configuration
+        proxmox.config_vm(node, new_vm_id[i], cpu_cores, ram)
+        # start vm
+        proxmox.start_vm(node, new_vm_id[i])
+
+    
+    for i in range(no_of_vm):
+        # wait for vm to start
+        proxmox.wait_for_vm_start(node, new_vm_id[i])
+        hostname.append(proxmox.wait_and_get_ip(node, new_vm_id[i]))
+
+
+        # set hostname and label in netdata
+    # vm_user = []
+    # vm_name = []
+    # label = []
+
+    # for i in range(no_of_vm):
+    #     vm_user.append("jin")
+    #     vm_name.append(classname + "-" + str(i))
+    #     label.append(classname)
+
+    # ansible.run_playbook("netdata_conf.yml", hostname, vm_user, vm_name, label)
+
+    return hostname
+
+def launch_lxc(request):
+
+    if request.method == "POST":
+
+        node = "pve"
+
+        data = request.POST
+        vm_id = data.get("vm_id")
+        
+        response = proxmox.start_lxc(node, vm_id)
+        
+        return JsonResponse({"redirect_url": response})
     
     return redirect("/ticketing")
