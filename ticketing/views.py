@@ -229,6 +229,7 @@ def lxc_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
     # ansible.run_playbook("netdata_conf.yml", hostname, vm_user, vm_name, label)
 
     return { 
+        'upids': upids,
         'vm_id' : new_vm_id,
         'hostname' : hostname
     }
