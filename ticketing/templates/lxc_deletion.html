@@ -2,8 +2,8 @@
     {% csrf_token %}
     <h1>Delete LXC Form</h1>
 
-    {% for upid in upids %}
-        <input type="text" name="vm_id" value="{{ upid }}" /><br /><br />
+    {% for vm_id in data.upids %}
+        <input type="text" name="vm_id" value="{{ vm_id }}" /><br /><br />
     {% endfor %}
 
     <input type="submit" value="submit" />
