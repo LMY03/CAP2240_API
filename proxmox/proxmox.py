@@ -230,7 +230,7 @@ def wait_for_lxc_lock(node, vmid):
             if 'lock' not in response: return
             time.sleep(5)
 
-def wait_for_vm_start(node, vmid):
+def wait_for_lxc_start(node, vmid):
     while True:
         status = get_lxc_status(node, vmid)['status']
         if status == "running" : return status
