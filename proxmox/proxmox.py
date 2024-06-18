@@ -218,7 +218,7 @@ def get_lxc_status(node, vmid):
     response.raise_for_status()
 
     status = response.json()['data']['status']
-    status = response.json()['data']['lock']
+    # status = response.json()['data']['lock']
 
     return response.json()['data']
 
