@@ -226,8 +226,9 @@ def get_lxc_ip(node, vmid):
 def wait_for_lxc_lock(node, vmid):
     while True:
         response = get_lxc_status(node, vmid)
-        if response['lock'] : return
-        time.sleep(5)
+        if response != None :
+            if response['lock'] : return
+            time.sleep(5)
 
 def wait_and_get_lxc_ip(node, vmid):
     while True:
