@@ -196,26 +196,31 @@ def lxc_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
     new_vm_id = []
     hostname = []
 
-    for i in range(no_of_vm):
-        # clone vm
-        new_vm_id.append(vm_id + i + 1)
-        upids.append(proxmox.clone_vm(node, vm_id, new_vm_id[i])['data'])
+    # for i in range(no_of_vm):
+    #     # clone vm
+    #     new_vm_id.append(vm_id + i + 1)
+    #     upids.append(proxmox.clone_lxc(node, vm_id, new_vm_id[i])['data'])
 
-    for i in range(no_of_vm):
-        # wait for vm to clone
-        proxmox.wait_for_task(node, upids[i])
-        # change vm configuration
-        proxmox.config_vm(node, new_vm_id[i], cpu_cores, ram)
-        # start vm
-        proxmox.start_vm(node, new_vm_id[i])
+    # for i in range(no_of_vm):
+    #     # wait for vm to clone
+    #     proxmox.wait_for_task(node, upids[i])
+    #     # change vm configuration
+    #     proxmox.config_lxc(node, new_vm_id[i], cpu_cores, ram)
+    #     # start vm
+    #     proxmox.start_lxc(node, new_vm_id[i])
 
     
+    # for i in range(no_of_vm):
+    #     # wait for vm to start
+    #     proxmox.wait_for_lxc_start(node, new_vm_id[i])
+    #     hostname.append(proxmox.wait_and_get_lxc_ip(node, new_vm_id[i]))
+
     for i in range(no_of_vm):
-        # wait for vm to start
-        proxmox.wait_for_vm_start(node, new_vm_id[i])
-        hostname.append(proxmox.wait_and_get_ip(node, new_vm_id[i]))
-
-
+        new_vm_id.append(vm_id + i + 1)
+        proxmox.clone_lxc(node, vm_id, new_vm_id[i])['data']
+        proxmox.config_lxc(node, new_vm_id[i], cpu_cores, ram)
+        proxmox.start_lxc(node, new_vm_id[i])
+        hostname.append(proxmox.wait_and_get_lxc_ip(node, new_vm_id[i]))
         # set hostname and label in netdata
     # vm_user = []
     # vm_name = []
@@ -228,7 +233,10 @@ def lxc_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
 
     # ansible.run_playbook("netdata_conf.yml", hostname, vm_user, vm_name, label)
 
-    return hostname
+    return { 
+        'vm_id' : new_vm_id,
+        'hostname' : hostname
+    }
 
 def launch_lxc(request):
 
