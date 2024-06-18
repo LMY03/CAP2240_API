@@ -189,7 +189,7 @@ def lxc_provision(request):
 
         data = lxc_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram)
         
-        return render(request, "vm_deletion.html", { "data" : data })
+        return render(request, "lxc_deletion.html", { "data" : data })
     
 def lxc_provision_process(node, vm_id, classname, no_of_vm, cpu_cores, ram):
     new_vm_id = []
