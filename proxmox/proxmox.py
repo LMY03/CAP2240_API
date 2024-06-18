@@ -157,6 +157,12 @@ def create_lxc(node, ostemplate, vmid, cores, memory, storage):
     response = session.post(url, data=config)
     return response.json()
 
+def unlock_lxc(node, vmid):
+    session = get_authenticated_session()
+    url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/lxc/{vmid}/status/lock"
+    response = session.delete(url)
+    return response.json()
+
 def clone_lxc(node, vmid, newid):
     session = get_authenticated_session()
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/lxc/{vmid}/clone"
