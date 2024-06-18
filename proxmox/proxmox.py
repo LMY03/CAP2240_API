@@ -181,21 +181,21 @@ def delete_lxc(node, vmid):
     return response.json()
 
 # shutdown VM POST
-def shutdown_vm(node, vmid):
+def shutdown_lxc(node, vmid):
     session = get_authenticated_session()
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/lxc/{vmid}/status/shutdown"
     response = session.post(url)
     return response.json()
 
 # stop VM POST - only on special occasion like the vm get stuck
-def stop_vm(node, vmid):              
+def stop_lxc(node, vmid):              
     session = get_authenticated_session()
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/lxc/{vmid}/status/stop"
     response = session.post(url)
     return response.json()
 
 # configure VM PUT 
-def config_vm(node, vmid, cpu_cores, memory_mb):
+def config_lxc(node, vmid, cpu_cores, memory_mb):
     session = get_authenticated_session()
     url = f"{PROXMOX_HOST}/api2/json/nodes/{node}/lxc/{vmid}/config"
     config = {
