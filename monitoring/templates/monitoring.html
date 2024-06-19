@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Your dashboard</title>
+
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="black-translucent"
+        />
+
+        <!-- here we will add dashboard.js -->
+        <script
+            type="text/javascript"
+            src="http://192.168.43.126:19999/dashboard.js"
+        ></script>
+
+        <style>
+            .chart-container {
+                display: flex;
+                justify-content: space-around;
+                margin-bottom: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="chart-container">
+        <!-- data-title="" if do not need title-->
+        <div
+            data-netdata="system.cpu"
+            data-host="http://192.168.43.126:19999/"
+            data-chart-library="dygraph"
+            data-width="600"
+            data-height="200"
+            data-after="-600"
+        ></div>
+
+        <div
+            data-netdata="mem.available"
+            data-host="http://192.168.43.126:19999/"
+            data-chart-library="dygraph"
+            data-width="600"
+            data-height="200"
+            data-after="-600"
+        ></div>
+
+        <div
+            data-netdata="system.net"
+            data-host="http://192.168.43.126:19999/"
+            data-chart-library="dygraph"
+            data-width="600"
+            data-height="200"
+            data-after="-600"
+        ></div>
+        </div>
+
+        <div class="chart-container">
+        <div
+            data-netdata="system.cpu"
+            data-host="http://192.168.43.248:19999/"
+            data-chart-library="dygraph"
+            data-width="600"
+            data-height="200"
+            data-after="-600"
+        ></div>
+
+        <div
+            data-netdata="mem.available"
+            data-host="http://192.168.43.248:19999/"
+            data-chart-library="dygraph"
+            data-width="600"
+            data-height="200"
+            data-after="-600"
+        ></div>
+
+        <div
+            data-netdata="system.net"
+            data-host="http://192.168.43.248:19999/"
+            data-chart-library="dygraph"
+            data-width="600"
+            data-height="200"
+            data-after="-600"
+        ></div>
+        </div>
+    </body>
+</html>
