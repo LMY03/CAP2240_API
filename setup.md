@@ -1,7 +1,3 @@
-sudo mkdir ./inventory
-sudo mkdir ./playbooks
-sudo touch ./inventory/hosts
-
 # Github Repository
 
 git clone https://github.com/LMY03/CAP2240_API.git ~/CAP2240_API
@@ -51,7 +47,7 @@ docker exec -it netdata /bin/bash
 vi /etc/netdata/stream.conf
 
 # plugin API_KEY 
-[API_KEY] 
+[75efd343-d36f-41bd-b7ec-7622fe15eaef] 
     enabled = yes
 
 # logout of docker container
