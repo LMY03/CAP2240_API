@@ -92,6 +92,10 @@ sudo nano /etc/xrdp/xrdp.ini
 
 sudo systemctl restart xrdp
 
+# Ubuntu Server
+@reboot (rm /etc/machine-id && systemd-machine-id-setup && crontab -l | grep -v 'rm /etc/machine-id && systemd-machine-id-setup' | crontab -)
+
+
 # References
 
 https://raspberrytips.com/tigervnc-server-on-ubuntu/
