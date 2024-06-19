@@ -20,13 +20,16 @@ curl https://get.netdata.cloud/kickstart.sh > /tmp/netdata-kickstart.sh && sh /t
 sudo nano /etc/netdata/stream.conf
 
 [stream]
+
     enabled = yes
+
     destination = parent_vm_ip:19999
+    
     api key = 75efd343-d36f-41bd-b7ec-7622fe15eaef
 
 sudo nano /etc/netdata/netdata.conf
 
-sudo chown USERNAME /etc/netdata/
+sudo chown jin /etc/netdata/
 
 sudo systemctl enable netdata
 
