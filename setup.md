@@ -47,7 +47,8 @@ docker exec -it netdata /bin/bash
 vi /etc/netdata/stream.conf
 
 # plugin API_KEY 
-[76afe428-665e-4418-b84c-cbb0c374233d] 
+[76afe428-665e-4418-b84c-cbb0c374233d]
+
     enabled = yes
 
 # logout of docker container
