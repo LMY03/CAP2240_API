@@ -28,63 +28,36 @@
         </style>
     </head>
     <body>
-        <div class="chart-container">
-        <!-- data-title="" if do not need title-->
-        <div
-            data-netdata="system.cpu"
-            data-host="http://192.168.254.165:19999/"
-            data-chart-library="dygraph"
-            data-width="600"
-            data-height="200"
-            data-after="-600"
-        ></div>
+        {% for ip in ip_add %}
+            <div class="chart-container">
+                <!-- data-title="" if do not need title-->
+                <div
+                    data-netdata="system.cpu"
+                    data-host="http://{{ ip }}:19999/"
+                    data-chart-library="dygraph"
+                    data-width="600"
+                    data-height="200"
+                    data-after="-600"
+                ></div>
 
-        <div
-            data-netdata="mem.available"
-            data-host="http://192.168.254.165:19999/"
-            data-chart-library="dygraph"
-            data-width="600"
-            data-height="200"
-            data-after="-600"
-        ></div>
+                <div
+                    data-netdata="mem.available"
+                    data-host="http://{{ ip }}:19999/"
+                    data-chart-library="dygraph"
+                    data-width="600"
+                    data-height="200"
+                    data-after="-600"
+                ></div>
 
-        <div
-            data-netdata="system.net"
-            data-host="http://192.168.254.165:19999/"
-            data-chart-library="dygraph"
-            data-width="600"
-            data-height="200"
-            data-after="-600"
-        ></div>
-        </div>
-
-        <div class="chart-container">
-        <div
-            data-netdata="system.cpu"
-            data-host="http://192.168.254.166:19999/"
-            data-chart-library="dygraph"
-            data-width="600"
-            data-height="200"
-            data-after="-600"
-        ></div>
-
-        <div
-            data-netdata="mem.available"
-            data-host="http://192.168.254.166:19999/"
-            data-chart-library="dygraph"
-            data-width="600"
-            data-height="200"
-            data-after="-600"
-        ></div>
-
-        <div
-            data-netdata="system.net"
-            data-host="http://192.168.254.166:19999/"
-            data-chart-library="dygraph"
-            data-width="600"
-            data-height="200"
-            data-after="-600"
-        ></div>
-        </div>
+                <div
+                    data-netdata="system.net"
+                    data-host="http://{{ ip }}:19999/"
+                    data-chart-library="dygraph"
+                    data-width="600"
+                    data-height="200"
+                    data-after="-600"
+                ></div>
+            </div>
+        {% endfor %}
     </body>
 </html>
