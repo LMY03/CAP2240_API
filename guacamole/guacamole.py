@@ -155,13 +155,19 @@ def get_connection_url(connection_id, username, password):
     # token = get_token()
     return f"{GUACAMOLE_HOST}/guacamole/#/client/{connection_id}?token={token}"
 
+# def get_connection_token(username, password):
+#     url = f"{GUACAMOLE_HOST}/guacamole/api/tokens"
+#     config = { 'username': username, 'password': password }
+#     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+#     response = requests.post(url, data=json.dumps(config), headers=headers)
+#     data = response.json()
+#     return data['authToken']
+
 def get_connection_token(username, password):
-    # CA_CRT = '/path/to/ca_bundle.crt'
-    # CA_CRT = False # Disable SSL certificate verification
-    # session.verify = CA_CRT
-    url = f"{GUACAMOLE_HOST}/guacamole/api/tokens"
-    config = { 'username': username, 'password': password }
-    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-    response = requests.post(url, data=json.dumps(config), headers=headers)
+    session = requests.Session()
+    response = session.post(
+        f"{GUACAMOLE_HOST}/guacamole/api/tokens",
+        data={'username': username, 'password': password},
+    )
     data = response.json()
     return data['authToken']
