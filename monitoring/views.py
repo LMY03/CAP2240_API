@@ -20,7 +20,10 @@ def fetch_netdata_metrics(vm_url):
     }
 
 def vm_monitoring(request):
-    vm_urls = ["vm1_address", "vm2_address"]  # Replace with actual VM addresses
+    vm_urls = [
+        "192.168.254.162",
+        "192.168.254.165",
+    ]
     vms_data = []
 
     for vm_url in vm_urls:
