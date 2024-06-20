@@ -54,4 +54,4 @@ def fetch_netdata_metrics():
 
 def renders(request):
     data = fetch_netdata_metrics()
-    return render(request, 'netdata.html', {'data': data})
+    return render(request, 'index.html', {'data': data})
