@@ -63,4 +63,4 @@ import json
 #     return JsonResponse(data)  # Return data as JSON response for AJAX requests
 
 def index(request):
-    return render(request, 'monitor/index.html')
+    return render(request, 'index.html')
