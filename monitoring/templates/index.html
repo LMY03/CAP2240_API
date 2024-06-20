@@ -35,7 +35,7 @@
     <script>
         function fetchData() {
             $.ajax({
-                url: 'https://your-netdata-server/api/v1/allmetrics?format=json&options=seconds',
+                url: 'https://192.168.254.162/api/v1/allmetrics?format=json&options=seconds',
                 method: 'GET',
                 success: function(data) {
                     updateTable(data);
