@@ -3,14 +3,14 @@ import requests
 
 # Create your views here.
 
-def renders(request) : 
-    ip_add = {
-        "192.168.254.165",
-        "192.168.254.166",
-    }
-    # template = "monitoring.html"
-    template = "index.html"
-    return render(request, template, { "ip_add" : ip_add })
+# def renders(request) : 
+#     ip_add = {
+#         "192.168.254.165",
+#         "192.168.254.166",
+#     }
+#     # template = "monitoring.html"
+#     template = "index.html"
+#     return render(request, template, { "ip_add" : ip_add })
 
 def fetch_netdata_metrics():
     base_url = "http://192.168.254.162:19999/api/v1/data?chart={chart}&format=json"
@@ -28,6 +28,6 @@ def fetch_netdata_metrics():
             data[key] = {}
     return data
 
-def netdata_view(request):
+def renders(request):
     data = fetch_netdata_metrics()
-    return render(request, 'netdata.html', {'data': data})
+    return render(request, 'index.html', {'data': data})
