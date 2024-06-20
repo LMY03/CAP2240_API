@@ -52,6 +52,6 @@ def fetch_netdata_metrics():
             data[key] = {'labels': [], 'data': []}
     return data
 
-def netdata_view(request):
+def renders(request):
     data = fetch_netdata_metrics()
     return render(request, 'netdata.html', {'data': data})
