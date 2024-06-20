@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Netdata Metrics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Netdata Metrics</h1>
+    <div>
+        <canvas id="cpuChart"></canvas>
+    </div>
+    <div>
+        <canvas id="memoryChart"></canvas>
+    </div>
+    <div>
+        <canvas id="networkChart"></canvas>
+    </div>
+    <table id="metricsTable">
+        <thead>
+            <tr>
+                <th>Metric</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <script>
+        // Extract initial data from Django context
+        let data = JSON.parse('{{ data|escapejs }}');
+
+        // Function to create chart
+        function createChart(ctx, chartData, label) {
+            return new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: chartData.labels,
+                    datasets: [{
+                        label: label,
+                        data: chartData.data,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Create charts for CPU, memory, and network
+        const cpuChart = createChart(document.getElementById('cpuChart'), data.cpu, 'CPU Usage');
+        const memoryChart = createChart(document.getElementById('memoryChart'), data.memory, 'Memory Usage');
+        const networkChart = createChart(document.getElementById('networkChart'), data.network, 'Network Usage');
+
+        // Function to update charts with new data
+        function updateCharts(data) {
+            cpuChart.data.labels = data.cpu.labels;
+            cpuChart.data.datasets[0].data = data.cpu.data;
+            cpuChart.update();
+
+            memoryChart.data.labels = data.memory.labels;
+            memoryChart.data.datasets[0].data = data.memory.data;
+            memoryChart.update();
+
+            networkChart.data.labels = data.network.labels;
+            networkChart.data.datasets[0].data = data.network.data;
+            networkChart.update();
+        }
+
+        // Function to update table
+        function updateTable(data) {
+            const tbody = document.getElementById('metricsTable').getElementsByTagName('tbody')[0];
+            tbody.innerHTML = '';  // Clear existing table rows
+
+            for (const [key, value] of Object.entries(data)) {
+                let row = tbody.insertRow();
+                let cell1 = row.insertCell(0);
+                let cell2 = row.insertCell(1);
+                cell1.innerHTML = key;
+                cell2.innerHTML = value.data[value.data.length - 1];  // Display the latest value
+            }
+        }
+
+        // Fetch new data every 5 seconds
+        setInterval(() => {
+            fetch('/myapp/netdata-metrics-api/')
+                .then(response => response.json())
+                .then(newData => {
+                    data = newData;
+                    updateCharts(newData);
+                    updateTable(newData);
+                });
+        }, 5000);
+
+        // Sort table function
+        document.querySelectorAll('th').forEach(header => {
+            header.addEventListener('click', () => {
+                const table = header.parentElement.parentElement.parentElement;
+                const index = Array.from(header.parentElement.children).indexOf(header);
+                const isAscending = header.classList.contains('asc');
+                const direction = isAscending ? -1 : 1;
+
+                Array.from(table.querySelector('tbody').children)
+                    .sort((rowA, rowB) => {
+                        const cellA = rowA.children[index].innerText;
+                        const cellB = rowB.children[index].innerText;
+                        return cellA > cellB ? (1 * direction) : (-1 * direction);
+                    })
+                    .forEach(row => table.querySelector('tbody').appendChild(row));
+
+                header.classList.toggle('asc', !isAscending);
+            });
+        });
+    </script>
+</body>
+</html>

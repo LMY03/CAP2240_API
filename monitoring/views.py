@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from django.http import JsonResponse
 import requests
+import json
 
 # Create your views here.
 
@@ -45,13 +47,17 @@ def fetch_netdata_metrics():
         if response.status_code == 200:
             chart_data = response.json()
             data[key] = {
-                'labels': [label for label in chart_data['labels']],
-                'data': [point[0] for point in chart_data['data']]
+                'labels': list(range(len(chart_data['data']))),  # Use a range as labels
+                'data': [sum(point) for point in chart_data['data']]  # Sum the data points for simplicity
             }
         else:
             data[key] = {'labels': [], 'data': []}
     return data
 
-def renders(request):
+def netdata_view(request):
     data = fetch_netdata_metrics()
-    return render(request, 'index.html', {'data': data})
+    return render(request, 'netdata.html', {'data': json.dumps(data)})  # Use json.dumps to pass data as JSON
+
+def netdata_metrics_api(request):
+    data = fetch_netdata_metrics()
+    return JsonResponse(data)  # Return data as JSON response for AJAX requests

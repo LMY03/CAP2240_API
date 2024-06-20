@@ -1,54 +1,63 @@
+<!-- myapp/templates/netdata.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Netdata Metrics</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('th').forEach(header => {
+                header.addEventListener('click', () => {
+                    const table = header.parentElement.parentElement.parentElement;
+                    const index = Array.from(header.parentElement.children).indexOf(header);
+                    const isAscending = header.classList.contains('asc');
+                    const direction = isAscending ? -1 : 1;
+
+                    Array.from(table.querySelector('tbody').children)
+                        .sort((rowA, rowB) => {
+                            const cellA = rowA.children[index].innerText;
+                            const cellB = rowB.children[index].innerText;
+                            return cellA > cellB ? (1 * direction) : (-1 * direction);
+                        })
+                        .forEach(row => table.querySelector('tbody').appendChild(row));
+
+                    header.classList.toggle('asc', !isAscending);
+                });
+            });
+        });
+    </script>
 </head>
 <body>
     <h1>Netdata Metrics</h1>
-    <div>
-        <canvas id="cpuChart"></canvas>
-    </div>
-    <div>
-        <canvas id="memoryChart"></canvas>
-    </div>
-    <div>
-        <canvas id="networkChart"></canvas>
-    </div>
-    <script>
-        // Extract data from Django context
-        const data = {{ data|safe }};
-
-        // Function to create chart
-        function createChart(ctx, chartData, label) {
-            return new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: chartData.labels,
-                    datasets: [{
-                        label: label,
-                        data: chartData.data,
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        x: {
-                            type: 'linear',
-                            position: 'bottom'
-                        }
-                    }
-                }
-            });
-        }
-
-        // Create charts for CPU, memory, and network
-        const cpuChart = createChart(document.getElementById('cpuChart'), data.cpu, 'CPU Usage');
-        const memoryChart = createChart(document.getElementById('memoryChart'), data.memory, 'Memory Usage');
-        const networkChart = createChart(document.getElementById('networkChart'), data.network, 'Network Usage');
-    </script>
+    <table>
+        <thead>
+            <tr>
+                <th>Metric</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for key, value in data.items %}
+            <tr>
+                <td>{{ key|capfirst }}</td>
+                <td>{{ value|safe }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>
