@@ -21,7 +21,7 @@ def fetch_netdata_metrics(vm_url):
 
 def vm_monitoring(request):
     vm_urls = [
-        "192.168.254.162",
+        # "192.168.254.162",
         "192.168.254.165",
     ]
     vms_data = []
