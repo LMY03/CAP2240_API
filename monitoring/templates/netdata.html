@@ -1,137 +1,121 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Netdata Metrics</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-        th {
-            cursor: pointer;
-        }
-    </style>
+    <title>VM Monitoring</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sortable/1.13.0/js/sortable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
 </head>
 <body>
-    <h1>Netdata Metrics</h1>
-    <div>
-        <canvas id="cpuChart"></canvas>
-    </div>
-    <div>
-        <canvas id="memoryChart"></canvas>
-    </div>
-    <div>
-        <canvas id="networkChart"></canvas>
-    </div>
-    <table id="metricsTable">
+    <h1>VM Monitoring</h1>
+    <table id="vm-table" class="sortable">
         <thead>
             <tr>
-                <th>Metric</th>
-                <th>Value</th>
+                <th>VM Name</th>
+                <th>CPU Usage</th>
+                <th>Memory Usage</th>
+                <th>Network Usage</th>
             </tr>
         </thead>
         <tbody>
+            <!-- Data will be populated here -->
         </tbody>
     </table>
-    <script>
-        // Extract initial data from Django context
-        let data = JSON.parse('{{ data|escapejs }}');
 
-        // Function to create chart
-        function createChart(ctx, chartData, label) {
-            return new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: chartData.labels,
-                    datasets: [{
-                        label: label,
-                        data: chartData.data,
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        x: {
-                            type: 'linear',
-                            position: 'bottom'
-                        }
-                    }
+    <div id="graphs">
+        <h2>CPU Usage</h2>
+        <canvas id="cpu-graph"></canvas>
+        <h2>Memory Usage</h2>
+        <canvas id="memory-graph"></canvas>
+        <h2>Network Usage</h2>
+        <canvas id="network-graph"></canvas>
+    </div>
+
+    <script>
+        function fetchData() {
+            $.ajax({
+                url: 'https://your-netdata-server/api/v1/allmetrics?format=json&options=seconds',
+                method: 'GET',
+                success: function(data) {
+                    updateTable(data);
+                    updateGraphs(data);
                 }
             });
         }
 
-        // Create charts for CPU, memory, and network
-        const cpuChart = createChart(document.getElementById('cpuChart'), data.cpu, 'CPU Usage');
-        const memoryChart = createChart(document.getElementById('memoryChart'), data.memory, 'Memory Usage');
-        const networkChart = createChart(document.getElementById('networkChart'), data.network, 'Network Usage');
-
-        // Function to update charts with new data
-        function updateCharts(data) {
-            cpuChart.data.labels = data.cpu.labels;
-            cpuChart.data.datasets[0].data = data.cpu.data;
-            cpuChart.update();
-
-            memoryChart.data.labels = data.memory.labels;
-            memoryChart.data.datasets[0].data = data.memory.data;
-            memoryChart.update();
-
-            networkChart.data.labels = data.network.labels;
-            networkChart.data.datasets[0].data = data.network.data;
-            networkChart.update();
-        }
-
-        // Function to update table
         function updateTable(data) {
-            const tbody = document.getElementById('metricsTable').getElementsByTagName('tbody')[0];
-            tbody.innerHTML = '';  // Clear existing table rows
+            let tbody = $('#vm-table tbody');
+            tbody.empty();
 
-            for (const [key, value] of Object.entries(data)) {
-                let row = tbody.insertRow();
-                let cell1 = row.insertCell(0);
-                let cell2 = row.insertCell(1);
-                cell1.innerHTML = key;
-                cell2.innerHTML = value.data[value.data.length - 1];  // Display the latest value
+            // Assuming data structure based on Netdata's API
+            for (let vm of data.vms) {
+                tbody.append(`
+                    <tr>
+                        <td>${vm.name}</td>
+                        <td>${vm.cpu_usage}%</td>
+                        <td>${vm.memory_usage} MB</td>
+                        <td>${vm.network_usage} KB/s</td>
+                    </tr>
+                `);
             }
         }
 
-        // Fetch new data every 5 seconds
-        setInterval(() => {
-            fetch('/myapp/netdata-metrics-api/')
-                .then(response => response.json())
-                .then(newData => {
-                    data = newData;
-                    updateCharts(newData);
-                    updateTable(newData);
-                });
-        }, 5000);
+        function updateGraphs(data) {
+            // Assuming data structure based on Netdata's API
+            let cpuData = data.vms.map(vm => vm.cpu_usage);
+            let memoryData = data.vms.map(vm => vm.memory_usage);
+            let networkData = data.vms.map(vm => vm.network_usage);
 
-        // Sort table function
-        document.querySelectorAll('th').forEach(header => {
-            header.addEventListener('click', () => {
-                const table = header.parentElement.parentElement.parentElement;
-                const index = Array.from(header.parentElement.children).indexOf(header);
-                const isAscending = header.classList.contains('asc');
-                const direction = isAscending ? -1 : 1;
-
-                Array.from(table.querySelector('tbody').children)
-                    .sort((rowA, rowB) => {
-                        const cellA = rowA.children[index].innerText;
-                        const cellB = rowB.children[index].innerText;
-                        return cellA > cellB ? (1 * direction) : (-1 * direction);
-                    })
-                    .forEach(row => table.querySelector('tbody').appendChild(row));
-
-                header.classList.toggle('asc', !isAscending);
+            let ctxCpu = document.getElementById('cpu-graph').getContext('2d');
+            let cpuChart = new Chart(ctxCpu, {
+                type: 'line',
+                data: {
+                    labels: data.vms.map(vm => vm.name),
+                    datasets: [{
+                        label: 'CPU Usage',
+                        data: cpuData,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                }
             });
+
+            let ctxMemory = document.getElementById('memory-graph').getContext('2d');
+            let memoryChart = new Chart(ctxMemory, {
+                type: 'line',
+                data: {
+                    labels: data.vms.map(vm => vm.name),
+                    datasets: [{
+                        label: 'Memory Usage',
+                        data: memoryData,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                }
+            });
+
+            let ctxNetwork = document.getElementById('network-graph').getContext('2d');
+            let networkChart = new Chart(ctxNetwork, {
+                type: 'line',
+                data: {
+                    labels: data.vms.map(vm => vm.name),
+                    datasets: [{
+                        label: 'Network Usage',
+                        data: networkData,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            fetchData();
+            setInterval(fetchData, 5000);
         });
     </script>
 </body>
