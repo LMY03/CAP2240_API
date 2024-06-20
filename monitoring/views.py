@@ -1,66 +1,37 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django_tables2 import RequestConfig
 import requests
-import json
+from .tables import VMTable
 
-# Create your views here.
+def fetch_netdata_metrics(vm_url):
+    # Replace with your actual endpoint and processing
+    response = requests.get(f'http://{vm_url}/api/v1/allmetrics')
+    data = response.json()
+    
+    # Extract CPU, memory, and network usage from data
+    cpu = data['system.cpu']['value']
+    memory = data['system.ram']['value']
+    network = data['system.network']['value']
+    
+    return {
+        'cpu': cpu,
+        'memory': memory,
+        'network': network,
+    }
 
-# def renders(request) : 
-#     ip_add = {
-#         "192.168.254.165",
-#         "192.168.254.166",
-#     }
-#     # template = "monitoring.html"
-#     template = "index.html"
-#     return render(request, template, { "ip_add" : ip_add })
+def vm_monitoring(request):
+    vm_urls = ["vm1_address", "vm2_address"]  # Replace with actual VM addresses
+    vms_data = []
 
-# def fetch_netdata_metrics():
-#     base_url = "http://192.168.254.162:19999/api/v1/data?chart={chart}&format=json"
-#     charts = {
-#         'cpu': 'system.cpu',
-#         'memory': 'system.ram',
-#         'network': 'system.net'
-#     }
-#     data = {}
-#     for key, chart in charts.items():
-#         response = requests.get(base_url.format(chart=chart))
-#         if response.status_code == 200:
-#             data[key] = response.json()
-#         else:
-#             data[key] = {}
-#     return data
+    for vm_url in vm_urls:
+        metrics = fetch_netdata_metrics(vm_url)
+        vms_data.append({
+            'name': vm_url,
+            'cpu': metrics['cpu'],
+            'memory': metrics['memory'],
+            'network': metrics['network'],
+        })
 
-# def renders(request):
-#     data = fetch_netdata_metrics()
-#     return render(request, 'index.html', {'data': data})
-
-# def fetch_netdata_metrics():
-#     base_url = "http://192.168.254.162:19999/api/v1/data?chart={chart}&format=json"
-#     charts = {
-#         'cpu': 'system.cpu',
-#         'memory': 'system.ram',
-#         'network': 'system.net'
-#     }
-#     data = {}
-#     for key, chart in charts.items():
-#         response = requests.get(base_url.format(chart=chart))
-#         if response.status_code == 200:
-#             chart_data = response.json()
-#             data[key] = {
-#                 'labels': list(range(len(chart_data['data']))),  # Use a range as labels
-#                 'data': [sum(point) for point in chart_data['data']]  # Sum the data points for simplicity
-#             }
-#         else:
-#             data[key] = {'labels': [], 'data': []}
-#     return data
-
-# def netdata_view(request):
-#     data = fetch_netdata_metrics()
-#     return render(request, 'netdata.html', {'data': json.dumps(data)})  # Use json.dumps to pass data as JSON
-
-# def netdata_metrics_api(request):
-#     data = fetch_netdata_metrics()
-#     return JsonResponse(data)  # Return data as JSON response for AJAX requests
-
-def renders(request):
-    return render(request, "index.html")
+    table = VMTable(vms_data)
+    RequestConfig(request).configure(table)
+    return render(request, 'monitoring/vm_monitoring.html', {'table': table})

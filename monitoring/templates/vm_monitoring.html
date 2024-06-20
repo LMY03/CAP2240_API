@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VM Monitoring</title>
+    <link rel="stylesheet" href="{% static 'django_tables2/bootstrap.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <h1>VM Monitoring</h1>
+    {% render_table table %}
+    <div id="graphs">
+        {% for vm in table.data %}
+        <div id="{{ vm.name }}-graph">
+            <h3>{{ vm.name }}</h3>
+            <iframe src="http://{{ vm.name }}/dashboard.html" width="600" height="400"></iframe>
+        </div>
+        {% endfor %}
+    </div>
+    <script>
+        setInterval(function() {
+            location.reload();
+        }, 5000);
+    </script>
+</body>
+</html>

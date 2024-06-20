@@ -4,3 +4,4 @@ requests
 ansible
 # ansible-core
 ansible-runner
+django_tables2
