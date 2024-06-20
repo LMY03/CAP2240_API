@@ -5,5 +5,5 @@ from . import views
 app_name = "monitoring"
 
 urlpatterns = [
-    path("", views.renders, name="monitoring"),
+    path("", views.netdata_view, name="monitoring"),
 ]
