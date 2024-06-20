@@ -62,5 +62,5 @@ import json
 #     data = fetch_netdata_metrics()
 #     return JsonResponse(data)  # Return data as JSON response for AJAX requests
 
-def index(request):
-    return render(request, 'index.html')
+def renders(request):
+    return render(request, "index.html")
