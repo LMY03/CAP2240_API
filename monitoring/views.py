@@ -8,7 +8,9 @@ def renders(request) :
         "192.168.254.165",
         "192.168.254.166",
     }
-    return render(request, "monitoring.html", { "ip_add" : ip_add })
+    # template = "monitoring.html"
+    template = "index.html"
+    return render(request, template, { "ip_add" : ip_add })
 
 def fetch_netdata_metrics():
     base_url = "http://192.168.254.162:19999/api/v1/data?chart={chart}&format=json"
