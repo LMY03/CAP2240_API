@@ -1,29 +1,35 @@
 from django.shortcuts import render
 from django_tables2 import RequestConfig
 import requests
+from requests.exceptions import RequestException
 from .tables import VMTable
 
 def fetch_netdata_metrics(vm_url):
-    # Replace with your actual endpoint and processing
-    response = requests.get(f'http://{vm_url}/api/v1/allmetrics')
-    data = response.json()
-    
-    # Extract CPU, memory, and network usage from data
-    cpu = data['system.cpu']['value']
-    memory = data['system.ram']['value']
-    network = data['system.network']['value']
-    
-    return {
-        'cpu': cpu,
-        'memory': memory,
-        'network': network,
-    }
+    try:
+        response = requests.get(f'http://{vm_url}:19999/api/v1/allmetrics?format=json')
+        response.raise_for_status()  # Raises an HTTPError if the HTTP request returned an unsuccessful status code
+        data = response.json()
+
+        # Extract CPU, memory, and network usage from data
+        cpu = data['system.cpu']['value']
+        memory = data['system.ram']['value']
+        network = data['system.network']['value']
+
+        return {
+            'cpu': cpu,
+            'memory': memory,
+            'network': network,
+        }
+    except RequestException as e:
+        print(f"Error fetching data from {vm_url}: {e}")
+        return {
+            'cpu': 'N/A',
+            'memory': 'N/A',
+            'network': 'N/A',
+        }
 
 def vm_monitoring(request):
-    vm_urls = [
-        # "192.168.254.162",
-        "192.168.254.165",
-    ]
+    vm_urls = ["192.168.254.165", "192.168.254.162"]  # Replace with actual VM addresses
     vms_data = []
 
     for vm_url in vm_urls:
