@@ -59,4 +59,4 @@ def vm_monitoring(request):
 
     table = VMTable(vms_data)
     RequestConfig(request).configure(table)
-    return render(request, 'monitoring/vm_monitoring.html', {'table': table})
+    return render(request, 'vm_monitoring.html', {'table': table})
