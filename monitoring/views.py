@@ -7,13 +7,22 @@ from .tables import VMTable
 def fetch_netdata_metrics(vm_url):
     try:
         response = requests.get(f'http://{vm_url}:19999/api/v1/allmetrics?format=json')
-        response.raise_for_status()  # Raises an HTTPError if the HTTP request returned an unsuccessful status code
+        response.raise_for_status()
         data = response.json()
+        
+        # Debug: Print the top-level keys
+        print(f"Top-level keys: {list(data.keys())}")
+        
+        # You need to identify the exact paths to the metrics you need
+        # Example paths (replace these with actual paths from your Netdata setup)
+        cpu_key = 'system.cpu'
+        memory_key = 'system.ram'
+        network_key = 'system.network'
 
-        # Extract CPU, memory, and network usage from data
-        cpu = data['system.cpu']['value']
-        memory = data['system.ram']['value']
-        network = data['system.network']['value']
+        # Assuming each metric is under a 'value' key within its dictionary
+        cpu = data.get(cpu_key, {}).get('value', 'N/A')
+        memory = data.get(memory_key, {}).get('value', 'N/A')
+        network = data.get(network_key, {}).get('value', 'N/A')
 
         return {
             'cpu': cpu,
@@ -27,9 +36,16 @@ def fetch_netdata_metrics(vm_url):
             'memory': 'N/A',
             'network': 'N/A',
         }
+    except KeyError as e:
+        print(f"KeyError: {e} in data: {data}")
+        return {
+            'cpu': 'N/A',
+            'memory': 'N/A',
+            'network': 'N/A',
+        }
 
 def vm_monitoring(request):
-    vm_urls = ["192.168.254.165"]  # Replace with actual VM addresses
+    vm_urls = ["192.168.254.165", "192.168.254.166"]  # Replace with actual VM addresses
     vms_data = []
 
     for vm_url in vm_urls:
