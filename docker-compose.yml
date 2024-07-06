@@ -38,30 +38,30 @@ services:
       mysql:
         condition: service_healthy
 
-  guacamole:
-    image: guacamole/guacamole:latest
-    container_name: guacamole
-    restart: always
-    ports:
-      - "8080:8080"
-    environment:
-      GUACD_HOSTNAME: guacd
-      MYSQL_HOSTNAME: mysql
-      MYSQL_PORT: 3306
-      MYSQL_DATABASE: ${MYSQL_GUACAMOLE_DB}
-      MYSQL_USER: ${MYSQL_GUACAMOLE_USER}
-      MYSQL_PASSWORD: ${MYSQL_GUACAMOLE_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-    depends_on:
-      - guacd
-      - mysql
+  # guacamole:
+  #   image: guacamole/guacamole:latest
+  #   container_name: guacamole
+  #   restart: always
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     GUACD_HOSTNAME: guacd
+  #     MYSQL_HOSTNAME: mysql
+  #     MYSQL_PORT: 3306
+  #     MYSQL_DATABASE: ${MYSQL_GUACAMOLE_DB}
+  #     MYSQL_USER: ${MYSQL_GUACAMOLE_USER}
+  #     MYSQL_PASSWORD: ${MYSQL_GUACAMOLE_PASSWORD}
+  #     MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+  #   depends_on:
+  #     - guacd
+  #     - mysql
 
-  guacd:
-    image: guacamole/guacd:latest
-    container_name: guacd
-    restart: always
-    ports:
-      - "4822:4822"
+  # guacd:
+  #   image: guacamole/guacd:latest
+  #   container_name: guacd
+  #   restart: always
+  #   ports:
+  #     - "4822:4822"
     
   influxdb:
     image: influxdb:latest
