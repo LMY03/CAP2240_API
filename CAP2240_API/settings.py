@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_tables2',
 ]
 
 MIDDLEWARE = [
@@ -89,7 +90,6 @@ DATABASES = {
         'USER': 'cap-2240',
         'PASSWORD': 'CAP_2240',
         'HOST': 'mysql',
-        # 'HOST': 'localhost',
         'PORT': 3306,
     }
 }
