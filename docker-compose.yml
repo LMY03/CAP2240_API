@@ -4,7 +4,7 @@ services:
     container_name: mysql
     restart: always
     ports:
-      - "3306:3306"
+      - "3307:3306"
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_CAP2240_DATABASE}
@@ -22,14 +22,19 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: CAP-2240
-    command: sh -c "python manage.py runserver 0.0.0.0:8000"
-    # command: sh -c "python3 manage.py migrate --noinput && python manage.py runserver 0.0.0.0:8000"
+    # command: sh -c "python manage.py runserver 0.0.0.0:8000"
+    command: sh -c "python3 manage.py migrate --noinput && python manage.py runserver 0.0.0.0:8000"
+    # command: sh -c "python3 manage.py makemigrations && python3 manage.py migrate --noinput && python manage.py runserver 0.0.0.0:8000"
     # command: sh -c "python3 manage.py migrate --noinput && python3 manage.py collectstatic --noinput && python manage.py runserver 0.0.0.0:8000"
     restart: always
     volumes:
       - .:/app
+      - /home/${USERNAME}/.ssh/id_rsa:/root/.ssh/id_rsa:ro
+      - /home/${USERNAME}/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub:ro
     ports:
       - "8000:8000"
+    environment:
+      ANSIBLE_HOST_KEY_CHECKING: "False"
     env_file:
       - .env
     depends_on:
@@ -60,55 +65,30 @@ services:
     restart: always
     ports:
       - "4822:4822"
-
-  netdata:
-    image: netdata/netdata:latest
-    container_name: netdata
-    pid: host
-    network_mode: host
-    restart: unless-stopped
-    ports:
-      - "19999:19999"
-    cap_add:
-      - SYS_PTRACE
-      - SYS_ADMIN
-    security_opt:
-      - apparmor:unconfined
-    volumes:
-      - netdataconfig:/etc/netdata
-      - netdatalib:/var/lib/netdata
-      - netdatacache:/var/cache/netdata
-      - /etc/passwd:/host/etc/passwd:ro
-      - /etc/group:/host/etc/group:ro
-      - /etc/localtime:/etc/localtime:ro
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /etc/os-release:/host/etc/os-release:ro
-      - /var/log:/host/var/log:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-
-  ansible:
-    image: cytopia/ansible:latest
+    
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
     restart: always
-    container_name: ansible
-    volumes:
-      - ./playbooks:/playbooks
-      - ./inventory:/inventory
-      - /home/${USERNAME}/.ssh/id_rsa:/root/.ssh/id_rsa:ro
-      - /home/${USERNAME}/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub:ro
+    ports:
+      - "8086:8086"
     environment:
-      ANSIBLE_HOST_KEY_CHECKING: "False"
-    working_dir: /playbooks
-    entrypoint: ["sh", "-c"]
-    command: ["apk update && apk add --no-cache openssh-client && tail -f /dev/null"]
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUXDB_USERNAME}
+      DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUXDB_PASSWORD}
+      DOCKER_INFLUXDB_INIT_ORG: ${INFLUXDB_ORG}
+      DOCKER_INFLUXDB_INIT_BUCKET: ${INFLUXDB_BUCKET}
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+      - influxdb_config:/etc/influxdb2
 
 volumes:
   mysql_data:
-  netdataconfig:
-  netdatalib:
-  netdatacache:
+  influxdb_data:
+  influxdb_config:
 
 # References
 
 # https://medium.com/@akshatgadodia/dockerizing-a-django-and-mysql-application-a-step-by-step-guide-d4ba181d3de5
 # https://www.youtube.com/watch?v=GGb1C-4mTCw
+# https://community.influxdata.com/t/docker-compose-example/25627
