@@ -1,13 +1,11 @@
 <form action="{% url 'ticketing:vm_provision' %}" method="post">
-
     {% csrf_token %}
-
     <h1>VM Request</h1>
 
     <label for="template_vm_id">Choose VM Template: </label>
     <select id="template_vm_id" name="template_vm_id">
-        <option value="4000">Ubuntu 24</option>
-        <option value="3000">Ubuntu 22</option>
+        <option value="111">Ubuntu 24</option>
+        <option value="101">Ubuntu 22</option>
     </select><br /><br />
 
     <label for="class">Class Name: </label>
@@ -27,11 +25,9 @@
 
 <hr />
 
-<form id="vmForm" action="{% url 'ticketing:launch_vm' %}" method="post" onsubmit="submitForm(event)">
-
+<form id="vmForm" action="{% url 'ticketing:start_vm' %}" method="post" onsubmit="submitForm(event)">
     {% csrf_token %}
-
-    <h1>Launch VM</h1>
+    <h1>Start VM</h1>
 
     <label for="vm_id">VM ID: </label>
     <input type="text" name="vm_id" id="vm_id" /><br /><br />
@@ -39,48 +35,6 @@
     <input type="text" name="username" id="username" /><br /><br />
     <label for="connection_id">Guacamole Connection ID: </label>
     <input type="text" name="connection_id" id="connection_id" /><br /><br />
-
-    <input type="submit" value="submit" />
-</form>
-
-<hr />
-
-<form action="{% url 'ticketing:lxc_provision' %}" method="post">
-
-    {% csrf_token %}
-
-    <h1>LXC Request</h1>
-
-    <label for="template_vm_id">Choose LXC Template: </label>
-    <select id="template_vm_id" name="template_vm_id">
-        <option value="5000">Ubuntu 22</option>
-    </select><br /><br />
-
-    <label for="class">Class Name: </label>
-    <input type="text" name="class" id="class" /><br /><br />
-
-    <label for="no_of_vm">Number of VM: </label>
-    <input type="number" name="no_of_vm" id="no_of_vm" /><br /><br />
-
-    <label for="cpu_cores">CPU Cores: </label>
-    <input type="number" name="cpu_cores" id="cpu_cores" /><br /><br />
-
-    <label for="ram">RAM: </label>
-    <input type="number" name="ram" id="ram" /><br /><br />
-
-    <input type="submit" value="submit" />
-</form>
-
-<hr />
-
-<form action="{% url 'ticketing:launch_lxc' %}" method="post">
-
-    {% csrf_token %}
-
-    <h1>Start LXC</h1>
-
-    <label for="vm_id">VM ID: </label>
-    <input type="text" name="vm_id" id="vm_id" /><br /><br />
 
     <input type="submit" value="submit" />
 </form>

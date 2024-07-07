@@ -4,6 +4,7 @@ import json
 # GUACAMOLE_HOST = 'http://guacamole:8080'
 GUACAMOLE_HOST = "http://10.1.200.20:8080"
 # GUACAMOLE_HOST = 'http://192.168.254.125:8080'
+# GUACAMOLE_HOST = 'http://10.63.132.128:8080'
 USERNAME = 'guacadmin'
 PASSWORD = 'guacadmin'
 
@@ -118,11 +119,15 @@ def update_connection(connection_id, hostname):
     token = get_token()
     url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/connections/{connection_id}?token={token}"
     headers = {'Content-Type': 'application/json'}
-    connection_details = get_connection_details(connection_id)
-    connection_parameter_details = get_connection_parameter_details(connection_id)
-    connection_parameter_details['hostname'] = hostname
-    connection_details['parameters'] = connection_parameter_details
+    connection_details = get_connection_parameter_details(connection_id)
+    print(connection_details)
+    print("--------------------------------")
+    connection_details['hostname'] = hostname
+    print(connection_details)
+    print("--------------------------------")
     updated_data=json.dumps(connection_details)
+    print(updated_data)
+    print("--------------------------------")
     response = requests.put(url, data=updated_data, headers=headers)
     return response
 
@@ -151,23 +156,17 @@ def set_permission(username, config):
     return response.status_code
 
 def get_connection_url(connection_id, username, password):
-    token = get_connection_token(username, password)
-    # token = get_token()
+    # token = get_connection_token(username, password)
+    token = get_token()
     return f"{GUACAMOLE_HOST}/guacamole/#/client/{connection_id}?token={token}"
 
-# def get_connection_token(username, password):
-#     url = f"{GUACAMOLE_HOST}/guacamole/api/tokens"
-#     config = { 'username': username, 'password': password }
-#     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-#     response = requests.post(url, data=json.dumps(config), headers=headers)
-#     data = response.json()
-#     return data['authToken']
-
 def get_connection_token(username, password):
-    session = requests.Session()
-    response = session.post(
-        f"{GUACAMOLE_HOST}/guacamole/api/tokens",
-        data={'username': username, 'password': password},
-    )
+    # CA_CRT = '/path/to/ca_bundle.crt'
+    # CA_CRT = False # Disable SSL certificate verification
+    # session.verify = CA_CRT
+    url = f"{GUACAMOLE_HOST}/guacamole/api/tokens"
+    config = { 'username': username, 'password': password }
+    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+    response = requests.post(url, data=json.dumps(config), headers=headers)
     data = response.json()
     return data['authToken']

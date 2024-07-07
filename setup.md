@@ -1,6 +1,6 @@
 # Github Repository
 
-git clone https://github.com/LMY03/CAP2240_API.git ~/CAP2240_API
+git clone https://github.com/LMY03/CAP2240_API.git
 
 docker compose -f ~/CAP2240_API/docker-compose.yml up --build -d
 
@@ -47,8 +47,7 @@ docker exec -it netdata /bin/bash
 vi /etc/netdata/stream.conf
 
 # plugin API_KEY 
-[76afe428-665e-4418-b84c-cbb0c374233d]
-
+[API_KEY] 
     enabled = yes
 
 # logout of docker container
@@ -60,7 +59,9 @@ docker restart netdata
 
 # ANSIBLE
 
-sudo nano ~/inventory/hosts
+docker exec -it ansible /bin/sh
+
+vi ../inventory/hosts
 
 IP_ADDRESS_OF_NODE_VM ansible_user=USER_NAME
 
@@ -68,7 +69,7 @@ ssh-copy-id USER_NAME@IP_ADDRESS_OF_NODE_VM
 
 docker exec -it ansible ansible all -i /inventory/hosts -m ping
 
-<!-- rm -rf ~/.ssh -->
+rm -rf ~/.ssh
 
 # References
 

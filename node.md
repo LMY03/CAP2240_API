@@ -20,23 +20,18 @@ curl https://get.netdata.cloud/kickstart.sh > /tmp/netdata-kickstart.sh && sh /t
 sudo nano /etc/netdata/stream.conf
 
 [stream]
-
     enabled = yes
-
     destination = parent_vm_ip:19999
-
     api key = 76afe428-665e-4418-b84c-cbb0c374233d
 
 sudo nano /etc/netdata/netdata.conf
 
-sudo chown jin /etc/netdata/
+[global]
+    hostname = HOST_NAME
 
 sudo systemctl enable netdata
 
 sudo systemctl restart netdata
-
-# FOR Template
-sudo rm /var/lib/netdata/registry/netdata.public.unique.id
 
 # Tiger VNC
 
@@ -91,10 +86,6 @@ sudo systemctl start xrdp
 sudo nano /etc/xrdp/xrdp.ini
 
 sudo systemctl restart xrdp
-
-# Ubuntu Server
-@reboot (rm /etc/machine-id && systemd-machine-id-setup && crontab -l | grep -v 'rm /etc/machine-id && systemd-machine-id-setup' | crontab -)
-
 
 # References
 

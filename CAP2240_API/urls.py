@@ -19,10 +19,9 @@ from django.urls import include, path
 from django.urls import path
 
 urlpatterns = [
-    path('ansible/', include("autotool.urls")),
-    path('monitoring/', include("monitoring.urls")),
     path('guacamole/', include("guacamole.urls")),
     path('proxmox/', include("proxmox.urls")),
     path('ticketing/', include("ticketing.urls")),
     path('admin/', admin.site.urls),
+    path('dashboard/', include('dashboard.urls'))
 ]
