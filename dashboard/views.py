@@ -6,7 +6,7 @@ import csv
 from io import StringIO
 
 token = "f8_eTh9R0EUb_qxjO_CeNQUT8SCZdjmlQ00TBLQQPkkN3ZSrJ3xg1hAOVbB9dveCt41h-WkmZhyjKFKId_li3A=="
-org = "DLSU_CAP2240"
+org = "DLSU_CCS"
 bucket = "Proxmox"
     
 # Create your views here.
