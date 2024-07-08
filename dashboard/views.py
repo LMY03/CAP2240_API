@@ -23,7 +23,7 @@ def index(request):
 def getData(request):
     #Connection between Proxmox API and application
     proxmox = ProxmoxAPI('10.1.200.11', user='root@pam', password='cap2240', verify_ssl=False)
-    client = InfluxDBClient(url="http://influx:8086", token=token, org=org)
+    client = InfluxDBClient(url="http://192.168.1.3:8086", token=token, org=org)
 
     #Get VM Info from Proxmox API
     vmids = proxmox.cluster.resources.get(type='vm')
