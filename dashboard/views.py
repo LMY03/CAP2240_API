@@ -5,7 +5,7 @@ from influxdb_client import InfluxDBClient, Point, WritePrecision
 import csv
 from io import StringIO
 
-token = "f8_eTh9R0EUb_qxjO_CeNQUT8SCZdjmlQ00TBLQQPkkN3ZSrJ3xg1hAOVbB9dveCt41h-WkmZhyjKFKId_li3A=="
+token = "6QTrJL1YztyrDuI09m3K9LPWANvCFlE6FiRoIPkXLEyhteJ0t9O4V8pc4ncQx4SGoK38xi5JVpYwPULhzCy4Mw=="
 org = "DLSU_CCS"
 bucket = "Proxmox"
     
