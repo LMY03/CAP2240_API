@@ -11,7 +11,7 @@ bucket = "Proxmox"
     
 # Create your views here.
 def index(request):
-    proxmox = ProxmoxAPI('10.1.200.11', user='root@pam', password='43210', verify_ssl=False)
+    proxmox = ProxmoxAPI('10.1.200.11', user='root@pam', password='cap2240', verify_ssl=False)
     nodes = proxmox.nodes.get()
     strNodes = []
     
