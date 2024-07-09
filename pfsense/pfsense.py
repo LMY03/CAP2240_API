@@ -6,13 +6,13 @@ PFSENSE_HOST = 'http://192.168.1.1'
 API_KEY = '74c46c1735cc476bb78df2c189be73daf9753ba872d64f8'
 
 def get_token():
-    url = f"{PFSENSE_HOST}/api/v2/auth/key"
+    url = f"{PFSENSE_HOST}/api/v2/auth/jwt"
     headers = {
         'Content-Type': 'application/json',
     }
     data = {}
     response = requests.post(url, headers=headers, json=data, auth=HTTPBasicAuth("admin", "pfsense"))
-    return response.json()
+    return response.json()['data']['token']
 
 def add_firewall_rule():
     # url = f"{PFSENSE_HOST}/api/v2/firewall/apply"
