@@ -51,7 +51,7 @@ def add_firewall_rule(protocol, destination_port, ip_add, local_port):
     return response.json()
     return response.json()['data']['id']
 
-def edit_firewall_rule(id, ip_add):
+def edit_firewall_rule(rule_id, ip_add):
     token = get_token()
     url = f'{PFSENSE_HOST}/api/v2/firewall/nat/port_forward'
     headers = {
@@ -59,7 +59,7 @@ def edit_firewall_rule(id, ip_add):
         'Authorization': f"Bearer {token}",
     }
     data = {
-        'id': id,
+        'id': rule_id,
         'target': ip_add,
     }
     response = requests.patch(url, headers=headers, json=data)
@@ -68,7 +68,7 @@ def edit_firewall_rule(id, ip_add):
 def delete_firewall_rule(rule_id):
     try:
         token = get_token()
-        url = f'{PFSENSE_HOST}/api/v2/firewall/nat/port_forward?id={rule_id}'
+        url = f'{PFSENSE_HOST}/api/v2/firewall/nat/port_forward?id={rule_id}&apply=true'
         headers = {
             # 'Content-Type': 'application/json',
             'Authorization': f'Bearer {token}',
