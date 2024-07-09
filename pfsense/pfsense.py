@@ -70,7 +70,7 @@ def edit_firewall_rule(id):
     
 def get_rules():
     token = get_token()
-    url = f"{PFSENSE_HOST}/api/v2/system/interface/wan"
+    url = f"{PFSENSE_HOST}/api/v2/system/interface"
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f"Bearer {token}",
