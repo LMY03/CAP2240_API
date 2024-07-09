@@ -1,4 +1,4 @@
-<form action="{% url 'pfsense:add_firewall_rule' %}" method="post">
+<form action="{% url 'pfsense:add_port_forward_rule' %}" method="post">
 
     {% csrf_token %}
 
@@ -22,7 +22,7 @@
 
 <hr />
 
-<form action="{% url 'pfsense:edit_firewall_rule' %}" method="post">
+<form action="{% url 'pfsense:edit_port_forward_rule' %}" method="post">
 
     {% csrf_token %}
 
@@ -38,7 +38,7 @@
 
 <hr />
 
-<form action="{% url 'pfsense:delete_firewall_rule' %}" method="post">
+<form action="{% url 'pfsense:delete_port_forward_rule' %}" method="post">
 
     {% csrf_token %}
 
