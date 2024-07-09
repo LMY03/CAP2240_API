@@ -1,7 +1,7 @@
 import json, requests
 
 PFSENSE_HOST = 'http://192.168.1.1'
-API_KEY = '3cbd65d72ccb0bba75e669d2679f54f5'
+API_KEY = 'API_KEY'
 
 def add_firewall_rule():
     # url = f"{PFSENSE_HOST}/api/v2/firewall/apply"
