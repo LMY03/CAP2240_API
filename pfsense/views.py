@@ -53,6 +53,5 @@ def delete_firewall_rule(request):
     return redirect('/pfsense')
 
 def get_rules(request):
-    print("------------------------")
     data = pfsense.get_rules()
     return render(request, 'data.html', { 'data' : data })
