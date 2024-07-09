@@ -5,7 +5,7 @@ PFSENSE_HOST = 'http://192.168.1.1'
 API_KEY = 'API_KEY'
 
 def get_token():
-    url = f"{PFSENSE_HOST}/api/v2/auth/jwt"
+    url = f"{PFSENSE_HOST}/api/v2/auth/key"
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f"Bearer {API_KEY}"
