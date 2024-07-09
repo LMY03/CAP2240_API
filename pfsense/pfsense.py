@@ -1,6 +1,5 @@
-from django.http.response import HttpResponse, JsonResponse
 from requests.auth import HTTPBasicAuth
-import json, requests
+import requests
 
 PFSENSE_HOST = 'http://192.168.1.1'
 API_KEY = '74c46c1735cc476bb78df2c189be73daf9753ba872d64f8'
@@ -129,3 +128,4 @@ def get_firewall_rules():
     return response.json()['data']
 
 # https://github.com/jaredhendrickson13/pfsense-api/blob/dbd61d89b93bb85eb64a4ed7b9f477729d8ea9cf/pfSense-pkg-RESTAPI/files/usr/local/pkg/RESTAPI/Models/PortForward.inc
+# https://github.com/jaredhendrickson13/pfsense-api/blob/dbd61d89b93bb85eb64a4ed7b9f477729d8ea9cf/pfSense-pkg-RESTAPI/files/usr/local/pkg/RESTAPI/Models/FirewallRule.inc
