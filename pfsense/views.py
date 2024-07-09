@@ -11,7 +11,7 @@ redis_client = redis.StrictRedis(host='localhost', port=6379, db=0)
 def get_port_forward_rule(vm_name):
     rules = pfsense.get_port_forward_rules()
     for rule in rules:
-        if rule['descr'] == vm_name: return rule
+        if rule['descr'] == vm_name: return rule['id']
 
 
 def get_port_forward_rules(request_id):
@@ -20,10 +20,10 @@ def get_port_forward_rules(request_id):
         if rule['descr'] == "Test": return rule['id']
 
 
-def create_firewall_rule():
+def create_firewall_rule(protocol, destination_port, ip_add, local_port, descr):
     lock = redis_client.lock('pfsense_lock', timeout=10)
     with lock:
-        pfsense.add_firewall_rule()
+        pfsense.add_port_forward_rule(protocol, destination_port, ip_add, local_port, descr)
         pfsense.apply_changes()
 
 def update_firewall_rule_ip_add(vm_name):

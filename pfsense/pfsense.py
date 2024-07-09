@@ -23,7 +23,7 @@ def apply_changes():
     response = requests.post(url, headers=headers)
     return response.json()['data']['token']
 
-def add_firewall_rule(protocol, destination_port, ip_add, local_port):
+def add_port_forward_rule(protocol, destination_port, ip_add, local_port, descr):
     token = get_token()
     url = f'{PFSENSE_HOST}/api/v2/firewall/nat/port_forward'
     headers = {
@@ -42,14 +42,13 @@ def add_firewall_rule(protocol, destination_port, ip_add, local_port):
         'disabled': False,
         # 'nordr': True, # notsure
         # 'nosync': True,
-        'descr': 'Test',
-        'associated_rule_id': '',
+        'descr': descr,
+        'associated_rule_id': ' ',
     }
     response = requests.post(url, headers=headers, json=data)
     return response.json()
-    return response.json()['data']['id']
 
-def edit_firewall_rule(rule_id, ip_add):
+def edit_port_forward_rule(rule_id, ip_add):
     token = get_token()
     url = f'{PFSENSE_HOST}/api/v2/firewall/nat/port_forward'
     headers = {
@@ -63,7 +62,7 @@ def edit_firewall_rule(rule_id, ip_add):
     response = requests.patch(url, headers=headers, json=data)
     return response.json()
 
-def delete_firewall_rule(rule_id):
+def delete_port_forward_rule(rule_id):
     token = get_token()
     url = f'{PFSENSE_HOST}/api/v2/firewall/nat/port_forward?id={rule_id}&apply=true'
     headers = { 'Authorization': f"Bearer {token}" }
