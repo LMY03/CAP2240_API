@@ -5,7 +5,7 @@ from . import pfsense
 # Create your views here.
 
 def renders(request):
-    return render(request, 'pfsense.html')
+    return render(request, 'pfsense/pfsense.html')
 
 def add_rule(request):
 
@@ -21,4 +21,4 @@ def get_rules(request):
     data = pfsense.get_token()
     print("-------------------")
     print(data)
-    return render(request, 'data.html', { 'data' : data })
+    return render(request, 'pfsense/data.html', { 'data' : data })
