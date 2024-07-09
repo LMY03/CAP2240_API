@@ -25,7 +25,7 @@ def apply_changes():
     response = requests.post(url, headers=headers)
     return response.json()['data']['token']
 
-def add_firewall_rule(wan_ip, protocol, destination_port, ip_add, local_port):
+def add_firewall_rule(protocol, destination_port, ip_add, local_port):
     token = get_token()
     url = f"{PFSENSE_HOST}/api/v2/firewall/nat/port_forward"
     headers = {
