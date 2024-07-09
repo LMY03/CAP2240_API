@@ -45,7 +45,7 @@ def add_firewall_rule():
     
 def get_rules():
     token = get_token()
-    url = f"{PFSENSE_HOST}/api/v2/firewall/nat/portforwards"
+    url = f"{PFSENSE_HOST}/api/v2/firewall/nat/port_forwards"
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f"Bearer {token}",
