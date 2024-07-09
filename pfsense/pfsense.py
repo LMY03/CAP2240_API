@@ -35,7 +35,7 @@ def add_firewall_rule(protocol, destination_port, ip_add, local_port):
         'protocol': protocol,
         'source': 'any',
         # 'source_port': 'any',
-        'destination': 'WAN_address',
+        'destination': 'WANIP',
         'destination_port': destination_port,
         'target': ip_add,
         'local_port': local_port,
