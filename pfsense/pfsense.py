@@ -11,8 +11,6 @@ def get_token():
         'Content-Type': 'application/json',
     }
     response = requests.post(url, headers=headers, auth=HTTPBasicAuth("admin", "pfsense"))
-    print("----------------------")
-    print(response.json())
     return response.json()['data']['token']
 
 def apply_changes():
@@ -66,23 +64,14 @@ def edit_firewall_rule(rule_id, ip_add):
     return response.json()
 
 def delete_firewall_rule(rule_id):
-    try:
-        token = get_token()
-        url = f'{PFSENSE_HOST}/api/v2/firewall/nat/port_forward?id={rule_id}&apply=true'
-        headers = {
-            # 'Content-Type': 'application/json',
-            'Authorization': f'Bearer {token}',
-        }
-        print(f"Attempting to delete rule at: {url}")
-        response = requests.delete(url, headers=headers)
-        response.raise_for_status()
-        return response.json()
-    except requests.exceptions.HTTPError as http_err:
-        print(f"HTTP error occurred: {http_err}")
-        return {'error': str(http_err)}
-    except Exception as err:
-        print(f"An error occurred: {err}")
-        return {'error': str(err)}
+    token = get_token()
+    url = f'{PFSENSE_HOST}/api/v2/firewall/nat/port_forward?id={rule_id}&apply=true'
+    headers = {
+        # 'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}',
+    }
+    response = requests.delete(url, headers=headers)
+    return response.json()
     
 def get_rules():
     token = get_token()
