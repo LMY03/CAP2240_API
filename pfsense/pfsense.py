@@ -66,7 +66,7 @@ def edit_firewall_rule(id):
         'associated_rule_id': '',
     }
     response = requests.patch(url, headers=headers, json=data)
-    return response.json()['data']['id']
+    return response.json()
     
 def get_rules():
     token = get_token()
