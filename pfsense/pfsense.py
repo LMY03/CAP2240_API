@@ -3,7 +3,7 @@ from requests.auth import HTTPBasicAuth
 import json, requests
 
 PFSENSE_HOST = 'http://192.168.1.1'
-API_KEY = 'a0762d86ae7aa908e23ffea953d1a4f9'
+API_KEY = '74c46c1735cc476bb78df2c189be73daf9753ba872d64f8'
 
 def get_token():
     url = f"{PFSENSE_HOST}/api/v2/auth/key"
@@ -44,14 +44,11 @@ def add_firewall_rule():
         return {"error": str(e)}
     
 def get_rules():
-    url = f"{PFSENSE_HOST}/api/v2/firewall/nat/port_forwards"  # Adjust this endpoint as needed
+    token = get_token()
+    url = f"{PFSENSE_HOST}/api/v2/firewall/nat/port_forwards"
     headers = {
-        'Authorization': f"Bearer {API_KEY}",
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': f"Bearer {token}",
     }
-    try:
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()  # Checks for HTTP request errors
-        return response.json()  # Returns the JSON response from the API
-    except requests.RequestException as e:
-        return {'error': str(e)}
+    response = requests.get(url, headers=headers)
+    return response.json()
