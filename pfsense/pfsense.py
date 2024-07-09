@@ -67,7 +67,7 @@ def edit_firewall_rule(id, ip_add):
 
 def delete_firewall_rule(id):
     token = get_token()
-    url = f"{PFSENSE_HOST}/api/v2/firewall/nat/port_forward?id=4&apply=true"
+    url = f"{PFSENSE_HOST}/api/v2/firewall/nat/port_forward?{id}=4&apply=true"
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f"Bearer {token}",
