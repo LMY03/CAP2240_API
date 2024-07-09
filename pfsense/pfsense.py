@@ -72,6 +72,7 @@ def delete_firewall_rule(id):
         'Content-Type': 'application/json',
         'Authorization': f"Bearer {token}",
     }
+    print("url")
     response = requests.delete(url, headers=headers)
     return response.json()
 
