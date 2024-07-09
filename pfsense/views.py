@@ -8,10 +8,16 @@ redis_client = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 # Create your views here.
 
-# def get_firewall_rule(vm_name):
+def get_port_forward_rule(vm_name):
+    rules = pfsense.get_port_forward_rules()
+    for rule in rules:
+        if rule['descr'] == vm_name: return rule
 
 
-# def get_firewall_rules(request_id):
+def get_port_forward_rules(request_id):
+    rules = pfsense.get_port_forward_rules()
+    for rule in rules:
+        if rule['descr'] == "Test": return rule['id']
 
 
 def create_firewall_rule():
@@ -78,7 +84,7 @@ def delete_firewall_rule(request):
     return redirect('/pfsense')
 
 def get_port_forward_rules(request):
-    data = pfsense.get_port_forward_rules()
+    data = get_port_forward_rule("Test")
     return render(request, 'data.html', { 'data' : data })
 
 def get_firewall_rules(request):
