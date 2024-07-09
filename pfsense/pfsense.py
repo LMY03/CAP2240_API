@@ -27,7 +27,7 @@ def add_firewall_rule():
         'protocol': 'tcp',
         'source': 'any',
         # 'source_port': 'any',
-        'destination': 'WAN address',
+        'destination': 'wan_address',
         'destination_port': '8080',
         'target': '192.168.1.100',
         'local_port': '80',
