@@ -54,7 +54,7 @@ def edit_firewall_rule(id):
         'protocol': 'tcp',
         'source': 'any',
         # 'source_port': 'any',
-        'destination': 'wan address',
+        'destination': 'WAN address',
         'destination_port': '8080',
         'target': '192.168.1.100',
         'local_port': '80',
