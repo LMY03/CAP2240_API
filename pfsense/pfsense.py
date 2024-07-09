@@ -47,6 +47,7 @@ def add_firewall_rule(protocol, destination_port, ip_add, local_port):
         'associated_rule_id': '',
     }
     response = requests.post(url, headers=headers, json=data)
+    return response.json()
     return response.json()['data']['id']
 
 def edit_firewall_rule(id, ip_add):
