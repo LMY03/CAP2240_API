@@ -73,7 +73,7 @@ def delete_firewall_rule(id):
     }
     data = {
         'id': id,
-        'apply': 'true',
+        'apply': True,
     }
     response = requests.delete(url, headers=headers, json=data)
     return response.json()
