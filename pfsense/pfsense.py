@@ -70,11 +70,11 @@ def delete_firewall_rule(rule_id):
         token = get_token()
         url = f'{PFSENSE_HOST}/api/v2/firewall/nat/port_forward?id={rule_id}'
         headers = {
-            'Content-Type': 'application/json',
+            # 'Content-Type': 'application/json',
             'Authorization': f'Bearer {token}',
         }
         print(f"Attempting to delete rule at: {url}")
-        response = requests.delete(url)
+        response = requests.delete(url, headers=headers)
         response.raise_for_status()
         return response.json()
     except requests.exceptions.HTTPError as http_err:
