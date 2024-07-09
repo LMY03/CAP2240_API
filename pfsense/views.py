@@ -1,8 +1,34 @@
 from django.shortcuts import render, redirect
 
+import redis
+
 from . import pfsense
 
+redis_client = redis.StrictRedis(host='localhost', port=6379, db=0)
+
 # Create your views here.
+
+# def get_firewall_rule(vm_name):
+
+
+# def get_firewall_rules(request_id):
+
+
+def create_firewall_rule():
+    lock = redis_client.lock('pfsense_lock', timeout=10)
+    with lock:
+        pfsense.add_firewall_rule()
+        pfsense.apply_changes()
+
+def update_firewall_rule_ip_add(vm_name):
+    lock = redis_client.lock('pfsense_lock', timeout=10)
+    with lock:
+        get_firewall_rule(vm_name)
+
+def delete_firewall_rule(vm_name):
+    lock = redis_client.lock('pfsense_lock', timeout=10)
+    with lock:
+        get_firewall_rule(vm_name)
 
 def renders(request):
     return render(request, 'pfsense.html')
@@ -51,6 +77,10 @@ def delete_firewall_rule(request):
 
     return redirect('/pfsense')
 
-def get_rules(request):
-    data = pfsense.get_rules()
+def get_port_forward_rules(request):
+    data = pfsense.get_port_forward_rules()
+    return render(request, 'data.html', { 'data' : data })
+
+def get_firewall_rules(request):
+    data = pfsense.get_firewall_rules()
     return render(request, 'data.html', { 'data' : data })

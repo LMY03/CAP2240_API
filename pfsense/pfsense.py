@@ -66,20 +66,21 @@ def edit_firewall_rule(rule_id, ip_add):
 def delete_firewall_rule(rule_id):
     token = get_token()
     url = f'{PFSENSE_HOST}/api/v2/firewall/nat/port_forward?id={rule_id}&apply=true'
-    headers = {
-        # 'Content-Type': 'application/json',
-        'Authorization': f'Bearer {token}',
-    }
+    headers = { 'Authorization': f"Bearer {token}" }
     response = requests.delete(url, headers=headers)
     return response.json()
     
-def get_rules():
+def get_port_forward_rules():
     token = get_token()
-    url = f"{PFSENSE_HOST}/api/v2/interfaces"
-    headers = {
-        'Content-Type': 'application/json',
-        'Authorization': f"Bearer {token}",
-    }
+    url = f"{PFSENSE_HOST}/api/v2/firewall/nat/port_forwards?limit=0&offset=0"
+    headers = { 'Authorization': f"Bearer {token}" }
+    response = requests.get(url, headers=headers)
+    return response.json()
+    
+def get_firewall_rules():
+    token = get_token()
+    url = f"{PFSENSE_HOST}/api/v2/firewall/rules?limit=0&offset=0"
+    headers = { 'Authorization': f"Bearer {token}" }
     response = requests.get(url, headers=headers)
     return response.json()
 

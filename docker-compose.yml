@@ -40,6 +40,10 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+  
+  redis:
+    image: redis:latest
+    container_name: redis
 
   guacamole:
     image: guacamole/guacamole:latest
