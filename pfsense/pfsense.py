@@ -69,27 +69,22 @@ def delete_port_forward_rule(rule_id):
     response = requests.delete(url, headers=headers)
     return response.json()
 
-def add_firewall_rule(protocol, destination_port, ip_add, local_port, descr):
+def add_firewall_rule(protocol, destination_port, ip_add, descr):
     token = get_token()
-    url = f'{PFSENSE_HOST}/api/v2/firewall/nat/port_forward'
+    url = f'{PFSENSE_HOST}/api/v2/firewall/rule'
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f"Bearer {token}",
     }
     data = {
-        'interface': 'wan',
+        'type': 'pass',
+        'interface': ['wan'],
+        'ipprotocol': 'inet',
         'protocol': protocol,
         'source': 'any',
-        # 'source_port': 'any',
-        'destination': 'wan:ip',
+        'destination': ip_add,
         'destination_port': destination_port,
-        'target': ip_add,
-        'local_port': local_port,
-        'disabled': False,
-        # 'nordr': True, # notsure
-        # 'nosync': True,
         'descr': descr,
-        'associated_rule_id': '',
     }
     response = requests.post(url, headers=headers, json=data)
     return response.json()
