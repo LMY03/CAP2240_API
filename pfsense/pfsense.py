@@ -66,16 +66,16 @@ def edit_firewall_rule(id, ip_add):
 
 def delete_firewall_rule(id):
     token = get_token()
-    url = f"{PFSENSE_HOST}/api/v2/firewall/nat/port_forward"
+    url = f"{PFSENSE_HOST}/api/v2/firewall/nat/port_forward?id={id}&apply=true"
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f"Bearer {token}",
     }
-    data = {
-        'id': id,
-        'apply': True,
-    }
-    response = requests.delete(url, headers=headers, json=data)
+    # data = {
+    #     'id': id,
+    #     'apply': True,
+    # }
+    response = requests.delete(url, headers=headers)
     return response.json()
 
     
