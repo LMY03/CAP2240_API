@@ -4,7 +4,7 @@ from proxmoxer import ProxmoxAPI
 from influxdb_client import InfluxDBClient, Point, WritePrecision
 import csv
 from io import StringIO
-token = "AZCdOUsa2C1miGSPo4CAZ8oq40SnHOnPoK2BH7nRJuIxKNEPLx3A07qSc9oxYfHOxGCflXDIn4SvvIL1EYBHkA=="
+token = "fZTol0u-bKXxSbyn098UbdrWj7l3TS876mheo30RBIfKfPmxohWsNGCUfZ84g20yWpPFGUENPSMPrekqCgktEA=="
 org = "DLSU_CCS"
 bucket = "proxmox"
     
