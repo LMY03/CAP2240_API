@@ -18,7 +18,7 @@ def add_rule(request):
     return redirect('/pfsense')
 
 def get_rules(request):
-    data = pfsense.get_token()
+    data = pfsense.get_rules()
     print("-------------------")
     print(data)
     return render(request, 'data.html', { 'data' : data })
