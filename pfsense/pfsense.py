@@ -45,7 +45,6 @@ def add_firewall_rule(wan_ip, protocol, destination_port, ip_add, local_port):
         # 'nordr': True, # notsure
         # 'nosync': True,
         'descr': 'Test',
-        'natreflection': 'enable',
         'associated_rule_id': '',
     }
     response = requests.post(url, headers=headers, json=data)
@@ -61,7 +60,7 @@ def edit_firewall_rule(id, ip_add):
     }
     data = {
         'id': id,
-        'destination': ip_add,
+        'target': ip_add,
     }
     response = requests.patch(url, headers=headers, json=data)
     return response.json()
