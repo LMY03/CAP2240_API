@@ -75,8 +75,8 @@ def get_port_forward_rules():
     url = f"{PFSENSE_HOST}/api/v2/firewall/nat/port_forwards?limit=0&offset=0"
     headers = { 'Authorization': f"Bearer {token}" }
     response = requests.get(url, headers=headers)
-    port_forwards = response.json().get('data', [])
-    return port_forwards
+    data = response.json()['data']
+    return response.json()['data'](0)
     
 def get_firewall_rules():
     token = get_token()
