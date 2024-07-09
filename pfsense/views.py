@@ -10,7 +10,7 @@ def renders(request):
 def add_rule(request):
 
     if request.method == 'POST':
-        data = pfsense.add_firewall_rule()
+        data = pfsense.edit_firewall_rule(4)
         # data = opnsense.get_firewall_rule("c423352c-d132-438f-be10-d86f6a429244")
 
         return render(request, 'data.html', { 'data' : data })

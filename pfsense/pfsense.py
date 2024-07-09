@@ -27,19 +27,46 @@ def add_firewall_rule():
         'protocol': 'tcp',
         'source': 'any',
         # 'source_port': 'any',
-        'destination': 'wan',
+        'destination': 'wan address',
         'destination_port': '8080',
         'target': '192.168.1.100',
         'local_port': '80',
         'disabled': False,
-        'nordr': True,
-        'nosync': True,
+        # 'nordr': True, # notsure
+        # 'nosync': True,
         'descr': 'Test',
         'natreflection': 'enable',
         'associated_rule_id': '',
     }
     response = requests.post(url, headers=headers, json=data)
-    return response.json()
+    return response.json()['data']['id']
+
+def edit_firewall_rule(id):
+    token = get_token()
+    url = f"{PFSENSE_HOST}/api/v2/firewall/nat/port_forward"
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f"Bearer {token}",
+    }
+    data = {
+        'id': id,
+        'interface': 'wan',
+        'protocol': 'tcp',
+        'source': 'any',
+        # 'source_port': 'any',
+        'destination': 'wan address',
+        'destination_port': '8080',
+        'target': '192.168.1.100',
+        'local_port': '80',
+        'disabled': False,
+        # 'nordr': True, # notsure
+        # 'nosync': True,
+        'descr': 'Test',
+        'natreflection': 'default',
+        'associated_rule_id': '',
+    }
+    response = requests.patch(url, headers=headers, json=data)
+    return response.json()['data']['id']
     
 def get_rules():
     token = get_token()
