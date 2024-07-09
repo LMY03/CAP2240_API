@@ -4,6 +4,11 @@ import json, requests
 PFSENSE_HOST = 'http://192.168.1.1'
 API_KEY = 'API_KEY'
 
+def get_token():
+    url = f"{PFSENSE_HOST}/api/v2/access_token"
+    response = requests.post(url)
+    return response
+
 def add_firewall_rule():
     # url = f"{PFSENSE_HOST}/api/v2/firewall/apply"
     url = f"{PFSENSE_HOST}/api/v2/firewall/rule"
