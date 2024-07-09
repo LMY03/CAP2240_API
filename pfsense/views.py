@@ -18,7 +18,7 @@ def add_firewall_rule(request):
         ip_add = data.get("ip_add")
         local_port = data.get("local_port")
 
-        response = pfsense.add_firewall_rule(protocol, destination_port, ip_add, local_port)
+        response = pfsense.add_firewall_rule(destination, protocol, destination_port, ip_add, local_port)
 
         return render(request, 'data.html', { 'data' : response })
 
