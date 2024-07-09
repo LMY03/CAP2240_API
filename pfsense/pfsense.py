@@ -32,13 +32,13 @@ def add_firewall_rule(protocol, destination_port, ip_add, local_port):
     }
     data = {
         'interface': 'wan',
-        'protocol': 'tcp',
+        'protocol': protocol,
         'source': 'any',
         # 'source_port': 'any',
-        'destination': 'wan_address',
-        'destination_port': '8080',
-        'target': '192.168.1.100',
-        'local_port': '80',
+        'destination': 'WAN_address',
+        'destination_port': destination_port,
+        'target': ip_add,
+        'local_port': local_port,
         'disabled': False,
         # 'nordr': True, # notsure
         # 'nosync': True,
