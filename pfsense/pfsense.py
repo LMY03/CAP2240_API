@@ -6,7 +6,7 @@ PFSENSE_HOST = 'http://192.168.1.1'
 API_KEY = '74c46c1735cc476bb78df2c189be73daf9753ba872d64f8'
 
 def get_token():
-    url = f"{PFSENSE_HOST}/api/v2/auth/jwt"
+    url = f'{PFSENSE_HOST}/api/v2/auth/jwt'
     headers = {
         'Content-Type': 'application/json',
     }
@@ -17,7 +17,7 @@ def get_token():
 
 def apply_changes():
     token = get_token()
-    url = f"{PFSENSE_HOST}/api/v2/firewall/apply"
+    url = f'{PFSENSE_HOST}/api/v2/firewall/apply'
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f"Bearer {token}",
@@ -27,7 +27,7 @@ def apply_changes():
 
 def add_firewall_rule(protocol, destination_port, ip_add, local_port):
     token = get_token()
-    url = f"{PFSENSE_HOST}/api/v2/firewall/nat/port_forward"
+    url = f'{PFSENSE_HOST}/api/v2/firewall/nat/port_forward'
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f"Bearer {token}",
@@ -53,7 +53,7 @@ def add_firewall_rule(protocol, destination_port, ip_add, local_port):
 
 def edit_firewall_rule(id, ip_add):
     token = get_token()
-    url = f"{PFSENSE_HOST}/api/v2/firewall/nat/port_forward"
+    url = f'{PFSENSE_HOST}/api/v2/firewall/nat/port_forward'
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f"Bearer {token}",
