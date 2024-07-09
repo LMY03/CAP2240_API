@@ -75,13 +75,13 @@ def get_port_forward_rules():
     url = f"{PFSENSE_HOST}/api/v2/firewall/nat/port_forwards?limit=0&offset=0"
     headers = { 'Authorization': f"Bearer {token}" }
     response = requests.get(url, headers=headers)
-    return response.json()
+    return response.json()['data']
     
 def get_firewall_rules():
     token = get_token()
     url = f"{PFSENSE_HOST}/api/v2/firewall/rules?limit=0&offset=0"
     headers = { 'Authorization': f"Bearer {token}" }
     response = requests.get(url, headers=headers)
-    return response.json()
+    return response.json()['data']
 
 # https://github.com/jaredhendrickson13/pfsense-api/blob/dbd61d89b93bb85eb64a4ed7b9f477729d8ea9cf/pfSense-pkg-RESTAPI/files/usr/local/pkg/RESTAPI/Models/PortForward.inc
