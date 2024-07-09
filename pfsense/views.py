@@ -15,8 +15,10 @@ def add_rule(request):
 
         return render(request, 'data.html', { 'data' : data })
 
-    return redirect('/opnense')
+    return redirect('/pfsense')
 
 def get_rules(request):
     data = pfsense.get_rules()
+    print("-------------------")
+    print(data)
     render(request, 'data.html', { 'data' : data })

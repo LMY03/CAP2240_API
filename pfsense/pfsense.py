@@ -33,7 +33,7 @@ def add_firewall_rule():
         return {"error": str(e)}
     
 def get_rules():
-    url = f"{PFSENSE_HOST}/api/v1/firewall/rule"  # Adjust API version/path as necessary
+    url = f"{PFSENSE_HOST}/api/v2/firewall/rule"  # Adjust API version/path as necessary
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f"Bearer {API_KEY}"  # Ensure the correct format
