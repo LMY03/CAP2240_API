@@ -27,7 +27,7 @@ def add_firewall_rule():
         'protocol': 'tcp',
         'source': 'any',
         # 'source_port': 'any',
-        'destination': 'wan address',
+        'destination': 'wanip',
         'destination_port': '8080',
         'target': '192.168.1.100',
         'local_port': '80',
@@ -62,7 +62,7 @@ def edit_firewall_rule(id):
         # 'nordr': True, # notsure
         # 'nosync': True,
         'descr': 'Test',
-        'natreflection': 'default',
+        'natreflection': 'system',
         'associated_rule_id': '',
     }
     response = requests.patch(url, headers=headers, json=data)
