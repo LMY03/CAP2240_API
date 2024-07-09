@@ -11,7 +11,8 @@ def get_token():
         'Content-Type': 'application/json',
     }
     response = requests.post(url, headers=headers, auth=HTTPBasicAuth("admin", "pfsense"))
-    return response.json()
+    print("----------------------")
+    print(response.json())
     return response.json()['data']['token']
 
 def apply_changes():
