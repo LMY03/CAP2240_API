@@ -77,7 +77,7 @@ def getData(request):
     
         # serverCoreResultList
         core_flux_query = f'''
-                            from(bucket: "your_bucket")
+                            from(bucket: "{bucket}")
                             |> range(start: -5m)
                             |> filter(fn: (r) => r._measurement == "system" && r._field == "cpu")
                             |> aggregateWindow(every: 10s, fn: mean, createEmpty: false)
