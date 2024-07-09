@@ -62,7 +62,7 @@ def edit_firewall_rule(id):
         'protocol': 'tcp',
         'source': 'any',
         # 'source_port': 'any',
-        'destination': 'wanip',
+        'destination': '10.1.200.20',
         'destination_port': '8080',
         'target': '192.168.1.100',
         'local_port': '80',
@@ -85,3 +85,5 @@ def get_rules():
     }
     response = requests.get(url, headers=headers)
     return response.json()
+
+# https://github.com/jaredhendrickson13/pfsense-api/blob/dbd61d89b93bb85eb64a4ed7b9f477729d8ea9cf/pfSense-pkg-RESTAPI/files/usr/local/pkg/RESTAPI/Models/PortForward.inc
