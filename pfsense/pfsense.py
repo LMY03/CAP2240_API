@@ -62,7 +62,7 @@ def edit_firewall_rule(id):
         # 'nordr': True, # notsure
         # 'nosync': True,
         'descr': 'Test',
-        'natreflection': 'system',
+        # 'natreflection': 'system',
         'associated_rule_id': '',
     }
     response = requests.patch(url, headers=headers, json=data)
