@@ -60,8 +60,9 @@ def add_port_forward_rule(request):
         destination_port = data.get("destination_port")
         ip_add = data.get("ip_add")
         local_port = data.get("local_port")
+        descr = data.get("descr")
 
-        response = pfsense.add_port_forward_rule(protocol, destination_port, ip_add, local_port)
+        response = pfsense.add_port_forward_rule(protocol, destination_port, ip_add, local_port, descr)
 
         return render(request, 'data.html', { 'data' : response })
 
