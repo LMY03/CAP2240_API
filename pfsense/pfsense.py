@@ -5,8 +5,13 @@ PFSENSE_HOST = 'http://192.168.1.1'
 API_KEY = 'API_KEY'
 
 def get_token():
-    url = f"{PFSENSE_HOST}/api/v2/access_token"
-    response = requests.post(url)
+    url = f"{PFSENSE_HOST}/api/v2/auth/jwt"
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f"Bearer {API_KEY}"
+    }
+    data = {}
+    response = requests.post(url, headers=headers, json=data)
     return response
 
 def add_firewall_rule():
