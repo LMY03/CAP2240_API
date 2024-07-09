@@ -30,3 +30,4 @@ urllib3
 
 proxmoxer
 influxdb_client
+redis
