@@ -72,7 +72,7 @@ def delete_firewall_rule(id):
         'Authorization': f"Bearer {token}",
     }
     data = {
-        'id': id,
+        # 'id': id,
     }
     response = requests.delete(url, headers=headers, json=data)
     return response.json()
