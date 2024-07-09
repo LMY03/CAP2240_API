@@ -12,7 +12,7 @@ def add_firewall_rule(request):
     if request.method == 'POST':
 
         data = request.POST
-        wan_ip = data.get("wan_ip")
+        destination = data.get("destination")
         protocol = data.get("protocol")
         destination_port = data.get("destination_port")
         ip_add = data.get("ip_add")
