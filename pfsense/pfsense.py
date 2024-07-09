@@ -10,13 +10,21 @@ def get_token():
     headers = {
         'Content-Type': 'application/json',
     }
-    data = {}
-    response = requests.post(url, headers=headers, json=data, auth=HTTPBasicAuth("admin", "pfsense"))
+    response = requests.post(url, headers=headers, auth=HTTPBasicAuth("admin", "pfsense"))
+    return response.json()['data']['token']
+
+def apply_changes():
+    token = get_token()
+    url = f"{PFSENSE_HOST}/api/v2/firewall/apply"
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f"Bearer {token}",
+    }
+    response = requests.post(url, headers=headers)
     return response.json()['data']['token']
 
 def add_firewall_rule():
     token = get_token()
-    # url = f"{PFSENSE_HOST}/api/v2/firewall/apply"
     url = f"{PFSENSE_HOST}/api/v2/firewall/nat/port_forward"
     headers = {
         'Content-Type': 'application/json',
