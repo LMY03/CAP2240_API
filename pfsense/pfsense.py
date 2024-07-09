@@ -76,7 +76,7 @@ def get_port_forward_rules():
     headers = { 'Authorization': f"Bearer {token}" }
     response = requests.get(url, headers=headers)
     data = response.json()['data']
-    return response.json()['data'](0)
+    return response.json()['data'][0]
     
 def get_firewall_rules():
     token = get_token()
