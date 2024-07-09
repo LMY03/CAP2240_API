@@ -44,11 +44,14 @@ def add_firewall_rule():
         return {"error": str(e)}
     
 def get_rules():
-    # token = get_token()
-    url = f"{PFSENSE_HOST}/api/v2/firewall/nat/port_forwards"
+    url = f"{PFSENSE_HOST}/api/v2/firewall/nat/port_forwards"  # Adjust this endpoint as needed
     headers = {
-        'Content-Type': 'application/json',
         'Authorization': f"Bearer {API_KEY}",
+        'Content-Type': 'application/json'
     }
-    response = requests.get(url, headers=headers)
-    return response.json()
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()  # Checks for HTTP request errors
+        return response.json()  # Returns the JSON response from the API
+    except requests.RequestException as e:
+        return {'error': str(e)}
