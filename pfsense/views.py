@@ -20,6 +20,5 @@ def add_rule(request):
 def get_rules(request):
     print("------------------------")
     data = pfsense.get_rules()
-    print("data")
-    print(data)
+    pfsense.apply_changes()
     return render(request, 'data.html', { 'data' : data })
