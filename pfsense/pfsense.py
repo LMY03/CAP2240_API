@@ -1,17 +1,17 @@
 from django.http.response import HttpResponse, JsonResponse
+from requests.auth import HTTPBasicAuth
 import json, requests
 
 PFSENSE_HOST = 'http://192.168.1.1'
 API_KEY = 'API_KEY'
 
 def get_token():
-    url = f"{PFSENSE_HOST}/api/v2/auth/key"
+    url = f"{PFSENSE_HOST}/api/v2/auth/jwt"
     headers = {
         'Content-Type': 'application/json',
-        'Authorization': f"Bearer {API_KEY}"
     }
     data = {}
-    response = requests.post(url, headers=headers, json=data)
+    response = requests.post(url, headers=headers, json=data, auth=HTTPBasicAuth("admin", "pfsense"))
     return response
 
 def add_firewall_rule():
