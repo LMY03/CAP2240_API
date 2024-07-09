@@ -15,33 +15,31 @@ def get_token():
     return response.json()['data']['token']
 
 def add_firewall_rule():
+    token = get_token()
     # url = f"{PFSENSE_HOST}/api/v2/firewall/apply"
-    url = f"{PFSENSE_HOST}/api/v2/firewall/rule"
+    url = f"{PFSENSE_HOST}/api/v2/firewall/nat/port_forward"
     headers = {
         'Content-Type': 'application/json',
-        'Authorization': f"Bearer {API_KEY}"
+        'Authorization': f"Bearer {token}",
     }
-
     data = {
-        "interface": "wan",
-        "protocol": "tcp/udp",
-        "src": "any",
-        "srcport": "",
-        "dst": "wan_address",
-        "dstport": "8000",
-        "target": "192.168.1.2",
-        "local-port": "8000",
-        "descr": "Test",
-        "natreflection": "enable",
-        "noxmlrpc": 'false',
+        'interface': 'wan',
+        'protocol': 'tcp',
+        'source': '*',
+        'source_port': '',
+        'destination': 'WAN address',
+        'destination_port': '8080',
+        'target': '192.168.1.100',
+        'local_port': '80',
+        'disabled': False,
+        'nordr': True,
+        'nosync': True,
+        'descr': 'Test',
+        'natreflection': 'enable',
+        'associated_rule_id': '',
     }
-
-    try:
-        response = requests.post(url, headers=headers, json=data)
-        response.raise_for_status()  # Raises a HTTPError for bad responses
-        return response.json()
-    except requests.RequestException as e:
-        return {"error": str(e)}
+    response = requests.post(url, headers=headers, json=data)
+    return response.json()
     
 def get_rules():
     token = get_token()
