@@ -36,10 +36,12 @@ def delete_firewall_rule(vm_name):
     with lock:
         get_firewall_rule(vm_name)
 
+###########################################################################
+
 def renders(request):
     return render(request, 'pfsense.html')
 
-def add_firewall_rule(request):
+def add_port_forward_rule(request):
 
     if request.method == 'POST':
 
@@ -49,13 +51,13 @@ def add_firewall_rule(request):
         ip_add = data.get("ip_add")
         local_port = data.get("local_port")
 
-        response = pfsense.add_firewall_rule(protocol, destination_port, ip_add, local_port)
+        response = pfsense.add_port_forward_rule(protocol, destination_port, ip_add, local_port)
 
         return render(request, 'data.html', { 'data' : response })
 
     return redirect('/pfsense')
 
-def edit_firewall_rule(request):
+def edit_port_forward_rule(request):
 
         
     if request.method == 'POST':
@@ -64,20 +66,20 @@ def edit_firewall_rule(request):
         id = data.get("id")
         ip_add = data.get("ip_add")
 
-        response = pfsense.edit_firewall_rule(id, ip_add)
+        response = pfsense.edit_port_forward_rule(id, ip_add)
 
         return render(request, 'data.html', { 'data' : response })
 
     return redirect('/pfsense')
 
-def delete_firewall_rule(request):
+def delete_port_forward_rule(request):
 
     if request.method == 'POST':
 
         data = request.POST
         id = data.get("id")
 
-        response = pfsense.delete_firewall_rule(id)
+        response = pfsense.delete_port_forward_rule(id)
 
         return render(request, 'data.html', { 'data' : response })
 
