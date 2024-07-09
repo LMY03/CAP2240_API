@@ -37,6 +37,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     "ticketing.apps.TicketingConfig",
     "guacamole.apps.GuacamoleConfig",
+    "pfsense.apps.PfsenseConfig",
     "proxmox.apps.ProxmoxConfig",
     "autotool.apps.AutotoolConfig",
     'django.contrib.admin',

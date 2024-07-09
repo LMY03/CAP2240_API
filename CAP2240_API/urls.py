@@ -20,6 +20,7 @@ from django.urls import path
 
 urlpatterns = [
     path('guacamole/', include("guacamole.urls")),
+    path('pfsense/', include("pfsense.urls")),
     path('proxmox/', include("proxmox.urls")),
     path('ticketing/', include("ticketing.urls")),
     path('admin/', admin.site.urls),
