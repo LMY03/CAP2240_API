@@ -4,10 +4,9 @@ from proxmoxer import ProxmoxAPI
 from influxdb_client import InfluxDBClient, Point, WritePrecision
 import csv
 from io import StringIO
-
-token = "6QTrJL1YztyrDuI09m3K9LPWANvCFlE6FiRoIPkXLEyhteJ0t9O4V8pc4ncQx4SGoK38xi5JVpYwPULhzCy4Mw=="
+token = "AZCdOUsa2C1miGSPo4CAZ8oq40SnHOnPoK2BH7nRJuIxKNEPLx3A07qSc9oxYfHOxGCflXDIn4SvvIL1EYBHkA=="
 org = "DLSU_CCS"
-bucket = "Proxmox"
+bucket = "proxmox"
     
 # Create your views here.
 def index(request):
