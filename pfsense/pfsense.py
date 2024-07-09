@@ -50,5 +50,5 @@ def get_rules():
         'Content-Type': 'application/json',
         'Authorization': f"Bearer {token}",
     }
-    response = requests.post(url, headers=headers)
+    response = requests.get(url, headers=headers)
     return response.json()
