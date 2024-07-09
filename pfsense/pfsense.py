@@ -44,10 +44,11 @@ def add_firewall_rule():
         return {"error": str(e)}
     
 def get_rules():
+    token = get_token()
     url = f"{PFSENSE_HOST}/api/v2/firewall/nat/portforwards"
     headers = {
         'Content-Type': 'application/json',
+        'Authorization': f"Bearer {token}",
     }
-    data = {}
-    response = requests.post(url, headers=headers, json=data, auth=HTTPBasicAuth("admin", "pfsense"))
-    return response
+    response = requests.post(url, headers=headers)
+    return response.json()
