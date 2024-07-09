@@ -65,16 +65,25 @@ def edit_firewall_rule(id, ip_add):
     response = requests.patch(url, headers=headers, json=data)
     return response.json()
 
-def delete_firewall_rule(id):
-    token = get_token()
-    url = f'{PFSENSE_HOST}/api/v2/firewall/nat/port_forward?id={id}'
-    headers = {
-        'Content-Type': 'application/json',
-        'Authorization': f"Bearer {token}",
-    }
-    print(url)
-    response = requests.delete(url, headers=headers)
-    return response.json()
+def delete_firewall_rule(rule_id):
+    try:
+        token = get_token()
+        url = f'{PFSENSE_HOST}/api/v2/firewall/nat/port_forward?id={rule_id}'
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {token}',
+        }
+        print(f"Attempting to delete rule at: {url}")
+        response = requests.delete(url, headers=headers)
+        response.raise_for_status()  # Raises an HTTPError for bad requests (400 or 500 level responses)
+        return response.json()
+    except requests.exceptions.HTTPError as http_err:
+        print(f"HTTP error occurred: {http_err}")
+        return {'error': str(http_err)}
+    except Exception as err:
+        print(f"An error occurred: {err}")
+        return {'error': str(err)}
+
 
     
 def get_rules():
