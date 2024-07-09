@@ -74,7 +74,7 @@ def delete_firewall_rule(rule_id):
             'Authorization': f'Bearer {token}',
         }
         print(f"Attempting to delete rule at: {url}")
-        response = requests.delete(url, headers=headers)
+        response = requests.delete(url)
         response.raise_for_status()
         return response.json()
     except requests.exceptions.HTTPError as http_err:
@@ -83,8 +83,6 @@ def delete_firewall_rule(rule_id):
     except Exception as err:
         print(f"An error occurred: {err}")
         return {'error': str(err)}
-
-
     
 def get_rules():
     token = get_token()
