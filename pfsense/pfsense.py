@@ -68,14 +68,14 @@ def edit_firewall_rule(id, ip_add):
 def delete_firewall_rule(rule_id):
     try:
         token = get_token()
-        url = f'{PFSENSE_HOST}/api/v2/firewall/nat/port_forward?id={rule_id}'
+        url = f'{PFSENSE_HOST}/api/v2/firewall/nat/port_forward?id={int(rule_id)}'
         headers = {
             'Content-Type': 'application/json',
             'Authorization': f'Bearer {token}',
         }
         print(f"Attempting to delete rule at: {url}")
         response = requests.delete(url, headers=headers)
-        response.raise_for_status()  # Raises an HTTPError for bad requests (400 or 500 level responses)
+        response.raise_for_status()
         return response.json()
     except requests.exceptions.HTTPError as http_err:
         print(f"HTTP error occurred: {http_err}")
