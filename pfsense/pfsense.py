@@ -12,7 +12,7 @@ def get_token():
     }
     data = {}
     response = requests.post(url, headers=headers, json=data, auth=HTTPBasicAuth("admin", "pfsense"))
-    return response.json()['data']['token']
+    return response.json()
 
 def add_firewall_rule():
     # url = f"{PFSENSE_HOST}/api/v2/firewall/apply"
