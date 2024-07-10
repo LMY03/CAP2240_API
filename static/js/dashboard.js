@@ -265,9 +265,21 @@ $(document).ready(function() {
         }
     }
 
-    function setData(serverCpuResultList, totalSwapResultList, cpuLow, cpuMid, cpuHigh, cpuCrit, 
+    function setData(serverCoreResultList, serverCpuResultList, totalSwapResultList, cpuLow, cpuMid, cpuHigh, cpuCrit, 
         usedMemResultList, totalMemoryResultList, memLow, memMid, memHigh, memCrit,
         localUsageResultList, totalStorageUsedResultList, stoLow,stoMid, stoHigh, stoCrit) {
+
+        // CPU Cores
+        var coreNum = 0
+        var count = 0;
+        for(i = 0; i < serverCoreResultList.length; i++) {
+            nodeData = serverCoreResultList[i].data;
+            for( j = 0; j < nodeData.length; j++){
+                count++;
+                coreNum += nodeData[j].core; 
+            }
+        }
+        if (count != 0) coreNum /= count;
 
         // CPU utilization
         var usedSwapNum = 0
@@ -299,7 +311,7 @@ $(document).ready(function() {
 
         
         $('h1#usedSwap').html((usedSwapNum * 100).toFixed(2) + "%");
-        $('h4#totalSwap').html("of " + (totalSwapNum).toFixed(2) + " CPU(s)");
+        $('h4#totalSwap').html("of " + coreNum.toFixed(2) + " CPU(s)");
         
         changeCpuDiv(usedSwapNum * 100,cpuLow,cpuMid,cpuHigh,cpuCrit);
 
