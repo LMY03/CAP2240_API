@@ -530,6 +530,7 @@ $(document).ready(function() {
             success: function(response) {
                 console.log("VMlist" + response.vmList)
                 console.log("length: " + response.vmList.length)
+                console.log("serverCoreResultList: " + JSON.stringify(response.serverCoreResultList))
                 console.log("localUsageResultList: " + JSON.stringify(response.localUsageResultList))
                 console.log("totalStorageUsedResultList: " + JSON.stringify(response.totalStorageUsedResultList))
                 // Default settings -> might change based on the settings (threshold, implement later)
