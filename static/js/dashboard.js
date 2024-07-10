@@ -273,13 +273,18 @@ $(document).ready(function() {
         var coreNum = 0
         var count = 0;
         for(i = 0; i < serverCoreResultList.length; i++) {
+            var temp = 0
             nodeData = serverCoreResultList[i].data;
             for( j = 0; j < nodeData.length; j++){
                 count++;
-                coreNum += nodeData[j].core; 
+                temp += nodeData[j].core; 
+            }
+            if (count != 0) {
+                temp /= count;
+                coreNum += temp
             }
         }
-        if (count != 0) coreNum /= count;
+        
 
         // CPU utilization
         var usedSwapNum = 0
