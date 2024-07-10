@@ -271,9 +271,6 @@ $(document).ready(function() {
 
         // CPU utilization
         var usedSwapNum = 0
-        var totalSwapNum = 0
-        
-        // Adds the CPU value of every machine currently being used within the virtual environment
         var count = 0;
         for(i = 0; i < serverCpuResultList.length; i++) {
             nodeData = serverCpuResultList[i].data;
@@ -285,18 +282,6 @@ $(document).ready(function() {
         if (count != 0) usedSwapNum /= count;
 
         
-        // Adds the total CPU value of every machine within the virtual environment // TODO: Fix this Total number
-        var count = 0;
-        for(i = 0; i < totalSwapResultList.length; i++) {
-            nodeData = totalSwapResultList[i].data;
-            for( j = 0; j < nodeData.length; j++){
-                count++;
-                totalSwapNum += nodeData[j].swaptotal; 
-            }
-        }
-        if (count != 0) totalSwapNum /= count;
-        console.log("totalSwapNum: " + totalSwapNum)
-
         // CPU Cores
         var coreNum = 0
         for(i = 0; i < serverCoreResultList.length; i++) {
