@@ -64,6 +64,7 @@ def getData(request):
 
 
     # list declarations
+    serverCoreResultList = []
     serverCpuResultList = []
     totalSwapResultList = []
     usedMemResultList = []
@@ -74,6 +75,27 @@ def getData(request):
     # loop through nodes
     for node in nodes:
         # add node filter: if node == request.GET['nodeFilter'] or request.GET['nodeFilter'] == 'All nodes':
+
+        # serverCoreResultList
+        core_flux_query = f'''
+                                from(bucket: "{bucket}")
+                                |> range(start: -5m)
+                                |> filter(fn: (r) => r._measurement == "cpustat" and r._field == "cpus")
+                                |> filter(fn: (r) => r.host == "{node}")
+                                '''
+        
+        core_result = query_api.query(query=core_flux_query)
+        serverCoreResult = {}
+        serverCoreResult["node"] = node
+        serverCoreResult["data"] = []
+        for table in core_result:
+            for record in table.records:
+                serverCoreResult["data"].append({
+                    "time": record.get_time(),
+                    "core": record.get_value()
+                })
+        serverCoreResultList.append(serverCoreResult)
+
 
         # serverCpuResultList
         cpu_flux_query = f'''
@@ -217,6 +239,7 @@ def getData(request):
 
         
     return JsonResponse({
+        'serverCoreResultList': serverCoreResultList,
         'serverCpuResultList': serverCpuResultList,
         'totalSwapResultList': totalSwapResultList,
         'usedMemResultList': usedMemResultList,
