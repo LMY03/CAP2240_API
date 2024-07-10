@@ -299,9 +299,9 @@ $(document).ready(function() {
 
         // CPU Cores
         var coreNum = 0
-        var count = 0;
         for(i = 0; i < serverCoreResultList.length; i++) {
             var temp = 0
+            var count = 0;
             nodeData = serverCoreResultList[i].data;
             for( j = 0; j < nodeData.length; j++){
                 count++;
@@ -359,8 +359,6 @@ $(document).ready(function() {
         var usedStorage = 0
         var localStorage = 0
 
-        console.log("localUsageResultList: " + JSON.stringify(localUsageResultList))
-        console.log("totalStorageUsedResultList: " + JSON.stringify(totalStorageUsedResultList))
         // Adds the Storage value of every machine currently being used within the virtual environment
         var count = 0;
         for(i = 0; i < localUsageResultList.length; i++){
@@ -532,8 +530,6 @@ $(document).ready(function() {
                 console.log("VMlist" + response.vmList)
                 console.log("length: " + response.vmList.length)
                 console.log("serverCoreResultList: " + JSON.stringify(response.serverCoreResultList))
-                console.log("localUsageResultList: " + JSON.stringify(response.localUsageResultList))
-                console.log("totalStorageUsedResultList: " + JSON.stringify(response.totalStorageUsedResultList))
                 // Default settings -> might change based on the settings (threshold, implement later)
                 cpuLow = 25
                 cpuMid = 50
