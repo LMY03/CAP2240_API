@@ -344,28 +344,34 @@ $(document).ready(function() {
 
         // Storage
         var usedStorage = 0
-        var localStorage = 0
-
-        // Adds the Storage value of every machine currently being used within the virtual environment
-        var count = 0;
         for(i = 0; i < localUsageResultList.length; i++){
             nodeData = localUsageResultList[i].data;
+            var count = 0;
+            var temp = 0;
             for( j = 0; j < nodeData.length; j++) {
                 count++;
-                usedStorage += nodeData[j].used;
+                temp += nodeData[j].used;
+            }
+            if (count != 0) {
+                temp /= count;
+                usedStorage += temp
             }
         } 
-        if (count != 0) usedStorage /= count;
 
-        var count = 0;
+        var localStorage = 0
         for(i = 0; i < totalStorageUsedResultList.length; i++){
             nodeData = totalStorageUsedResultList[i].data;
+            var count = 0;
+            var temp = 0;
             for( j = 0; j < nodeData.length; j++ ){
                 count++;
-                localStorage += nodeData[j].total;
+                temp += nodeData[j].total;
+            }
+            if (count != 0) {
+                temp /= count;
+                localStorage += temp
             }
         }
-        if (count != 0) localStorage /= count;
         
         // Adds the total Storage value of every machine within the virtual environment
         $('h1#localMem').html((usedStorage /= (1024 * 1024 * 1024)).toFixed(2) + "GiB");
