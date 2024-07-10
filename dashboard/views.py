@@ -81,6 +81,7 @@ def getData(request):
                             from(bucket: "{bucket}")
                             |> range(start: -5m)
                             |> filter(fn: (r) => r._measurement == "system" && r._field == "cpu")
+                            |> filter(fn: (r) => r.host == "{node}")
                             |> aggregateWindow(every: 10s, fn: mean, createEmpty: false)
                         '''
         
