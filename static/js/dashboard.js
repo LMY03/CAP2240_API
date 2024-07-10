@@ -265,7 +265,7 @@ $(document).ready(function() {
         }
     }
 
-    function setData(serverCoreResultList, serverCpuResultList, totalSwapResultList, cpuLow, cpuMid, cpuHigh, cpuCrit, 
+    function setData(serverCoreResultList, serverCpuResultList, cpuLow, cpuMid, cpuHigh, cpuCrit, 
         usedMemResultList, totalMemoryResultList, memLow, memMid, memHigh, memCrit,
         localUsageResultList, totalStorageUsedResultList, stoLow,stoMid, stoHigh, stoCrit) {
 
@@ -296,46 +296,46 @@ $(document).ready(function() {
                 temp /= count;
                 coreNum += temp
             }
-            console.log("corenum: " + coreNum)
         }        
-
         
         $('h1#usedSwap').html((usedSwapNum * 100).toFixed(2) + "%");
         $('h4#totalSwap').html("of " + coreNum.toFixed(2) + " CPU(s)");
-        
         changeCpuDiv(usedSwapNum * 100,cpuLow,cpuMid,cpuHigh,cpuCrit);
-
 
         // Memory
         var usedMemNum = 0
-        var totalMemNum = 0
-
-        // Adds the RAM value of every machine currently being used within the virtual environment
-        var count = 0;
         for(i = 0; i < usedMemResultList.length; i++)
+            var count = 0;
+            var temp = 0;
             nodeData = usedMemResultList[i].data;
             for( j = 0; j < nodeData.length; j++){
                 count++;
-                usedMemNum += nodeData[j].memused; 
+                temp += nodeData[j].memused; 
+                if (count != 0) {
+                    temp /= count;
+                    usedMemNum += temp
+                }
+                console.log("usedMemNum: " + totalMemNum)
             }
-        if (count != 0) usedMemNum /= count;
-
         console.log("usedMemNum: " + usedMemNum);
 
-        // Adds the total RAM value of every machine within the virtual environment
-        var count = 0;
+        var totalMemNum = 0
         for(i = 0; i < totalMemoryResultList.length; i++) 
             nodeData = totalMemoryResultList[i].data;
+            var count = 0;
+            var temp = 0;
             for( j = 0; j < nodeData.length; j++){
                 count++;
-                totalMemNum += nodeData[j].memtotal; 
+                temp += nodeData[j].memtotal; 
+                if (count != 0) {
+                    temp /= count;
+                    totalMemNum += temp
+                }
+                console.log("totalMemNum: " + totalMemNum)
             }
-        if (count != 0) totalMemNum /= count;
-
-        console.log("totalMemNum: " + totalMemNum);
-
-        $('h4#totalMem').html("out of " +  (totalMemNum).toFixed(2) + "GiB");
+        
         $('h1#usedMem').html(((usedMemNum / totalMemNum) * 100).toFixed(2) + "%")
+        $('h4#totalMem').html("out of " +  (totalMemNum).toFixed(2) + "GiB");
         
         changeMemDiv(usedMemNum, totalMemNum, memLow, memMid, memHigh, memCrit);
 
@@ -388,7 +388,7 @@ $(document).ready(function() {
             success: function(response) {
                 // OVERVIEW OF METRICS
                 // TODO: Fix this when all metrics are available
-                setData(response.serverCoreResultList, response.serverCpuResultList, response.totalSwapResultList, cpuLow, cpuMid, cpuHigh, cpuCrit, 
+                setData(response.serverCoreResultList, response.serverCpuResultList, cpuLow, cpuMid, cpuHigh, cpuCrit, 
                     response.usedMemResultList, response.totalMemoryResultList, memLow, memMid, memHigh, memCrit,
                     response.localUsageResultList, response.totalStorageUsedResultList, stoLow,stoMid, stoHigh, stoCrit)
 
@@ -542,7 +542,7 @@ $(document).ready(function() {
                 // TODO: CPU Usage -> how to calculate?
                 // 已經分配出去多少個？還是說使用情況 % 
 
-                setData(response.serverCoreResultList, response.serverCpuResultList, response.totalSwapResultList, cpuLow, cpuMid, cpuHigh, cpuCrit, 
+                setData(response.serverCoreResultList, response.serverCpuResultList, cpuLow, cpuMid, cpuHigh, cpuCrit, 
                     response.usedMemResultList, response.totalMemoryResultList, memLow, memMid, memHigh, memCrit,
                     response.localUsageResultList, response.totalStorageUsedResultList, stoLow,stoMid, stoHigh, stoCrit)
 

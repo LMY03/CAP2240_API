@@ -49,7 +49,7 @@ def getData(request):
     query_api = client.query_api()
     flux_query = f'''
                     from(bucket:"{bucket}")
-                    |> range(start: -1h)
+                    |> range(start: -5m)
                     |> filter(fn: (r) => r._measurement == "system")
                     |> filter(fn: (r) => r.object == "nodes")
                     |> group(columns: ["host"])
@@ -66,7 +66,6 @@ def getData(request):
     # list declarations
     serverCoreResultList = []
     serverCpuResultList = []
-    totalSwapResultList = []
     usedMemResultList = []
     totalMemoryResultList = []
     localUsageResultList = []
@@ -76,7 +75,7 @@ def getData(request):
     for node in nodes:
         # add node filter: if node == request.GET['nodeFilter'] or request.GET['nodeFilter'] == 'All nodes':
 
-        # serverCoreResultList
+        # serverCoreResultList -> Compute for total Cores
         core_flux_query = f'''
                                 from(bucket: "{bucket}")
                                 |> range(start: -5m)
@@ -97,7 +96,7 @@ def getData(request):
         serverCoreResultList.append(serverCoreResult)
 
 
-        # serverCpuResultList
+        # serverCpuResultList -> Compute for CPU utilization
         cpu_flux_query = f'''
                             from(bucket: "{bucket}")
                             |> range(start: -5m)
@@ -118,28 +117,6 @@ def getData(request):
                     "cpu": record.get_value()
                 })
         serverCpuResultList.append(serverCpuResult)
-
-        # totalSwapResultList
-        swap_flux_query = f'''
-                            from(bucket: "{bucket}")
-                            |> range(start: -5m)
-                            |> filter(fn: (r) => r._measurement == "memory")
-                            |> filter(fn: (r) => r._field == "swaptotal")
-                            |> filter(fn: (r) => r.host == "{node}")
-                            |> map(fn: (r) => ({{ r with _value: r._value / 1073741824.0 }}))  // To GB
-                        '''
-        swap_result = query_api.query(query=swap_flux_query)
-
-        totalSwapResult = {}
-        totalSwapResult["node"] = node
-        totalSwapResult["data"] = []
-        for table in swap_result:
-            for record in table.records:
-                totalSwapResult["data"].append({
-                    "time": record.get_time(),
-                    "swaptotal": record.get_value()
-                })
-        totalSwapResultList.append(totalSwapResult)
         
         # usedMemResultList
         mem_flux_query = f'''
@@ -241,7 +218,6 @@ def getData(request):
     return JsonResponse({
         'serverCoreResultList': serverCoreResultList,
         'serverCpuResultList': serverCpuResultList,
-        'totalSwapResultList': totalSwapResultList,
         'usedMemResultList': usedMemResultList,
         'totalMemoryResultList': totalMemoryResultList,
         'localUsageResultList': localUsageResultList, 
