@@ -307,9 +307,6 @@ $(document).ready(function() {
         for(i = 0; i < usedMemResultList.length; i++) {
             var count = 0;
             var temp = 0;
-            console.log("i: " + i) 
-            console.log("usedMemResultList length: " + usedMemResultList[i].length)
-            console.log("usedMemResultList[i]: " + JSON.stringify(usedMemResultList[i]))
             nodeData = usedMemResultList[i].data;
             for( j = 0; j < nodeData.length; j++){
                 count++;
@@ -342,7 +339,7 @@ $(document).ready(function() {
         changeMemDiv(usedMemNum, totalMemNum, memLow, memMid, memHigh, memCrit);
 
 
-        
+
         // Storage
         var usedStorage = 0
         for(i = 0; i < localUsageResultList.length; i++){
@@ -521,8 +518,7 @@ $(document).ready(function() {
             },
             datatype: 'json',
             success: function(response) {
-                console.log("VMlist" + response.vmList)
-                console.log("length: " + response.vmList.length)
+                console.log("VMlist" + JSON.stringify(response.vmList))
                 // Default settings -> might change based on the settings (threshold, implement later)
                 cpuLow = 25
                 cpuMid = 50
