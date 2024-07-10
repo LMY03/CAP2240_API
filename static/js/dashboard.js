@@ -265,26 +265,9 @@ $(document).ready(function() {
         }
     }
 
-    function setData(serverCoreResultList, serverCpuResultList, totalSwapResultList, cpuLow, cpuMid, cpuHigh, cpuCrit, 
+    function setData(serverCpuResultList, totalSwapResultList, cpuLow, cpuMid, cpuHigh, cpuCrit, 
         usedMemResultList, totalMemoryResultList, memLow, memMid, memHigh, memCrit,
         localUsageResultList, totalStorageUsedResultList, stoLow,stoMid, stoHigh, stoCrit) {
-
-        // CPU Cores
-        var coreNum = 0
-        var count = 0;
-        for(i = 0; i < serverCoreResultList.length; i++) {
-            var temp = 0
-            nodeData = serverCoreResultList[i].data;
-            for( j = 0; j < nodeData.length; j++){
-                count++;
-                temp += nodeData[j].core; 
-            }
-            if (count != 0) {
-                temp /= count;
-                coreNum += temp
-            }
-        }
-        
 
         // CPU utilization
         var usedSwapNum = 0
@@ -316,7 +299,7 @@ $(document).ready(function() {
 
         
         $('h1#usedSwap').html((usedSwapNum * 100).toFixed(2) + "%");
-        $('h4#totalSwap').html("of " + coreNum.toFixed(2) + " CPU(s)");
+        $('h4#totalSwap').html("of " + (totalSwapNum * 100).toFixed(2) + " CPU(s)");
         
         changeCpuDiv(usedSwapNum * 100,cpuLow,cpuMid,cpuHigh,cpuCrit);
 
@@ -405,7 +388,7 @@ $(document).ready(function() {
             success: function(response) {
                 // OVERVIEW OF METRICS
                 // TODO: Fix this when all metrics are available
-                setData(response.serverCoreResultList, response.serverCpuResultList, response.totalSwapResultList, cpuLow, cpuMid, cpuHigh, cpuCrit, 
+                setData(response.serverCpuResultList, response.totalSwapResultList, cpuLow, cpuMid, cpuHigh, cpuCrit, 
                     response.usedMemResultList, response.totalMemoryResultList, memLow, memMid, memHigh, memCrit,
                     response.localUsageResultList, response.totalStorageUsedResultList, stoLow,stoMid, stoHigh, stoCrit)
 
@@ -560,7 +543,7 @@ $(document).ready(function() {
                 // TODO: CPU Usage -> how to calculate?
                 // 已經分配出去多少個？還是說使用情況 % 
 
-                setData(response.serverCoreResultList, response.serverCpuResultList, response.totalSwapResultList, cpuLow, cpuMid, cpuHigh, cpuCrit, 
+                setData(response.serverCpuResultList, response.totalSwapResultList, cpuLow, cpuMid, cpuHigh, cpuCrit, 
                     response.usedMemResultList, response.totalMemoryResultList, memLow, memMid, memHigh, memCrit,
                     response.localUsageResultList, response.totalStorageUsedResultList, stoLow,stoMid, stoHigh, stoCrit)
 
