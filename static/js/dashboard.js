@@ -342,6 +342,7 @@ $(document).ready(function() {
         changeMemDiv(usedMemNum, totalMemNum, memLow, memMid, memHigh, memCrit);
 
 
+        
         // Storage
         var usedStorage = 0
         for(i = 0; i < localUsageResultList.length; i++){
