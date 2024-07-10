@@ -304,6 +304,7 @@ $(document).ready(function() {
 
         // Memory
         var usedMemNum = 0
+        console.log("usedMemResultList[0]: " + usedMemResultList[0])
         for(i = 0; i < usedMemResultList.length; i++)
             var count = 0;
             var temp = 0;
@@ -514,7 +515,6 @@ $(document).ready(function() {
             success: function(response) {
                 console.log("VMlist" + response.vmList)
                 console.log("length: " + response.vmList.length)
-                console.log("serverCoreResultList: " + JSON.stringify(response.serverCoreResultList))
                 // Default settings -> might change based on the settings (threshold, implement later)
                 cpuLow = 25
                 cpuMid = 50
