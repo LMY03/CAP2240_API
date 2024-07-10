@@ -307,21 +307,19 @@ $(document).ready(function() {
         for(i = 0; i < usedMemResultList.length; i++) {
             var count = 0;
             var temp = 0;
-            console.log("i: " + i) // 為什麼這裡直接就是2
+            console.log("i: " + i) 
             console.log("usedMemResultList length: " + usedMemResultList[i].length)
             console.log("usedMemResultList[i]: " + JSON.stringify(usedMemResultList[i]))
             nodeData = usedMemResultList[i].data;
             for( j = 0; j < nodeData.length; j++){
                 count++;
                 temp += nodeData[j].memused; 
-                if (count != 0) {
-                    temp /= count;
-                    usedMemNum += temp
-                }
-                console.log("usedMemNum: " + totalMemNum)
+            }
+            if (count != 0) {
+                temp /= count;
+                usedMemNum += temp
             }
         }
-        console.log("usedMemNum: " + usedMemNum);
 
         var totalMemNum = 0
         for(i = 0; i < totalMemoryResultList.length; i++) {
@@ -331,11 +329,10 @@ $(document).ready(function() {
             for( j = 0; j < nodeData.length; j++){
                 count++;
                 temp += nodeData[j].memtotal; 
-                if (count != 0) {
-                    temp /= count;
-                    totalMemNum += temp
-                }
-                console.log("totalMemNum: " + totalMemNum)
+            }
+            if (count != 0) {
+                temp /= count;
+                totalMemNum += temp
             }
         }
         
