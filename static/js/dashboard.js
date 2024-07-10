@@ -311,6 +311,7 @@ $(document).ready(function() {
                 temp /= count;
                 coreNum += temp
             }
+            console.log("corenum: " + coreNum)
         }        
 
         
