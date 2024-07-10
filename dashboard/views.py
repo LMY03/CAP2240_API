@@ -82,9 +82,6 @@ def getData(request):
                                 |> range(start: -5m)
                                 |> filter(fn: (r) => r._measurement == "system" and r._field == "cpu")
                                 |> filter(fn: (r) => r.host == "{node}")
-                                |> group(columns: ["host"])
-                                |> distinct(column: "cpu")
-                                |> count(column: "cpu")
                                 '''
         
         core_result = query_api.query(query=core_flux_query)
