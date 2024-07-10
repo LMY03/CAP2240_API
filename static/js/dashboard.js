@@ -304,10 +304,10 @@ $(document).ready(function() {
 
         // Memory
         var usedMemNum = 0
-        console.log("usedMemResultList[0]: " + JSON.stringify(usedMemResultList[0]))
         for(i = 0; i < usedMemResultList.length; i++)
             var count = 0;
             var temp = 0;
+            console.log("usedMemResultList[0]: " + JSON.stringify(usedMemResultList[0]))
             nodeData = usedMemResultList[i].data;
             for( j = 0; j < nodeData.length; j++){
                 count++;
