@@ -174,7 +174,7 @@ def getData(request):
                             |> filter(fn: (r) => r._measurement == "system")
                             |> filter(fn: (r) => r._field == "used")
                             |> filter(fn: (r) => r.host == "local")
-                            |> filter(fn: (r) => r.nodename =~ /{node}/))
+                            |> filter(fn: (r) => r.nodename == "{node}"))
                             |> aggregateWindow(every: 10s, fn: last, createEmpty: false)
                             |> yield(name: "last")
                         '''
@@ -198,7 +198,7 @@ def getData(request):
                             |> filter(fn: (r) => r._measurement == "system")
                             |> filter(fn: (r) => r._field == "total")
                             |> filter(fn: (r) => r.host == "local")
-                            |> filter(fn: (r) => r.nodename =~ /{node}/))
+                            |> filter(fn: (r) => r.nodename == "{node}"))
                             |> aggregateWindow(every: 10s, fn: last, createEmpty: false)
                             |> yield(name: "last")
                         '''
