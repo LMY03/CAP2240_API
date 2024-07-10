@@ -405,7 +405,7 @@ $(document).ready(function() {
             success: function(response) {
                 // OVERVIEW OF METRICS
                 // TODO: Fix this when all metrics are available
-                setData(response.serverCpuResultList, response.totalSwapResultList, cpuLow, cpuMid, cpuHigh, cpuCrit, 
+                setData(response.serverCoreResultList, response.serverCpuResultList, response.totalSwapResultList, cpuLow, cpuMid, cpuHigh, cpuCrit, 
                     response.usedMemResultList, response.totalMemoryResultList, memLow, memMid, memHigh, memCrit,
                     response.localUsageResultList, response.totalStorageUsedResultList, stoLow,stoMid, stoHigh, stoCrit)
 
@@ -560,7 +560,7 @@ $(document).ready(function() {
                 // TODO: CPU Usage -> how to calculate?
                 // 已經分配出去多少個？還是說使用情況 % 
 
-                setData(response.serverCpuResultList, response.totalSwapResultList, cpuLow, cpuMid, cpuHigh, cpuCrit, 
+                setData(response.serverCoreResultList, response.serverCpuResultList, response.totalSwapResultList, cpuLow, cpuMid, cpuHigh, cpuCrit, 
                     response.usedMemResultList, response.totalMemoryResultList, memLow, memMid, memHigh, memCrit,
                     response.localUsageResultList, response.totalStorageUsedResultList, stoLow,stoMid, stoHigh, stoCrit)
 
