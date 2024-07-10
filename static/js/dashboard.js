@@ -304,10 +304,10 @@ $(document).ready(function() {
 
         // Memory
         var usedMemNum = 0
-        for(i = 0; i < usedMemResultList.length; i++)
+        for(i = 0; i < usedMemResultList.length; i++) {
             var count = 0;
             var temp = 0;
-            console.log("i: " + i)
+            console.log("i: " + i) // 為什麼這裡直接就是2
             console.log("usedMemResultList length: " + usedMemResultList[i].length)
             console.log("usedMemResultList[i]: " + JSON.stringify(usedMemResultList[i]))
             nodeData = usedMemResultList[i].data;
@@ -320,10 +320,11 @@ $(document).ready(function() {
                 }
                 console.log("usedMemNum: " + totalMemNum)
             }
+        }
         console.log("usedMemNum: " + usedMemNum);
 
         var totalMemNum = 0
-        for(i = 0; i < totalMemoryResultList.length; i++) 
+        for(i = 0; i < totalMemoryResultList.length; i++) {
             nodeData = totalMemoryResultList[i].data;
             var count = 0;
             var temp = 0;
@@ -336,6 +337,7 @@ $(document).ready(function() {
                 }
                 console.log("totalMemNum: " + totalMemNum)
             }
+        }
         
         $('h1#usedMem').html(((usedMemNum / totalMemNum) * 100).toFixed(2) + "%")
         $('h4#totalMem').html("out of " +  (totalMemNum).toFixed(2) + "GiB");
