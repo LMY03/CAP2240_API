@@ -173,8 +173,10 @@ def getData(request):
                             |> range(start: -5m)
                             |> filter(fn: (r) => r._measurement == "system")
                             |> filter(fn: (r) => r._field == "used")
-                            |> filter(fn: (r) => r.host == "local" and r.nodename =~ /{node}/)
+                            |> filter(fn: (r) => r.host == "local")
+                            |> filter(fn: (r) => r.nodename =~ /{node}/))
                             |> aggregateWindow(every: 10s, fn: last, createEmpty: false)
+                            |> yield(name: "last")
                         '''
         usage_result = query_api.query(query=usage_flux_query)
 
@@ -195,8 +197,10 @@ def getData(request):
                             |> range(start: -5m)
                             |> filter(fn: (r) => r._measurement == "system")
                             |> filter(fn: (r) => r._field == "total")
-                            |> filter(fn: (r) => r.host == "local" and r.nodename =~ /{node}/)
+                            |> filter(fn: (r) => r.host == "local")
+                            |> filter(fn: (r) => r.nodename =~ /{node}/))
                             |> aggregateWindow(every: 10s, fn: last, createEmpty: false)
+                            |> yield(name: "last")
                         '''
         # 执行查询
         storage_result = query_api.query(query=storage_flux_query)
@@ -219,8 +223,8 @@ def getData(request):
         'serverCoreResultList': serverCoreResultList,
         'serverCpuResultList': serverCpuResultList,
         'usedMemResultList': usedMemResultList,
-        'totalMemoryResultList': totalMemoryResultList,
         'localUsageResultList': localUsageResultList, 
+        'totalMemoryResultList': totalMemoryResultList,
         'totalStorageUsedResultList': totalStorageUsedResultList,
         'vmList': VMList
     })
