@@ -13,13 +13,6 @@ def get_token():
     response = requests.post(url, headers=headers, auth=HTTPBasicAuth("admin", "pfsense"))
     return response.json()['data']['token']
 
-def apply_changes():
-    token = get_token()
-    url = f'{PFSENSE_HOST}/api/v2/firewall/apply'
-    headers = { 'Authorization': f"Bearer {token}" }
-    response = requests.post(url, headers=headers)
-    return response.json()
-
 def add_port_forward_rule(protocol, destination_port, ip_add, local_port, descr):
     token = get_token()
     url = f'{PFSENSE_HOST}/api/v2/firewall/nat/port_forward'
@@ -110,6 +103,13 @@ def delete_firewall_rule(rule_id):
     headers = { 'Authorization': f"Bearer {token}" }
     response = requests.delete(url, headers=headers)
 
+    return response.json()
+
+def apply_changes():
+    token = get_token()
+    url = f'{PFSENSE_HOST}/api/v2/firewall/apply'
+    headers = { 'Authorization': f"Bearer {token}" }
+    response = requests.post(url, headers=headers)
     return response.json()
     
 def get_port_forward_rules():
