@@ -16,7 +16,6 @@ def apply_changes():
     token = get_token()
     url = f'{PFSENSE_HOST}/api/v2/firewall/apply'
     headers = {
-        'Content-Type': 'application/json',
         'Authorization': f"Bearer {token}",
     }
     response = requests.post(url, headers=headers)
