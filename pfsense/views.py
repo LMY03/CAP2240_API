@@ -28,6 +28,9 @@ def test_run(request):
 
 #     return
 
+def get_rules(request):
+    return render(request, 'data.html', {'data':pfsense.get_port_forward_rules()})
+
 def add_port_forward_rules(request_id):
     # vms = VirtualMachines.objects.filter(request_id=request_id)
     # port_rules = PortRules.objects.filter(request_id=request_id)
