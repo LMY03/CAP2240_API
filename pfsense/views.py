@@ -64,6 +64,7 @@ def add_port_forward_rules(request_id):
 def update_port_forward_rule(vm_name, ip_add):
     pfsense.edit_firewall_rule(get_firewall_rule(vm_name), ip_add)
     pfsense.edit_port_forward_rule(get_port_forward_rule(vm_name), ip_add)
+    pfsense.apply_changes()
 
 def delete_port_forward_rules(vm_names):
     for vm_name in vm_names:
