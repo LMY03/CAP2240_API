@@ -6,10 +6,7 @@ API_KEY = 'de6b87c7d2afb198244c69fbdbe7fbbe'
 
 def get_token():
     url = f'{PFSENSE_HOST}/api/v2/auth/jwt'
-    headers = {
-        'Content-Type': 'application/json',
-    }
-    response = requests.post(url, headers=headers, auth=HTTPBasicAuth("admin", "pfsense"))
+    response = requests.post(url, auth=HTTPBasicAuth("admin", "pfsense"))
     return response.json()['data']['token']
 
 def apply_changes():
