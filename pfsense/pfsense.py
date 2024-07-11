@@ -5,9 +5,10 @@ PFSENSE_HOST = 'http://192.168.1.1'
 API_KEY = 'de6b87c7d2afb198244c69fbdbe7fbbe'
 
 def get_token():
-    url = f'{PFSENSE_HOST}/api/v2/auth/jwt'
-    response = requests.post(url, auth=HTTPBasicAuth("admin", "pfsense"))
-    return response.json()['data']['token']
+    return API_KEY
+    # url = f'{PFSENSE_HOST}/api/v2/auth/jwt'
+    # response = requests.post(url, auth=HTTPBasicAuth("admin", "pfsense"))
+    # return response.json()['data']['token']
 
 def apply_changes():
     token = get_token()
