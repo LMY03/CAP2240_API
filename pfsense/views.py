@@ -14,6 +14,13 @@ def delete_rules(request):
     delete_port_forward_rules(['VM1', 'VM2', 'VM3'])
     return redirect('/pfsense')
 
+def update_rule(request):
+    data = request.POST
+    vm_name = data.get("vm_name")
+    ip_add = data.get("ip_add")
+    update_port_forward_rule(vm_name, ip_add)
+    return redirect('/pfsense')
+
 def get_port_forward_rule(vm_name):
     rules = pfsense.get_port_forward_rules()
     for rule in rules:
@@ -54,16 +61,12 @@ def add_port_forward_rules(request_id):
         pfsense.add_port_forward_rule(protocol, destination_port, ip_add, local_port, descr)
     pfsense.apply_changes()
 
-# def update_port_forward_rule_ip_adds(vm_names, ip_adds):
-#     for vm_name, ip_add in vm_names, ip_adds:
-#         port_forward_id = get_port_forward_rule(vm_name)
-#         firewall_id = get_firewall_rule(vm_name)
-#         pfsense.edit_port_forward_rule(port_forward_id, ip_add)
-#         pfsense.edit_firewall_rule(firewall_id, ip_add)
+def update_port_forward_rule(vm_name, ip_add):
+    pfsense.edit_firewall_rule(get_firewall_rule(vm_name), ip_add)
+    pfsense.edit_port_forward_rule(get_port_forward_rule(vm_name), ip_add)
 
 def delete_port_forward_rules(vm_names):
     for vm_name in vm_names:
-        # get_firewall_rule(vm_name)
         pfsense.delete_firewall_rule(get_firewall_rule(vm_name))
         pfsense.delete_port_forward_rule(get_port_forward_rule(vm_name))
         time.sleep(3)

@@ -11,3 +11,16 @@
     <h1>Delete Rules</h1>
     <input type="submit" value="submit" />
 </form>
+
+<form action="{% url 'pfsense:update_rule' %}" method="post">
+
+    {% csrf_token %}
+    <h1>Delete Rules</h1>
+
+    <label for="vm_name">VM Name: </label>
+    <input type="text" id="vm_name" name="vm_name" /><br /><br />
+    <label for="ip_add">IP Add: </label>
+    <input type="text" id="ip_add" name="ip_add" /><br /><br />
+
+    <input type="submit" value="submit" />
+</form>
