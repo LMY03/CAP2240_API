@@ -83,7 +83,7 @@ def add_firewall_rule(protocol, destination_port, ip_add, descr):
         'destination': ip_add,
         'destination_port': destination_port,
         'descr': descr,
-        'tcp_flags_out_of': ['fin'],
+        # 'tcp_flags_out_of': ['fin'],
     }
     response = requests.post(url, headers=headers, json=data)
     return response.json()
