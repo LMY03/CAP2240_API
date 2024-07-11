@@ -3,7 +3,7 @@ from . import pfsense
 
 # Create your views here.
 
-def renders(request): return render(request, 'pfsense.html')
+def renders(request): return render(request, 'test.html')
 
 def test_run(request):
     add_port_forward_rules(1)
