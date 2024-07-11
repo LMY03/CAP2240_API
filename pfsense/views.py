@@ -5,19 +5,23 @@ from . import pfsense
 
 def renders(request): return render(request, 'test.html')
 
-def test_run(request):
+def add_rules(request):
     add_port_forward_rules(1)
     return redirect('/pfsense')
 
-# def get_port_forward_rule(vm_name):
-#     rules = pfsense.get_port_forward_rules()
-#     for rule in rules:
-#         if rule['descr'] == vm_name: return rule['id']
+def delete_rules(request):
+    delete_port_forward_rules(['VM1', 'VM2', 'VM3'])
+    return redirect('/pfsense')
 
-# def get_firewall_rule(vm_name):
-#     rules = pfsense.get_port_forward_rules()
-#     for rule in rules:
-#         if rule['descr'] == vm_name: return rule['id']
+def get_port_forward_rule(vm_name):
+    rules = pfsense.get_port_forward_rules()
+    for rule in rules:
+        if rule['descr'] == vm_name: return rule['id']
+
+def get_firewall_rule(vm_name):
+    rules = pfsense.get_port_forward_rules()
+    for rule in rules:
+        if rule['descr'] == vm_name: return rule['id']
 
 # def generate_dest_ports():
 #     port_rules = []
@@ -45,9 +49,9 @@ def add_port_forward_rules(request_id):
 
     # dest_ports = generate_dest_ports()
     for destination_port, ip_add, descr in zip(dest_ports, ip_adds, descrs):
-        # pfsense.add_firewall_rule(protocol, destination_port, ip_add, descr)
+        pfsense.add_firewall_rule(protocol, destination_port, ip_add, descr)
         pfsense.add_port_forward_rule(protocol, destination_port, ip_add, local_port, descr)
-    # pfsense.apply_changes()
+    pfsense.apply_changes()
 
 # def update_port_forward_rule_ip_adds(vm_names, ip_adds):
 #     for vm_name, ip_add in vm_names, ip_adds:
@@ -56,9 +60,9 @@ def add_port_forward_rules(request_id):
 #         pfsense.edit_port_forward_rule(port_forward_id, ip_add)
 #         pfsense.edit_firewall_rule(firewall_id, ip_add)
 
-# def delete_port_forward_rules(vm_names):
-#     for vm_name in vm_names:
-#         port_forward_id = get_port_forward_rule(vm_name)
-#         firewall_id = get_firewall_rule(vm_name)
-#         pfsense.delete_port_forward_rule(port_forward_id)
-#         pfsense.delete_firewall_rule(firewall_id)
+def delete_port_forward_rules(vm_names):
+    for vm_name in vm_names:
+        port_forward_id = get_port_forward_rule(vm_name)
+        firewall_id = get_firewall_rule(vm_name)
+        pfsense.delete_port_forward_rule(port_forward_id)
+        pfsense.delete_firewall_rule(firewall_id)
