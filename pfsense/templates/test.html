@@ -1,0 +1,6 @@
+<form action="{% url 'pfsense:test_run' %}" method="post">
+
+    {% csrf_token %}
+
+    <input type="submit" value="submit" />
+</form>

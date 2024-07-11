@@ -1,103 +1,64 @@
 from django.shortcuts import render, redirect
-
-import redis
-
 from . import pfsense
-
-redis_client = redis.StrictRedis(host='redis', port=6379, db=0)
 
 # Create your views here.
 
-def get_port_forward_rule(vm_name):
-    rules = pfsense.get_port_forward_rules()
-    for rule in rules:
-        if rule['descr'] == vm_name: return rule['id']
+def renders(request): return render(request, 'pfsense.html')
 
-def get_firewall_rule(vm_name):
-    rules = pfsense.get_port_forward_rules()
-    for rule in rules:
-        if rule['descr'] == vm_name: return rule['id']
-
-def add_port_forward_rules(protocols, destination_ports, ip_adds, local_ports, descrs):
-    lock = redis_client.lock('pfsense_lock', timeout=60)
-    with lock:
-        for protocol, destination_port, ip_add, local_port, descr in protocols, destination_ports, ip_adds, local_ports, descrs:
-            pfsense.add_firewall_rule(protocol, destination_port, ip_add, descr)
-            pfsense.add_port_forward_rule(protocol, destination_port, ip_add, local_port, descr)
-    pfsense.apply_changes()
-
-def update_port_forward_rule_ip_adds(vm_names, ip_adds):
-    lock = redis_client.lock('pfsense_lock', timeout=60)
-    with lock:
-        for vm_name, ip_add in vm_names, ip_adds:
-            port_forward_id = get_port_forward_rule(vm_name)
-            firewall_id = get_firewall_rule(vm_name)
-            pfsense.edit_port_forward_rule(port_forward_id, ip_add)
-            pfsense.edit_firewall_rule(firewall_id, ip_add)
-
-def delete_port_forward_rules(vm_names):
-    lock = redis_client.lock('pfsense_lock', timeout=60)
-    with lock:
-        for vm_name in vm_names:
-            port_forward_id = get_port_forward_rule(vm_name)
-            firewall_id = get_firewall_rule(vm_name)
-            pfsense.delete_port_forward_rule(port_forward_id)
-            pfsense.delete_firewall_rule(firewall_id)
-
-###########################################################################
-
-def renders(request):
-    return render(request, 'pfsense.html')
-
-def add_port_forward_rule(request):
-
-    if request.method == 'POST':
-
-        data = request.POST
-        protocol = data.get("protocol")
-        destination_port = data.get("destination_port")
-        ip_add = data.get("ip_add")
-        local_port = data.get("local_port")
-        descr = data.get("descr")
-
-        # response = add_port_forward_rules(protocol, destination_port, ip_add, local_port, descr)
-        response = pfsense.add_firewall_rule(protocol, destination_port, ip_add, descr)
-
-        return render(request, 'data.html', { 'data' : response })
-
+def test_run(request):
+    add_port_forward_rules(1)
     return redirect('/pfsense')
 
-def edit_port_forward_rule(request):
+# def get_port_forward_rule(vm_name):
+#     rules = pfsense.get_port_forward_rules()
+#     for rule in rules:
+#         if rule['descr'] == vm_name: return rule['id']
 
-    if request.method == 'POST':
+# def get_firewall_rule(vm_name):
+#     rules = pfsense.get_port_forward_rules()
+#     for rule in rules:
+#         if rule['descr'] == vm_name: return rule['id']
 
-        data = request.POST
-        id = data.get("id")
-        ip_add = data.get("ip_add")
+# def generate_dest_ports():
+#     port_rules = []
+#     request_entries = RequestEntry.objects.filter(status=RequestEntry.Status.ONGOING) # maybe also add completed
+#     for request_entry in request_entries:
+#         for port_rule in PortRules.objects.filter(request_id=request_entry.id):
+#             port_rules.append(port_rule)
 
-        response = pfsense.edit_port_forward_rule(id, ip_add)
+#     return
 
-        return render(request, 'data.html', { 'data' : response })
+def add_port_forward_rules(request_id):
+    # vms = VirtualMachines.objects.filter(request_id=request_id)
+    # port_rules = PortRules.objects.filter(request_id=request_id)
+    
+    # protocols = port_rules.values_list('protocol', flat=True)
+    # dest_ports = port_rules.values_list('dest_ports', flat=True)
+    # ip_adds = vms.values_list('ip_add', flat=True)
+    # descrs = vms.values_list('vm_name', flat=True)
 
-    return redirect('/pfsense')
+    protocol = 'tcp'
+    local_port = '80'
+    dest_ports = ['1000', '1001', '1002']
+    ip_adds = ['192.168.2.1', '192.168.2.2', '192.168.2.3']
+    descrs = ['VM1', 'VM2', 'VM3']
 
-def delete_port_forward_rule(request):
+    # dest_ports = generate_dest_ports()
+    for destination_port, ip_add, descr in zip(dest_ports, ip_adds, descrs):
+        pfsense.add_firewall_rule(protocol, destination_port, ip_add, descr)
+        pfsense.add_port_forward_rule(protocol, destination_port, ip_add, local_port, descr)
+    # pfsense.apply_changes()
 
-    if request.method == 'POST':
+# def update_port_forward_rule_ip_adds(vm_names, ip_adds):
+#     for vm_name, ip_add in vm_names, ip_adds:
+#         port_forward_id = get_port_forward_rule(vm_name)
+#         firewall_id = get_firewall_rule(vm_name)
+#         pfsense.edit_port_forward_rule(port_forward_id, ip_add)
+#         pfsense.edit_firewall_rule(firewall_id, ip_add)
 
-        data = request.POST
-        id = data.get("id")
-
-        response = pfsense.delete_port_forward_rule(id)
-
-        return render(request, 'data.html', { 'data' : response })
-
-    return redirect('/pfsense')
-
-def get_port_forward_rules(request):
-    data = get_port_forward_rule("Test")
-    return render(request, 'data.html', { 'data' : data })
-
-def get_firewall_rules(request):
-    data = pfsense.get_firewall_rules()
-    return render(request, 'data.html', { 'data' : data })
+# def delete_port_forward_rules(vm_names):
+#     for vm_name in vm_names:
+#         port_forward_id = get_port_forward_rule(vm_name)
+#         firewall_id = get_firewall_rule(vm_name)
+#         pfsense.delete_port_forward_rule(port_forward_id)
+#         pfsense.delete_firewall_rule(firewall_id)
