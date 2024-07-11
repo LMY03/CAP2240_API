@@ -5,10 +5,19 @@ PFSENSE_HOST = 'http://192.168.1.1'
 API_KEY = 'de6b87c7d2afb198244c69fbdbe7fbbe'
 
 def get_token():
-    # return API_KEY
     url = f'{PFSENSE_HOST}/api/v2/auth/jwt'
-    response = requests.post(url, auth=HTTPBasicAuth("admin", "pfsense"))
+    headers = {
+        'Content-Type': 'application/json',
+    }
+    response = requests.post(url, headers=headers, auth=HTTPBasicAuth("admin", "pfsense"))
     return response.json()['data']['token']
+
+def apply_changes():
+    token = get_token()
+    url = f'{PFSENSE_HOST}/api/v2/firewall/apply'
+    headers = { 'Authorization': f"Bearer {token}" }
+    response = requests.post(url, headers=headers)
+    return response.json()
 
 def add_port_forward_rule(protocol, destination_port, ip_add, local_port, descr):
     token = get_token()
@@ -74,7 +83,7 @@ def add_firewall_rule(protocol, destination_port, ip_add, descr):
         'destination': ip_add,
         'destination_port': destination_port,
         'descr': descr,
-        # 'tcp_flags_out_of': ['fin'],
+        'tcp_flags_out_of': ['fin'],
     }
     response = requests.post(url, headers=headers, json=data)
     return response.json()
@@ -100,13 +109,6 @@ def delete_firewall_rule(rule_id):
     headers = { 'Authorization': f"Bearer {token}" }
     response = requests.delete(url, headers=headers)
 
-    return response.json()
-
-def apply_changes():
-    token = get_token()
-    url = f'{PFSENSE_HOST}/api/v2/firewall/apply'
-    headers = { 'Authorization': f"Bearer {token}" }
-    response = requests.post(url, headers=headers)
     return response.json()
     
 def get_port_forward_rules():
