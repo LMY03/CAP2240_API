@@ -45,6 +45,7 @@ def add_port_forward_rule(protocol, destination_port, ip_add, local_port, descr)
         'associated_rule_id': ' ',
     }
     response = requests.post(url, headers=headers, json=data)
+    print(response.json())
     return response.json()
 
 def edit_port_forward_rule(rule_id, ip_add):
