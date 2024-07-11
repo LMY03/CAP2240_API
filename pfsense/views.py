@@ -19,11 +19,9 @@ def get_port_forward_rule(vm_name):
         if rule['descr'] == vm_name: return rule['id']
 
 def get_firewall_rule(vm_name):
-    rules = pfsense.get_port_forward_rules()
+    rules = pfsense.get_firewall_rules()
     for rule in rules:
-        if rule['descr'] == vm_name: 
-            print(rule)
-            return rule['id']
+        if rule['descr'] == vm_name : return rule['id']
 
 # def generate_dest_ports():
 #     port_rules = []
