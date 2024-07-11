@@ -59,6 +59,7 @@ def add_port_forward_rules(request_id):
     for destination_port, ip_add, descr in zip(dest_ports, ip_adds, descrs):
         pfsense.add_firewall_rule(protocol, destination_port, ip_add, descr)
         pfsense.add_port_forward_rule(protocol, destination_port, ip_add, local_port, descr)
+    time.sleep(3)
     pfsense.apply_changes()
 
 def update_port_forward_rule(vm_name, ip_add):
