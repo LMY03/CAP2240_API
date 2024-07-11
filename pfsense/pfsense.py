@@ -42,10 +42,9 @@ def add_port_forward_rule(protocol, destination_port, ip_add, local_port, descr)
         # 'nordr': True, # notsure
         # 'nosync': True,
         'descr': descr,
-        'associated-rule-id': '',
+        'associated_rule_id': '',
     }
     response = requests.post(url, headers=headers, json=data)
-    print(response.json())
     return response.json()
 
 def edit_port_forward_rule(rule_id, ip_add):
@@ -89,7 +88,7 @@ def add_firewall_rule(protocol, destination_port, ip_add, descr):
         'descr': descr,
     }
     response = requests.post(url, headers=headers, json=data)
-    return response.json()['data']['id']
+    return response.json()
 
 def edit_firewall_rule(rule_id, ip_add):
     token = get_token()
