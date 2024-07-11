@@ -2,9 +2,10 @@ from requests.auth import HTTPBasicAuth
 import requests
 
 PFSENSE_HOST = 'http://192.168.1.1'
-API_KEY = '74c46c1735cc476bb78df2c189be73daf9753ba872d64f8'
+API_KEY = 'de6b87c7d2afb198244c69fbdbe7fbbe'
 
 def get_token():
+    return API_KEY
     url = f'{PFSENSE_HOST}/api/v2/auth/jwt'
     headers = {
         'Content-Type': 'application/json',
