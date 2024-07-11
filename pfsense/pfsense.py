@@ -88,6 +88,8 @@ def add_firewall_rule(protocol, destination_port, ip_add, descr):
         'descr': descr,
     }
     response = requests.post(url, headers=headers, json=data)
+    print(response.json)
+    print(response.json())
     return response.json()
 
 def edit_firewall_rule(rule_id, ip_add):
