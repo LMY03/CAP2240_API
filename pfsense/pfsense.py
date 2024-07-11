@@ -42,7 +42,7 @@ def add_port_forward_rule(protocol, destination_port, ip_add, local_port, descr)
         # 'nordr': True, # notsure
         # 'nosync': True,
         'descr': descr,
-        'associated_rule_id': '',
+        # 'associated_rule_id': '',
     }
     response = requests.post(url, headers=headers, json=data)
     print(response.json())
