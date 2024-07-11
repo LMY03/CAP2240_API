@@ -96,7 +96,7 @@ def edit_firewall_rule(rule_id, ip_add):
     }
     data = {
         'id': rule_id,
-        'target': ip_add,
+        'destination': ip_add,
     }
     response = requests.patch(url, headers=headers, json=data)
     
