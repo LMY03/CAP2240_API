@@ -2,11 +2,13 @@ from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render
 from proxmoxer import ProxmoxAPI
 from influxdb_client import InfluxDBClient, Point, WritePrecision
-import csv
-from io import StringIO
-token = "fZTol0u-bKXxSbyn098UbdrWj7l3TS876mheo30RBIfKfPmxohWsNGCUfZ84g2OyWpPFGUENPSMPrekqCgktEA=="
-org = "DLSU_CCS"
-bucket = "proxmox"
+from decouple import config
+
+INFLUX_ADDRESS = config('INFLUX_ADDRESS')
+token = config('INFLUX_TOKEN')
+org = config('INFLUXDB_ORG')
+bucket = config('INFLUXDB_BUCKET')
+proxmox_password = config('PROXMOX_PASSWORD')
     
 # Create your views here.
 def index(request):
@@ -22,7 +24,7 @@ def index(request):
 def getData(request):
     #Connection between Proxmox API and application
     proxmox = ProxmoxAPI('10.1.200.11', user='root@pam', password='cap2240', verify_ssl=False)
-    client = InfluxDBClient(url="http://192.168.1.3:8086", token=token, org=org)
+    client = InfluxDBClient(url=INFLUX_ADDRESS, token=token, org=org)
 
     #Get VM Info from Proxmox API
     vmids = proxmox.cluster.resources.get(type='vm')
