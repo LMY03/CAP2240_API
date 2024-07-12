@@ -40,56 +40,52 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-  
-  redis:
-    image: redis:latest
-    container_name: redis
 
-  guacamole:
-    image: guacamole/guacamole:latest
-    container_name: guacamole
-    restart: always
-    ports:
-      - "8080:8080"
-    environment:
-      GUACD_HOSTNAME: guacd
-      MYSQL_HOSTNAME: mysql
-      MYSQL_PORT: 3306
-      MYSQL_DATABASE: ${MYSQL_GUACAMOLE_DB}
-      MYSQL_USER: ${MYSQL_GUACAMOLE_USER}
-      MYSQL_PASSWORD: ${MYSQL_GUACAMOLE_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-    depends_on:
-      - guacd
-      - mysql
+  # guacamole:
+  #   image: guacamole/guacamole:latest
+  #   container_name: guacamole
+  #   restart: always
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     GUACD_HOSTNAME: guacd
+  #     MYSQL_HOSTNAME: mysql
+  #     MYSQL_PORT: 3306
+  #     MYSQL_DATABASE: ${MYSQL_GUACAMOLE_DB}
+  #     MYSQL_USER: ${MYSQL_GUACAMOLE_USER}
+  #     MYSQL_PASSWORD: ${MYSQL_GUACAMOLE_PASSWORD}
+  #     MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+  #   depends_on:
+  #     - guacd
+  #     - mysql
 
-  guacd:
-    image: guacamole/guacd:latest
-    container_name: guacd
-    restart: always
-    ports:
-      - "4822:4822"
+  # guacd:
+  #   image: guacamole/guacd:latest
+  #   container_name: guacd
+  #   restart: always
+  #   ports:
+  #     - "4822:4822"
     
-  influxdb:
-    image: influxdb:latest
-    container_name: influxdb
-    restart: always
-    ports:
-      - "8086:8086"
-    environment:
-      DOCKER_INFLUXDB_INIT_MODE: setup
-      DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUXDB_USERNAME}
-      DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUXDB_PASSWORD}
-      DOCKER_INFLUXDB_INIT_ORG: ${INFLUXDB_ORG}
-      DOCKER_INFLUXDB_INIT_BUCKET: ${INFLUXDB_BUCKET}
-    volumes:
-      - influxdb_data:/var/lib/influxdb2
-      - influxdb_config:/etc/influxdb2
+  # influxdb:
+  #   image: influxdb:latest
+  #   container_name: influxdb
+  #   restart: always
+  #   ports:
+  #     - "8086:8086"
+  #   environment:
+  #     DOCKER_INFLUXDB_INIT_MODE: setup
+  #     DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUXDB_USERNAME}
+  #     DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUXDB_PASSWORD}
+  #     DOCKER_INFLUXDB_INIT_ORG: ${INFLUXDB_ORG}
+  #     DOCKER_INFLUXDB_INIT_BUCKET: ${INFLUXDB_BUCKET}
+  #   volumes:
+  #     - influxdb_data:/var/lib/influxdb2
+  #     - influxdb_config:/etc/influxdb2
 
 volumes:
   mysql_data:
-  influxdb_data:
-  influxdb_config:
+  # influxdb_data:
+  # influxdb_config:
 
 # References
 
