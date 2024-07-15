@@ -35,6 +35,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    "monitoring.apps.MonitoringConfig",
     "ticketing.apps.TicketingConfig",
     "guacamole.apps.GuacamoleConfig",
     "pfsense.apps.PfsenseConfig",
@@ -63,7 +64,7 @@ ROOT_URLCONF = 'CAP2240_API.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'dashboard', 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

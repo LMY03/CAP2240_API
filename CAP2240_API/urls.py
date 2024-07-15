@@ -18,11 +18,17 @@ from django.contrib import admin
 from django.urls import include, path
 from django.urls import path
 
+from django.shortcuts import render
+
+def tsg_home(request):
+    return render(request, 'users/tsg_home.html')
+
 urlpatterns = [
     path('guacamole/', include("guacamole.urls")),
     path('pfsense/', include("pfsense.urls")),
     path('proxmox/', include("proxmox.urls")),
     path('ticketing/', include("ticketing.urls")),
     path('admin/', admin.site.urls),
-    path('dashboard/', include('dashboard.urls'))
+    path('monitoring/', include('monitoring.urls')),
+    path('dashboard', tsg_home)
 ]
