@@ -21,7 +21,7 @@ from django.urls import path
 from django.shortcuts import render
 
 def tsg_home(request):
-    return render(request, 'ticketing/tsg_home.html')
+    return render(request, 'monitoring/tsg_home.html')
 
 urlpatterns = [
     path('guacamole/', include("guacamole.urls")),
