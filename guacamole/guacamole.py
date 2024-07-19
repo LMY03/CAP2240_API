@@ -197,7 +197,9 @@ def get_connection_url(connection, username, password):
     token = get_connection_token(username, password)
     connections_response = requests.get(f'{GUACAMOLE_HOST}/guacamole/api/session/data/{DATASOURCE}/connections?token={token}')
     connections = connections_response.json()
+    return connections
     for connection_id, connection_info in connections.items():
+        print()
         if connection_id == connection:
             encoded_connection_id = urllib.parse.quote(connection_id)
             return f"{GUACAMOLE_HOST}/guacamole/#/client/{encoded_connection_id}?token={token}"
