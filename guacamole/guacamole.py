@@ -1,4 +1,5 @@
 import json, requests
+import urllib.parse
 
 GUACAMOLE_HOST = "http://192.168.1.2:8080"
 USERNAME = 'guacadmin'
@@ -194,7 +195,12 @@ def revoke_connection_group(username, connection_group_id):
 
 def get_connection_url(connection, username, password):
     token = get_connection_token(username, password)
-    return f"http://10.1.200.20:8080/guacamole/#/client/{connection}?token={token}"
+    connections_response = requests.get(f'{GUACAMOLE_HOST}/guacamole/api/session/data/{DATASOURCE}/connections?token={token}')
+    connections = connections_response.json()
+    for connection_id, connection_info in connections.items():
+        if connection_id == connection:
+            encoded_connection_id = urllib.parse.quote(connection_id)
+            return f"{GUACAMOLE_HOST}/guacamole/#/client/{encoded_connection_id}?token={token}"
 
 # def get_connection_token(username, password):
 #     url = f"{GUACAMOLE_HOST}/guacamole/api/tokens"
