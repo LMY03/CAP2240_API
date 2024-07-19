@@ -1,26 +1,27 @@
-import requests
-import json
+import json, requests
 
-# GUACAMOLE_HOST = 'http://guacamole:8080'
-GUACAMOLE_HOST = "http://10.1.200.20:8080"
-# GUACAMOLE_HOST = 'http://192.168.254.125:8080'
-# GUACAMOLE_HOST = 'http://10.63.132.128:8080'
+GUACAMOLE_HOST = "http://192.168.1.2:8080"
 USERNAME = 'guacadmin'
 PASSWORD = 'guacadmin'
+DATASOURCE = 'mysql'
+CA_CRT = False
 
 # get token /
 def get_token():
-    # CA_CRT = '/path/to/ca_bundle.crt'
-    # CA_CRT = False # Disable SSL certificate verification
-    session = requests.Session()
-    # session.verify = CA_CRT
-    response = session.post(
-        f"{GUACAMOLE_HOST}/guacamole/api/tokens",
-        data={'username': USERNAME, 'password': PASSWORD},
-        # verify=CA_CRT
-    )
-    data = response.json()
-    return data['authToken']
+   return get_connection_token(USERNAME, PASSWORD)
+
+# def get_token():
+#     # CA_CRT = '/path/to/ca_bundle.crt'
+#     # CA_CRT = False # Disable SSL certificate verification
+#     session = requests.Session()
+#     # session.verify = CA_CRT
+#     response = session.post(
+#         f"{GUACAMOLE_HOST}/guacamole/api/tokens",
+#         data={'username': USERNAME, 'password': PASSWORD},
+#         # verify=CA_CRT
+#     )
+#     data = response.json()
+#     return data['authToken']
 
 # get session info TODO: avoid request again here
 def get_session_info():
@@ -33,7 +34,7 @@ def get_session_info():
     session.headers.update({
       'Guacamole-Token': data['authToken'],
     })
-    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/connections"
+    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/{DATASOURCE}/connections"
     response = session.get(url)
 
     return response.text
@@ -41,7 +42,7 @@ def get_session_info():
 # create user 200
 def create_user(username, password):
     token = get_token()
-    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/users?token={token}"
+    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/{DATASOURCE}/users?token={token}"
     config = {
         "username": username,
         "password": password,
@@ -62,14 +63,14 @@ def create_user(username, password):
 # delete user 204
 def delete_user(username):
     token = get_token()
-    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/users/{username}?token={token}"
+    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/{DATASOURCE}/users/{username}?token={token}"
     response = requests.delete(url)
     return response
 
 # create connection 200
 def create_connection(name, protocol, port, hostname, username, password, parent_identifier):
     token = get_token()
-    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/connections?token={token}"
+    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/{DATASOURCE}/connections?token={token}"
     config = {
       "parentIdentifier": parent_identifier,
       "name": name,
@@ -92,13 +93,13 @@ def create_connection(name, protocol, port, hostname, username, password, parent
 # delete connection 204
 def delete_connection(connection_id):
     token = get_token()
-    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/connections/{connection_id}?token={token}"
+    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/{DATASOURCE}/connections/{connection_id}?token={token}"
     response = requests.delete(url)
     return response
 
 def get_connection_details(connection_id):
     token = get_token()
-    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/connections/{connection_id}?token={token}"
+    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/{DATASOURCE}/connections/{connection_id}?token={token}"
     # headers = {'Authorization': f'Bearer {token}'}
     # response = requests.get(url, headers=headers)
     response = requests.get(url)
@@ -107,7 +108,7 @@ def get_connection_details(connection_id):
 
 def get_connection_parameter_details(connection_id):
     token = get_token()
-    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/connections/{connection_id}/parameters?token={token}"
+    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/{DATASOURCE}/connections/{connection_id}/parameters?token={token}"
     # headers = {'Authorization': f'Bearer {token}'}
     # response = requests.get(url, headers=headers)
     response = requests.get(url)
@@ -117,17 +118,13 @@ def get_connection_parameter_details(connection_id):
 # update connection 204
 def update_connection(connection_id, hostname):
     token = get_token()
-    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/connections/{connection_id}?token={token}"
+    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/{DATASOURCE}/connections/{connection_id}?token={token}"
     headers = {'Content-Type': 'application/json'}
-    connection_details = get_connection_parameter_details(connection_id)
-    print(connection_details)
-    print("--------------------------------")
-    connection_details['hostname'] = hostname
-    print(connection_details)
-    print("--------------------------------")
+    connection_details = get_connection_details(connection_id)
+    connection_parameter_details = get_connection_parameter_details(connection_id)
+    connection_parameter_details['hostname'] = hostname
+    connection_details['parameters'] = connection_parameter_details
     updated_data=json.dumps(connection_details)
-    print(updated_data)
-    print("--------------------------------")
     response = requests.put(url, data=updated_data, headers=headers)
     return response
 
@@ -150,23 +147,72 @@ def revoke_connection(username, connection_id):
 # set permission
 def set_permission(username, config):
     token = get_token()
-    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/mysql/users/{username}/permissions?token={token}"
+    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/{DATASOURCE}/users/{username}/permissions?token={token}"
     headers = {'Content-Type': 'application/json'}
     response = requests.patch(url, data=json.dumps(config), headers=headers)
     return response.status_code
 
-def get_connection_url(connection_id, username, password):
-    # token = get_connection_token(username, password)
+def create_connection_group(name):
     token = get_token()
-    return f"{GUACAMOLE_HOST}/guacamole/#/client/{connection_id}?token={token}"
+    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/{DATASOURCE}/connectionGroups?token={token}"
+    config = {
+        "parentIdentifier": "ROOT",
+        "name": name,
+        "type": "ORGANIZATIONAL",
+        "attributes": {
+            "max-connections": "",
+            "max-connections-per-user": "",
+            "enable-session-affinity": ""
+        }
+    }
+    headers = {'Content-Type': 'application/json'}
+    response = requests.post(url, data=json.dumps(config), headers=headers)
+
+    # get connection id
+    data = response.json()
+    return data['identifier']
+
+def delete_connection_group(connection_group_id):
+    token = get_token()
+    url = f"{GUACAMOLE_HOST}/guacamole/api/session/data/{DATASOURCE}/connectionGroups/{connection_group_id}?token={token}"
+    response = requests.delete(url)
+    return response
+
+def assign_connection_group(username, connection_group_id):
+    return set_permission(username, config=[{
+        "op": "add",
+        "path": f"/connectionGroupPermissions/{connection_group_id}",
+        "value": "READ"
+    }])
+
+def revoke_connection_group(username, connection_group_id):
+    return set_permission(username, config=[{
+        "op": "remove",
+        "path": f"/connectionGroupPermissions/{connection_group_id}",
+        "value": "READ"
+    }])
+
+def get_connection_url(connection, username, password):
+    token = get_connection_token(username, password)
+    return f"http://10.1.200.20:8080/guacamole/#/client/{connection}?token={token}"
+
+# def get_connection_token(username, password):
+#     url = f"{GUACAMOLE_HOST}/guacamole/api/tokens"
+#     config = { 'username': username, 'password': password }
+#     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+#     response = requests.post(url, data=json.dumps(config), headers=headers)
+#     data = response.json()
+#     return data['authToken']
 
 def get_connection_token(username, password):
     # CA_CRT = '/path/to/ca_bundle.crt'
     # CA_CRT = False # Disable SSL certificate verification
-    # session.verify = CA_CRT
-    url = f"{GUACAMOLE_HOST}/guacamole/api/tokens"
-    config = { 'username': username, 'password': password }
-    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-    response = requests.post(url, data=json.dumps(config), headers=headers)
+    session = requests.Session()
+    session.verify = CA_CRT
+    response = session.post(
+        f"{GUACAMOLE_HOST}/guacamole/api/tokens",
+        data={'username': username, 'password': password},
+    )
     data = response.json()
+
     return data['authToken']
