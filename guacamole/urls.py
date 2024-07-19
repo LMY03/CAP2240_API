@@ -6,6 +6,7 @@ app_name = "guacamole"
 
 urlpatterns = [
     path("", views.renders, name="form"),
+    path("get_url", views.get_url, name="get_url"),
     path("create_user", views.create_user, name="create_user"),
     path("delete_user", views.delete_user, name="delete_user"),
     path("create_connection", views.create_connection, name="create_connection"),

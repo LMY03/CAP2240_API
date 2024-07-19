@@ -6,6 +6,15 @@ from . import guacamole
 
 parent_identifier = "ROOT"
 
+def get_url(request):
+
+    if request.method == "POST":
+
+        return render(request, "data.html", { "data" : guacamole.get_connection_url(12, 'guacadmin', 'guacadmin') })
+    
+    return redirect("/guacamole")
+
+
 def renders(request) : 
     return render(request, "guacamole.html")
 
