@@ -193,6 +193,11 @@ def revoke_connection_group(username, connection_group_id):
         "value": "READ"
     }])
 
+def get_active_connections():
+    token = get_token()
+    connections_response = requests.get(f'{GUACAMOLE_HOST}/guacamole/api/session/data/{DATASOURCE}/activeConnections?token={token}')
+    return connections_response.json()
+
 def get_connection_url(connection, username, password):
     token = get_connection_token(username, password)
     connections_response = requests.get(f'{GUACAMOLE_HOST}/guacamole/api/session/data/{DATASOURCE}/connections?token={token}')

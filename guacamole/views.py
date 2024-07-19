@@ -10,7 +10,7 @@ def get_url(request):
 
     if request.method == "POST":
 
-        return render(request, "data.html", { "data" : guacamole.get_connection_url(12, 'guacadmin', 'guacadmin') })
+        return render(request, "data.html", { "data" : guacamole.get_active_connections() })
     
     return redirect("/guacamole")
 
