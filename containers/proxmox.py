@@ -19,7 +19,7 @@ def clone_lxc(node, vm_id, new_vm_ids, new_names):
     # Initialize Proxmox API connection
     proxmox = ProxmoxAPI('10.1.200.11', user='root@pam', password='cap2240', verify_ssl=CA_CRT)
 
-    status = proxmox.nodes('pve').lxc(vm_id).status.current.get()
+    status = proxmox.nodes(node).lxc(vm_id).status.current.get()
     print("Status of LXC 4001:", status)
     
     # Check if the node exists
@@ -30,6 +30,7 @@ def clone_lxc(node, vm_id, new_vm_ids, new_names):
 
     # Check if the LXC container exists
     containers = proxmox.nodes(node).lxc.get()
+    print(containers)
     if vm_id not in [c['vmid'] for c in containers]:
         print(f"Error: LXC container ID '{vm_id}' not found on node '{node}'.")
         return
