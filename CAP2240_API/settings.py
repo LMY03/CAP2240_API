@@ -35,6 +35,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    "containers.apps.ContainersConfig",
     "monitoring.apps.MonitoringConfig",
     "ticketing.apps.TicketingConfig",
     "guacamole.apps.GuacamoleConfig",

@@ -24,6 +24,7 @@ def tsg_home(request):
     return render(request, 'monitoring/tsg_home.html')
 
 urlpatterns = [
+    path('containers/', include("containers.urls")),
     path('guacamole/', include("guacamole.urls")),
     path('pfsense/', include("pfsense.urls")),
     path('proxmox/', include("proxmox.urls")),
