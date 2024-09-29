@@ -16,15 +16,34 @@ STORAGE = 'local-lvm'
 # proxmox = ProxmoxAPI(PROXMOX_IP, user=PROXMOX_USERNAME, password=PROXMOX_PASSWORD, verify_ssl=CA_CRT)
 
 def clone_lxc(node, vm_id, new_vm_ids, new_names):
+    # Initialize Proxmox API connection
     proxmox = ProxmoxAPI('10.1.200.11', user='root@pam', password='cap2240', verify_ssl=CA_CRT)
+    
+    # Check if the node exists
+    nodes = proxmox.nodes.get()
+    if node not in [n['node'] for n in nodes]:
+        print(f"Error: Node '{node}' not found in Proxmox.")
+        return
+
+    # Check if the LXC container exists
+    containers = proxmox.nodes(node).lxc.get()
+    if vm_id not in [c['vmid'] for c in containers]:
+        print(f"Error: LXC container ID '{vm_id}' not found on node '{node}'.")
+        return
+
+    # Proceed with the clone operation
     for new_id, new_name in zip(new_vm_ids, new_names):
-        proxmox.nodes(node).lxc(vm_id).clone.post(
-            newid=new_id,
-            name=new_name,
-            target=node,
-            full=1,
-            storage=STORAGE,
-        )
+        try:
+            proxmox.nodes(node).lxc(vm_id).clone.post(
+                newid=new_id,
+                name=new_name,
+                target=node,
+                full=1,
+                storage=STORAGE,
+            )
+            print(f"Successfully cloned LXC ID '{vm_id}' to new ID '{new_id}' with name '{new_name}'.")
+        except Exception as e:
+            print(f"Clone operation failed for ID {new_id}. Error: {e}")
 
     for new_id in new_vm_ids:
         print(f"Starting container {new_id}...")
