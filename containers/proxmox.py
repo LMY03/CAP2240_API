@@ -22,9 +22,9 @@ def clone_lxc(node, vm_id, new_vm_ids, new_names):
     # Proceed with the clone operation
     for new_id, new_name in zip(new_vm_ids, new_names):
         try:
+            # Remove 'name=new_name' from the parameters
             proxmox.nodes(node).lxc(vm_id).clone.post(
                 newid=new_id,
-                name=new_name,
                 target=node,
                 full=1,
                 storage=STORAGE,
