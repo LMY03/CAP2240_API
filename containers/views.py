@@ -8,9 +8,7 @@ def renders(request) :
     return render(request, "containers/form.html")
 
 def clone_lxc(request):
-    print("clone lxc")
     if request.method == "POST":
-        print("POST")
 
         data = request.POST
         vmid = [data.get("vmid")]
