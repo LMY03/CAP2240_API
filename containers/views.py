@@ -13,8 +13,8 @@ def clone_lxc(request):
         print("POST")
 
         data = request.POST
-        vmid = data.get("vmid")
-        newid = data.get("newid")
+        vmid = [data.get("vmid")]
+        newid = [data.get("newid")]
 
         data = proxmox.clone_lxc("pve", vmid, newid, newid)
 
