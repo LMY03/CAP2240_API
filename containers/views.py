@@ -16,8 +16,8 @@ def clone_lxc(request):
         vm_id = data.get("vm_id")
         newid = data.get("newid")
 
-        data = proxmox.clone_lxc("jin", vm_id, newid, newid)
+        data = proxmox.clone_lxc("pve", vm_id, newid, newid)
 
         return render(request, "containers/data.html", { 'data' : data })
     
-    return redirect('containers:form')
+    # return redirect('containers:form')
