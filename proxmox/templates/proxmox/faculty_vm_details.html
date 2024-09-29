@@ -1,0 +1,95 @@
+{% extends 'users/base_faculty.html' %}
+
+{% block title %}
+VM Details {{ vm_id }}
+{% endblock title %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'users/css/student_home.css' %}">
+
+{% endblock css %} 
+
+{% block content %}
+<!-- Main Content -->
+<div class="col-md-10 content">
+    <!-- Container for VM Details -->
+    <div class="container mt-4">
+        <!-- Header with Buttons -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>VM Details: {{ vm.vm_name }}</h2>
+            <div>
+                <form id="start_vm_form" action="{% url 'guacamole:access_vm' %}" method="post" onsubmit="submitForm(event)" class="d-inline">
+                    {% csrf_token %}
+                    <input type="hidden" id="vm_id" name="vm_id" value="{{ vm.id }}" />
+                    <button type="submit" class="btn btn-success me-1">Open VM</button>
+                </form>
+                <a href="{% url 'proxmox:shutdown_vm' vm.id %}" class="d-inline"><button type="submit" class="btn btn-danger">Shutdown</button></a>
+            </div>
+        </div>
+        <!-- Content Area -->
+        <div class="row">
+            <!-- Memory -->
+            <div class="col-md-12 mb-4">
+                <div class="card">
+                    <div class="card-header">Memory</div>
+                    <div class="card-body">
+                        {{ vm.ram }} MB
+                    </div>
+                </div>
+            </div>
+            <!-- Core Count -->
+            <div class="col-md-12 mb-4">
+                <div class="card">
+                    <div class="card-header">Core Count</div>
+                    <div class="card-body">
+                        {{ vm.cores }} Cores
+                    </div>
+                </div>
+            </div>
+            <!-- Storage -->
+            <div class="col-md-12 mb-4">
+                <div class="card">
+                    <div class="card-header">Storage</div>
+                    <div class="card-body">
+                        {{ vm.storage }} GB
+                    </div>
+                </div>
+            </div>
+            <!-- Network -->
+            <!-- <div class="col-md-12 mb-4">
+                <div class="card">
+                    <div class="card-header">Network</div>
+                    <div class="card-body">
+                        Add network details here
+                    </div>
+                </div>
+            </div> -->
+            <!-- Status -->
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">Status</div>
+                    <div class="card-body">
+                        {{ vm.status }}
+                    </div>
+                </div>
+            </div>
+            {% if destination_ports %}
+                {% for destination_port in destination_ports %}
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">Public Port</div>
+                            <div class="card-body">
+                                {{ destination_port.dest_port }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
+{% block script %}
+<script src="{% static 'guacamole/js/launch-vm.js' %}"></script>
+{% endblock script %}

@@ -2,7 +2,7 @@ import datetime
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render
 from proxmoxer import ProxmoxAPI
-from influxdb_client import InfluxDBClient, Point, WritePrecision
+from influxdb_client import InfluxDBClient
 import csv
 from io import StringIO
 from decouple import config
@@ -29,78 +29,11 @@ def getData(request):
     proxmox = ProxmoxAPI('10.1.200.11', user='root@pam', password='cap2240', verify_ssl=False)
     client = InfluxDBClient(url=INFLUX_ADDRESS, token=token, org=org)
     
-    #Query to get all nodes being used
-    query_api = client.query_api()
-    
     #Get VM Info from Proxmox API
-    vmids = proxmox.cluster.resources.get(type='vm')
+    vmids = proxmox.cluster.resources.get(type='vm')    
     VMList= []
-    
-    #Loop through each VM to get info
-    for vmid in vmids:
-        VMDict = {}
-        VMDict["id"] = vmid['vmid']
-        VMDict["type"] = vmid['type']        
-        VMDict["cpu"] = vmid['cpu']
-        VMDict["disk"] = vmid['disk']
-        VMDict["maxcpu"] = vmid['maxcpu']
-        VMDict["maxdisk"] = vmid['maxdisk']        
-        VMDict["maxmem"] = vmid['maxmem']
-        VMDict["mem"] = vmid['mem']
-        VMDict["name"] = vmid['name']
-        VMDict["node"] = vmid['node']
-        VMDict["status"] = vmid['status']
-        VMDict["uptime"] = vmid['uptime']
-        # Net In 
-        network_in_query = f'''
-                            from(bucket:"{bucket}")
-                            |> range(start: -5m)
-                            |> filter(fn: (r) => r._measurement == "system")
-                            |> filter(fn: (r) => r._field == "netin)
-                            |> filter(fn: (r) => r.host == {vmid['name']})
-                            |> filter(fn: (r) => r.nodename == {vmid['node']})
-                            |> derivative(unit: 1s, nonNegative: true)
-                            |> yield(name: "nonnegative derivative")
-                            '''
-        network_in_result = query_api.query(query=network_in_query)
-        networkInResult = {}
-        networkInResult["node"] = node
-        networkInResult["data"] = []
-        for table in core_result:
-            for record in table.records:
-                networkInResult["data"].append({
-                    "time": record.get_time(),
-                    "netin": record.get_value()
-                })
-        networkInResultList.append(networkInResult)
-        #Net Out
-        network_out_query = f'''
-                            from(bucket:"{bucket}")
-                            |> range(start: -5m)
-                            |> filter(fn: (r) => r._measurement == "system")
-                            |> filter(fn: (r) => r._field == "netout)
-                            |> filter(fn: (r) => r.host == {vmid['name']})
-                            |> filter(fn: (r) => r.nodename == {vmid['node']})
-                            |> derivative(unit: 1s, nonNegative: true)
-                            |> yield(name: "nonnegative derivative")
-                            '''
-        network_out_result = query_api.query(query=network_out_query)
-        networkOutResult = {}
-        networkOutResult["node"] = node
-        networkOutResult["data"] = []
-        for table in core_result:
-            for record in table.records:
-                networkOutResult["data"].append({
-                    "time": record.get_time(),
-                    "netout": record.get_value()
-                })
-        networkOutResultList.append(networkOutResult)
-
-        VMDict["networkInResultList"] = networkInResultList
-        VMDict["networkOutResult"] = networkOutResult
-
-        VMList.append(VMDict)
-    
+    query_api = client.query_api()
+    #Query to get all nodes being used
     
     flux_query = f'''
                     from(bucket:"{bucket}")
@@ -119,6 +52,7 @@ def getData(request):
 
 
     # list declarations
+    network_in_result_dict = {}
     serverCoreResultList = []
     serverCpuResultList = []
     usedMemResultList = []
@@ -128,6 +62,18 @@ def getData(request):
 
     # loop through nodes
     for node in nodes:
+
+        # network_in_flux_query = f'''
+        #                     from(bucket: "{bucket}")
+        #                     |> range(start: -8s)
+        #                     |> filter(fn: (r) => r._measurement == "system")
+        #                     |> filter(fn: (r) => r._field== "netin")
+        #                     |> filter(fn: (r) => r.nodename == "{node}")
+        #                     |> aggregateWindow(every: 8s, fn: derivative)
+        #                     |> derivative(unit: 1s, nonNegative: false)
+        #                     |> yield(name: "derivative")
+        #                     '''
+        
         # add node filter: if node == request.GET['nodeFilter'] or request.GET['nodeFilter'] == 'All nodes':
 
         # serverCoreResultList -> Compute for total Cores
@@ -137,7 +83,16 @@ def getData(request):
                                 |> filter(fn: (r) => r._measurement == "cpustat" and r._field == "cpus")
                                 |> filter(fn: (r) => r.host == "{node}")
                                 '''
+
         
+        # network_in_result  = query_api.query(query=network_in_flux_query)
+        
+        # for table in network_in_result:
+        #     for record in table.records:
+        #         host = record.values['host']
+        #         value = record.get_value()
+        #         network_in_result_dict[host] = value
+    
         core_result = query_api.query(query=core_flux_query)
         serverCoreResult = {}
         serverCoreResult["node"] = node
@@ -269,9 +224,26 @@ def getData(request):
                     "total": record.get_value()
                 })
         totalStorageUsedResultList.append(totalStorageUsedResult)
+    # print (network_in_result_dict)
+    #Loop through each VM to get info
+    for vmid in vmids:
+        VMDict = {}
+        VMDict["id"] = vmid['vmid']
+        VMDict["type"] = vmid['type']        
+        VMDict["cpu"] = vmid['cpu']
+        VMDict["disk"] = vmid['disk']
+        VMDict["maxcpu"] = vmid['maxcpu']
+        VMDict["maxdisk"] = vmid['maxdisk']        
+        VMDict["maxmem"] = vmid['maxmem']
+        VMDict["mem"] = vmid['mem']
+        VMDict["name"] = vmid['name']
+        VMDict["node"] = vmid['node']
+        VMDict["status"] = vmid['status']
+        VMDict["uptime"] = vmid['uptime']
+        VMDict['network_in'] = vmid['netin']
+        VMDict['network_out'] = vmid['netout']
+        VMList.append(VMDict)
 
-
-        
     return JsonResponse({
         'serverCoreResultList': serverCoreResultList,
         'serverCpuResultList': serverCpuResultList,
@@ -279,7 +251,8 @@ def getData(request):
         'localUsageResultList': localUsageResultList, 
         'totalMemoryResultList': totalMemoryResultList,
         'totalStorageUsedResultList': totalStorageUsedResultList,
-        'vmList': VMList
+        'vmList': VMList,
+        'vmids': vmids,
     })
 
 
@@ -315,7 +288,7 @@ def aggregatedData (request):
                         |> filter(fn: (r) => r["object"] == "nodes")
                         |> filter(fn: (r) => r["_field"] == "cpu")
                         |> filter(fn: (r) => r["host"] == "{node}")
-                        |> map(fn: (r) => ({{ r with _value: r._value / 100.0 }}))
+                        |> map(fn: (r) => ({{ r with _value: r._value * 100.0 }}))
                         |> aggregateWindow(every: 10s, fn: mean, createEmpty: false)
                         |> yield(name: "mean")
                     '''
@@ -401,51 +374,51 @@ def aggregatedData (request):
 
         storage_list.append(storage_total)
 
-        network_in = {'host': node, 'data':[]}
-        network_out = {'host':node, 'data':[]}
-        network_in_flux_query = f'''
-                            from(bucket: "{bucket}")
-                            |> range(start: -30m)
-                            |> filter(fn: (r) => r._measurement == "nics")
-                            |> filter(fn: (r) => r["_field"]== "netin")
-                            |> filter(fn: (r) => r.nodename == "{node}")
-                            |> aggregateWindow(every: 10s, fn: mean, createEmpty: false)
-                            |> map(fn: (r) => ({{ r with _value: r._value / 1048576.0 }})) //MB
-                            |> yield(name: "mean")
-                            '''
+        # network_in = {'host': node, 'data':[]}
+        # network_out = {'host':node, 'data':[]}
+        # network_in_flux_query = f'''
+        #                     from(bucket: "{bucket}")
+        #                     |> range(start: -30m)
+        #                     |> filter(fn: (r) => r._measurement == "system")
+        #                     |> filter(fn: (r) => r["_field"]== "netin")
+        #                     |> filter(fn: (r) => r.nodename == "{node}")
+        #                     |> aggregateWindow (every: 1m, fn: mean)
+        #                     |> derivative (unit:1s, nonNegative:false)
+        #                     |> yield(name: "derivative")
+        #                     '''
         
-        network_out_flux_query = f'''
-                            from(bucket: "{bucket}")
-                            |> range(start: -30m)
-                            |> filter(fn: (r) => r._measurement == "nics")
-                            |> filter(fn: (r) => r["_field"] == "netout")
-                            |> filter(fn: (r) => r.nodename == "{node}")
-                            |> aggregateWindow(every: 10s, fn: mean, createEmpty: false)
-                            |> map(fn: (r) => ({{ r with _value: r._value / 1048576.0 }})) //MB
-                            |> yield(name: "mean")
-                            '''
-        try: 
-            network_out_result = query_api.query(query= network_out_flux_query)
-            network_in_result = query_api.query(query= network_in_flux_query)
-            for table in network_in_result:
-                for record in table.records:
-                    network_in['data'].append({
-                        'time' : record.get_time(),
-                        'network_in' : record.get_value()
-                    })
+        # network_out_flux_query = f'''
+        #                     from(bucket: "{bucket}")
+        #                     |> range(start: -30m)
+        #                     |> filter(fn: (r) => r._measurement == "system")
+        #                     |> filter(fn: (r) => r["_field"]== "netout")
+        #                     |> filter(fn: (r) => r.nodename == "{node}")
+        #                     |> aggregateWindow (every: 1m, fn: mean)
+        #                     |> derivative (unit:1s, nonNegative:false)
+        #                     |> yield(name: "derivative")
+        #                     '''
+        # try: 
+        #     # network_out_result = query_api.query(query= network_out_flux_query)
+        #     network_in_result = query_api.query(query= network_in_flux_query)
+        #     for table in network_in_result:
+        #         for record in table.records:
+        #             network_in['data'].append({
+        #                 'time' : record.get_time(),
+        #                 'network_in' : record.get_value()
+        #             })
 
-            network_in_list.append(network_in)
+        #     network_in_list.append(network_in)
 
-            for table in network_out_result:
-                for record in table.records:
-                    network_out.append({
-                        'time' : record.get_time(),
-                        'network_in' : record.get_value()                        
-                    })
+            # for table in network_out_result:
+            #     for record in table.records:
+            #         network_out.append({
+            #             'time' : record.get_time(),
+            #             'network_in' : record.get_value()                        
+            #         })
                     
-            network_out_list.append(network_out)
-        except Exception as e :
-            print (e)
+            # network_out_list.append(network_out)
+        # except Exception as e :
+        #     print (e)
         
         
     return JsonResponse({
@@ -453,6 +426,6 @@ def aggregatedData (request):
       'memoryTotalResultList' : memory_total_list,
       'memoryUsedResultList' : memory_used_list,
       'storageResultList' : storage_list,
-      'networkInResultList' : network_in_list,
-      'networkOutResultList' : network_out_list
+    #   'networkInResultList' : network_in_list,
+    #   'networkOutResultList' : network_out_list
     })

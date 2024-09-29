@@ -1,13 +1,3 @@
-<form action="{% url 'guacamole:get_url' %}" method="post">
-    {% csrf_token %}
-
-    <h1>Get Url</h1>
-
-    <input type="submit" value="submit" />
-</form>
-
-<hr />
-
 <form action="{% url 'guacamole:create_user' %}" method="post">
     {% csrf_token %}
 
@@ -146,6 +136,62 @@
 
     <label for="connection_id">Connection ID: </label>
     <input type="text" name="connection_id" id="connection_id" /><br /><br />
+
+    <input type="submit" value="submit" />
+</form>
+
+<hr />
+
+<form action="{% url 'guacamole:create_connection_group' %}" method="post">
+    {% csrf_token %}
+
+    <h1>Create Connection Group</h1>
+
+    <label for="name">Connection Group Name: </label>
+    <input type="text" name="name" id="name" /><br /><br />
+
+    <input type="submit" value="submit" />
+</form>
+
+<hr />
+
+<form action="{% url 'guacamole:assign_connection_group' %}" method="post">
+    {% csrf_token %}
+
+    <h1>Assign Connection Group</h1>
+
+    <label for="name">Guacamole Username: </label>
+    <input type="text" name="name" id="name" /><br /><br />
+    <label for="name">Connection Group ID: </label>
+    <input type="text" name="id" id="id" /><br /><br />
+
+    <input type="submit" value="submit" />
+</form>
+
+<hr />
+
+<form action="{% url 'guacamole:revoke_connection_group' %}" method="post">
+    {% csrf_token %}
+
+    <h1>Revoke Connection Group</h1>
+
+    <label for="name">Guacamole Username: </label>
+    <input type="text" name="name" id="name" /><br /><br />
+    <label for="name">Connection Group ID: </label>
+    <input type="text" name="id" id="id" /><br /><br />
+
+    <input type="submit" value="submit" />
+</form>
+
+<hr />
+
+<form action="{% url 'guacamole:delete_connection_group' %}" method="post">
+    {% csrf_token %}
+
+    <h1>Delete Connection Group</h1>
+    
+    <label for="name">Connection Group ID: </label>
+    <input type="text" name="id" id="id" /><br /><br />
 
     <input type="submit" value="submit" />
 </form>

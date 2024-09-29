@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
+from decouple import config
 import os
 from pathlib import Path
 # from decouple import config
@@ -21,33 +22,34 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-sr0*!g82&@md%9rlo39a0s!u=5$y_o&8nvpk+pd+2i(181wkv='
-# SECRET_KEY = config('SECRET_KEY')
+# SECRET_KEY = 'django-insecure-sr0*!g82&@md%9rlo39a0s!u=5$y_o&8nvpk+pd+2i(181wkv='
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-# DEBUG = config('DEBUG')
+# DEBUG = True
+DEBUG = config('DEBUG')
 
-ALLOWED_HOSTS = ['*']
-# ALLOWED_HOSTS = config('ALLOWED_HOSTS')
+# ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS')
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    "autotool.apps.AutotoolConfig",
     "containers.apps.ContainersConfig",
     "monitoring.apps.MonitoringConfig",
     "ticketing.apps.TicketingConfig",
     "guacamole.apps.GuacamoleConfig",
     "pfsense.apps.PfsenseConfig",
     "proxmox.apps.ProxmoxConfig",
-    "autotool.apps.AutotoolConfig",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -84,33 +86,14 @@ WSGI_APPLICATION = 'CAP2240_API.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'cap2240db',
-#         'USER': 'root',
-#         'PASSWORD': 'CAP_2240',
-#         # 'HOST': 'mysql',
-#         'HOST': 'localhost',
-#         'PORT': 3306,
-#     }
-# }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': config('MYSQL_CAP2240_DATABASE'),
-#         'USER': config('MYSQL_CAP2240_USER'),
-#         'PASSWORD': config('MYSQL_CAP2240_PASSWORD'),
-#         'HOST': config('mysql'),  # Use 'db' as default from .env
-#         'PORT': config('DB_PORT'),  # Use '3306' as default from .env
-#     }
-# }
-
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "mydatabase",
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': config('MYSQL_CAP2240_DATABASE'),
+        'USER': config('MYSQL_CAP2240_USER'),
+        'PASSWORD': config('MYSQL_CAP2240_PASSWORD'),
+        'HOST': config('MYSQL_HOST'),
+        'PORT': config('MYSQL_PORT'),
     }
 }
 
@@ -157,3 +140,41 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_URL = 'customLogin'
+# LOGIN_REDIRECT_URL = 'redirect_based_on_user_type'
+LOGOUT_URL = 'logout'
+LOGOUT_REDIRECT_URL = 'customLogin'
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+GOOGLE_CREDENTIALS_JSON = os.path.join(BASE_DIR, 'credentials.json')
+
+ASGI_APPLICATION = 'app.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", config('REDIS_PORT'))],
+        },
+    },
+}
+
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE
+
+# INSTALLED_APPS += ['django_celery_beat']
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = config("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

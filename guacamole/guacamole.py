@@ -1,10 +1,12 @@
+from decouple import config
 import json, requests
-import urllib.parse
+import base64
 
-GUACAMOLE_HOST = "http://192.168.1.2:8080"
-USERNAME = 'guacadmin'
-PASSWORD = 'guacadmin'
-DATASOURCE = 'mysql'
+GUACAMOLE_HOST = config('GUACAMOLE_HOST')
+USERNAME = config('GUACAMOLE_USERNAME')
+PASSWORD = config('GUACAMOLE_PASSWORD')
+DATASOURCE = config('GUACAMOLE_DATASOURCE')
+# CA_CRT = config('CA_CRT')
 CA_CRT = False
 
 # get token /
@@ -193,24 +195,13 @@ def revoke_connection_group(username, connection_group_id):
         "value": "READ"
     }])
 
-def get_active_connections():
-    token = get_token()
-    connections_response = requests.get(f'{GUACAMOLE_HOST}/guacamole/api/session/data/{DATASOURCE}/activeConnections?token={token}')
-    return connections_response.json()
-
-def get_connection_url(connection, username, password):
+def get_connection_url(connection_id, username, password):
     token = get_connection_token(username, password)
-    connections_response = requests.get(f'{GUACAMOLE_HOST}/guacamole/api/session/data/{DATASOURCE}/connections?token={token}')
-    connections = connections_response.json()
-    for connection_id, connection_info in connections.items():
-        print("-------------------")
-        print(connection)
-        print(connection_id)
-        print(connection_id == connection)
-        encoded_connection_id = urllib.parse.quote(connection_id)
-        print(connection_info)
-        print(f"{GUACAMOLE_HOST}/guacamole/#/client/{encoded_connection_id}?token={token}")
-        # return f"{GUACAMOLE_HOST}/guacamole/#/client/{encoded_connection_id}?token={token}"
+    original_string = f'{connection_id}\0c\0{DATASOURCE}'
+    string_bytes = original_string.encode("utf-8")
+    base64_bytes = base64.b64encode(string_bytes)
+    base64_string = base64_bytes.decode("utf-8")
+    return f"{config('WAN_ADDRESS')}:8080/guacamole/#/client/{base64_string}?token={token}"
 
 # def get_connection_token(username, password):
 #     url = f"{GUACAMOLE_HOST}/guacamole/api/tokens"
@@ -232,3 +223,5 @@ def get_connection_token(username, password):
     data = response.json()
 
     return data['authToken']
+
+# https://sourceforge.net/p/guacamole/discussion/1110834/thread/fb609070/#bec4

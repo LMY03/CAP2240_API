@@ -2,7 +2,6 @@ from decouple import config
 import requests, time
 
 from proxmoxer import ProxmoxAPI
-from proxmox.proxmox import get_headers
 
 PROXMOX_HOST = config('PROXMOX_HOST')
 PROXMOX_IP = config('PROXMOX_IP')
