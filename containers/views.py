@@ -14,6 +14,8 @@ def clone_lxc(request):
         vmid = [data.get("vmid")]
         newid = [data.get("newid")]
 
+        newid = ['4002', '4003']
+
         data = proxmox.clone_lxc("pve", vmid, newid, newid)
 
         return render(request, "containers/data.html", { 'data' : data })
