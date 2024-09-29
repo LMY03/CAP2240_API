@@ -1,4 +1,4 @@
-<form action="{% url 'proxmox:clone_lxc' %}" method="post"></form>
+<form action="{% url 'containers:clone_lxc' %}" method="post"></form>
     {% csrf_token %}
     <h1>Clone VM</h1>
     <label for="vmid">Original VM ID: </label>
