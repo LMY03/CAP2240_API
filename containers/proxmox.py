@@ -12,10 +12,11 @@ PROXMOX_PASSWORD = config('PROXMOX_PASSWORD')
 CA_CRT = False
 STORAGE = 'local-lvm'
 
-proxmox = ProxmoxAPI('10.1.200.11', user='root@pam', password='cap2240', verify_ssl=CA_CRT)
-proxmox = ProxmoxAPI(PROXMOX_IP, user=PROXMOX_USERNAME, password=PROXMOX_PASSWORD, verify_ssl=CA_CRT)
+# proxmox = ProxmoxAPI('10.1.200.11', user='root@pam', password='cap2240', verify_ssl=CA_CRT)
+# proxmox = ProxmoxAPI(PROXMOX_IP, user=PROXMOX_USERNAME, password=PROXMOX_PASSWORD, verify_ssl=CA_CRT)
 
 def clone_lxc(node, vm_id, new_vm_ids, new_names):
+    proxmox = ProxmoxAPI('10.1.200.11', user='root@pam', password='cap2240', verify_ssl=CA_CRT)
     for new_id, new_name in zip(new_vm_ids, new_names):
         proxmox.nodes(node).lxc(vm_id).clone.post(
             newid=new_id,

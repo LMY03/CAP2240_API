@@ -24,10 +24,9 @@ from .models import RequestEntry, Comment, RequestUseCase, PortRules, UserProfil
 from proxmox.models import VirtualMachines, Nodes
 from guacamole.models import GuacamoleConnection, GuacamoleUser
 from pfsense.models import DestinationPorts
-from notifications.views import comment_notif_faculty, comment_notif_tsg, testVM_notif_faculty, reject_notif_faculty, accept_notif_tsg
 from .forms import IssueTicketForm, IssueCommentForm
 
-from CAPSTONE2240.utils import download_files
+from CAP2240_API.utils import download_files
 
 # Create your views here.
 
@@ -293,30 +292,7 @@ def add_comment(request, pk):
         if request_entry.status == RequestEntry.Status.PENDING:
             new_data['status'] = RequestEntry.Status.FOR_REVISION
 
-        if user_profile.user_type == 'admin':
-            data = {
-                'comment' : comment_text, 
-                'request_entry_id' : request_entry.id
-            }
-            print(requester_user.email, data)
-            comment_notif_faculty(requester_user.email, data) # Admin comments to the request ticket
-        elif user_profile.user_type == 'faculty':
-            data = {
-                'comment' : comment_text, 
-                'request_entry_id' : request_entry.id, 
-                'faculty_name': requester_user.get_full_name()
-            }
-            if request_entry.assigned_to and request_entry.assigned_to.email: #Checks if there is an assigned TSG
-                comment_notif_faculty(request_entry.assigned_to.email, data, user_profile.user_type) # Faculty replies back to the comment
-            else: # This is for the situation where there is no assigned to yet, and the faculty comments
-                admin_user_profiles = UserProfile.objects.filter(user_type='admin')
-                admin_user_ids = admin_user_profiles.values_list('user_id', flat=True)
-
-                tsgUsers = User.objects.filter(id__in = admin_user_ids)
-                tsgEmails = []
-                for tsg in tsgUsers:
-                    tsgEmails.append(tsg.email)
-                comment_notif_faculty(tsgEmails, data, 'admin') 
+        
         Comment.objects.create(
             request_entry=request_entry,
             comment=comment_text,
@@ -441,7 +417,6 @@ def new_form_submit(request):
             'vm_count' : gVM_count,
             'faculty_name' : requester.get_full_name()
         }
-        comment_notif_tsg(tsgEmails, data)
     return JsonResponse({'status': 'ok'}, status=200)
 
 def log_request_entry_changes(request_entry, changed_by, new_data, user):
@@ -625,7 +600,6 @@ def request_confirm(request, request_id):
         "id" : request_id
     }
     create_test_vm.delay(request.user.pk, request_id, node)
-    testVM_notif_faculty (to, data)
     return redirect('ticketing:request_details', request_id)
 
 def request_reject(request, id):
@@ -638,7 +612,6 @@ def request_reject(request, id):
         "faculty_name" : request_entry.requester.get_full_name(),
         "id" : id
     }
-    reject_notif_faculty(to, data)
 
     return HttpResponseRedirect(reverse("ticketing:index"))
 

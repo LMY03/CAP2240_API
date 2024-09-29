@@ -40,6 +40,47 @@ services:
     networks:
       - app-network
 
+  redis:
+    image: redis:6.0
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+  
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: celery
+    command: >
+      bash -c "celery -A CAP2240_API worker --loglevel=info --concurrency=1 &
+               celery -A CAP2240_API beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler"
+    # command: celery -A CAP2240_API worker --loglevel=info --concurrency=1
+    restart: always
+    volumes:
+      - .:/app
+    depends_on:
+      redis:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD-SHELL", "celery -A CAP2240_API status"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
   # guacamole:
   #   image: guacamole/guacamole:latest
   #   container_name: guacamole

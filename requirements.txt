@@ -32,3 +32,4 @@ proxmoxer
 influxdb_client
 redis
 celery
+django-celery-beat
