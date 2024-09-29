@@ -17,22 +17,33 @@ STORAGE = 'local-lvm'
 
 def clone_lxc(node, vm_id, new_vm_ids, new_names):
     # Initialize Proxmox API connection
-    proxmox = ProxmoxAPI('10.1.200.11', user='root@pam', password='cap2240', verify_ssl=CA_CRT)
+    proxmox = ProxmoxAPI('10.1.200.11', user='root@pam', password='cap2240', verify_ssl=False)
 
-    # Proceed with the clone operation
     for new_id, new_name in zip(new_vm_ids, new_names):
         try:
-            # Remove 'name=new_name' from the parameters
-            proxmox.nodes(node).lxc(vm_id).clone.post(
+            print(f"Starting clone operation for new container ID: {new_id} with name: {new_name}")
+            
+            # Perform the clone operation
+            task = proxmox.nodes(node).lxc(vm_id).clone.post(
                 newid=new_id,
                 target=node,
                 full=1,
-                storage=STORAGE,
+                storage='local-lvm',
             )
-            print(f"Successfully cloned LXC ID '{vm_id}' to new ID '{new_id}' with name '{new_name}'.")
-            print(f"Unlocking the cloned container {new_id}...")
-            proxmox.nodes(node).lxc(new_id).status.unlock.post()
-            print(f"Container {new_id} unlocked successfully.")
+            print(f"Successfully cloned LXC ID '{vm_id}' to new ID '{new_id}'.")
+
+            # Use config.put to clear the lock instead of status.unlock.post
+            print(f"Clearing the lock for the cloned container {new_id}...")
+            proxmox.nodes(node).lxc(new_id).config.put(
+                lock=None
+            )
+            print(f"Container {new_id} lock cleared successfully.")
+
+            # Optional: Start the container if needed
+            print(f"Starting container {new_id}...")
+            proxmox.nodes(node).lxc(new_id).status.start.post()
+            print(f"Container {new_id} started successfully.")
+
         except Exception as e:
             print(f"Clone operation failed for ID {new_id}. Error: {e}")
 
