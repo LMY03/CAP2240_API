@@ -16,7 +16,7 @@ STORAGE = 'local-lvm'
 # proxmox = ProxmoxAPI(PROXMOX_IP, user=PROXMOX_USERNAME, password=PROXMOX_PASSWORD, verify_ssl=CA_CRT)
 
 def clone_lxc(node, vm_id, new_vm_ids, new_names):
-    vm_id = 4001
+    vm_id = "4001"
     # Initialize Proxmox API connection
     proxmox = ProxmoxAPI('10.1.200.11', user='root@pam', password='cap2240', verify_ssl=CA_CRT)
     
