@@ -13,10 +13,10 @@ def clone_lxc(request):
         print("POST")
 
         data = request.POST
-        vm_id = data.get("vm_id")
+        vmid = data.get("vmid")
         newid = data.get("newid")
 
-        data = proxmox.clone_lxc("pve", vm_id, newid, newid)
+        data = proxmox.clone_lxc("pve", vmid, newid, newid)
 
         return render(request, "containers/data.html", { 'data' : data })
     
