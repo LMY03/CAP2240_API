@@ -93,6 +93,9 @@ def mass_provision(original_vm_id, new_vm_ids, new_vm_names):
             ip_addresses.append(None)
             print(f"Warning: Could not retrieve IP address for {new_vm_name} (ID: {new_vm_id}) after {max_retries} attempts.")
 
+    for new_vm_id in new_vm_ids:
+        proxmox.stop_lxc(node, new_vm_id)
+
     print(ip_addresses)
 
     return JsonResponse({"success": True, "ip_addresses": ip_addresses})
