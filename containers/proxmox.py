@@ -38,8 +38,8 @@ def delete_snapshot(node, vm_id, snapshot_name):
 def clone_container(node, vm_id, snapshot, new_vm_id, new_vm_name):
     get_proxmox_client().nodes(node).lxc(vm_id).clone().create(
         newid=new_vm_id,
-        name=new_vm_name,
-        full=True,
+        hostname=new_vm_name,  # Use 'hostname' instead of 'name'
+        full=True,  # Correct type: Boolean value without quotes
         snapname=snapshot
     )
 
