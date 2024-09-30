@@ -167,6 +167,7 @@ def start_lxc(node, vm_id):
 
 def get_ip_address(node, vm_id):
     network_info = get_proxmox_client().nodes(node).lxc(vm_id).config().get()
+    print(network_info)
     ip_address = network_info.get('ens18', {}).get('ip', None)
     return ip_address
 

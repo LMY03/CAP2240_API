@@ -9,6 +9,10 @@ from . import proxmox
 def renders(request):
     return render(request, "containers/form.html")
 
+def test(request):
+    data = proxmox.get_ip_address("pve", 4003)
+    return JsonResponse({"success": True, "data": data})
+
 def clone_lxc(request):
     if request.method == "POST":
 

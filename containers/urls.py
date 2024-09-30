@@ -7,4 +7,5 @@ app_name = "containers"
 urlpatterns = [
     path("", views.renders, name="form"),
     path("clone_lxc", views.clone_lxc, name="clone_lxc"),
+    path("test", views.test, name="test"),
 ]
