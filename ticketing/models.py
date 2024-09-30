@@ -191,9 +191,23 @@ class Comment(models.Model):
 #         print("created system user")
 #     # else:
 
-
 class IssueTicket(models.Model):
     subject = models.CharField(max_length=100)
+
+    class Category(models.TextChoices):
+        SYSTEM_USERNAME = 'System Username'
+        SYSTEM_PASSWORD = 'System Password'
+        VM_CONNECTION = 'Virtual Machine Connection'
+        INSTALLATION_ISSUES = 'Installation Issues'
+        REQUEST_FOR_EXTENSION = 'Request for Extension'
+        TERMINATE_REQUEST = 'Terminate Request'
+        ADDITIONAL = 'Additional Installation / Modification'
+        OTHERS = 'General Problems'
+        
+    category = models.CharField(
+        max_length=100, 
+        choices=Category.choices)
+
     description = models.CharField(max_length=10000)
     date_created = models.DateTimeField(default=timezone.localtime)
     resolve_date = models.DateTimeField(null=True)
