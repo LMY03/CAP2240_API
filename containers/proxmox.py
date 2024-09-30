@@ -71,8 +71,21 @@ def clone_lxc(node, template_id, new_vm_id, new_vm_name):
     )
     print(f"Clone {new_vm_id} ({new_vm_name}) created successfully.")
 
-def stop_lxc(node, vmid):
-    get_proxmox_client().nodes(node).lxc(vmid).status.stop().post()
+def shutdown_lxc(node, vm_id):
+    get_proxmox_client().nodes(node).lxc(vm_id).status.shutdown().post()
+
+def stop_lxc(node, vm_id):
+    get_proxmox_client().nodes(node).lxc(vm_id).status.stop().post()
+
+def delete_lxc(node, vm_id):
+    get_proxmox_client().nodes(node).lxc(vm_id).delete()
+
+# # configure VM PUT 
+def config_lxc(node, vm_id, cpu_cores, memory_mb):
+    get_proxmox_client().nodes(node).lxc(vm_id).config.put(
+        cores=cpu_cores,
+        memory=memory_mb,
+    )
 
 def is_template_locked(node, vm_id):
     """

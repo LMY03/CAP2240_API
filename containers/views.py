@@ -54,13 +54,9 @@ def mass_provision(original_vm_id, new_vm_ids, new_vm_names):
         proxmox.clone_lxc(node, original_vm_id, new_vm_id, new_vm_name)
 
         # Wait for the cloning operation to complete
-        clone_complete = proxmox.wait_for_clone_completion(node, new_vm_id)
+        proxmox.wait_for_clone_completion(node, new_vm_id)
+        proxmox.config_lxc(node, new_vm_id, 2, 2048)
         proxmox.start_lxc(node, new_vm_id)
-
-        # If the cloning operation failed or timed out, handle it accordingly
-        if not clone_complete:
-            print(f"Failed to complete cloning for container ID: {new_vm_id}")
-            return False
 
     print("All containers cloned successfully.")
 
@@ -94,7 +90,8 @@ def mass_provision(original_vm_id, new_vm_ids, new_vm_names):
             print(f"Warning: Could not retrieve IP address for {new_vm_name} (ID: {new_vm_id}) after {max_retries} attempts.")
 
     for new_vm_id in new_vm_ids:
-        proxmox.stop_lxc(node, new_vm_id)
+        proxmox.shutdown_lxc(node, new_vm_id)
+        proxmox.delete_lxc(node, new_vm_id)
 
     print(ip_addresses)
 
