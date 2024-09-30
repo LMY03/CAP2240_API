@@ -24,9 +24,28 @@ def get_proxmox_client():
     )
     return proxmox
 
-# clone_lxc
+def convert_to_template(node, vm_id):
+    print(f"Converting container {vm_id} to a template...")
+    get_proxmox_client().nodes(node).lxc(vm_id).template().create()
+    print(f"Container {vm_id} has been converted to a template.")
 
-# create_snapshot
+    wait_for_template_conversion(node, vm_id)
+
+def wait_for_template_conversion(node, vm_id, timeout=300, interval=5):
+    """Wait until the container is successfully converted to a template."""
+    print(f"Waiting for container {vm_id} to complete template conversion...")
+    total_time = 0
+    while total_time < timeout:
+        # Check the current status of the container
+        config = get_proxmox_client().nodes(node).lxc(vm_id).status.current().get()
+        if config.get('template', 0) == 1:  # 'template' field becomes 1 when it's a template
+            print(f"Container {vm_id} is now a template.")
+            return True
+        print(f"Container {vm_id} is still converting to a template, waiting...")
+        time.sleep(interval)
+        total_time += interval
+    raise TimeoutError(f"Container {vm_id} did not convert to a template after {timeout} seconds.")
+
 def create_snapshot(node, vm_id, snapshot_name="automation_snapshot"):
     get_proxmox_client().nodes(node).lxc(vm_id).snapshot().create(snapname=snapshot_name)
     return snapshot_name
@@ -34,7 +53,6 @@ def create_snapshot(node, vm_id, snapshot_name="automation_snapshot"):
 def delete_snapshot(node, vm_id, snapshot_name):
     get_proxmox_client().nodes(node).lxc(vm_id).snapshot(snapshot_name).delete()
 
-# full clone snapshot
 def clone_container(node, vm_id, snapshot, new_vm_id, new_vm_name):
     wait_for_unlock(node, vm_id)
     get_proxmox_client().nodes(node).lxc(vm_id).clone().create(
@@ -43,6 +61,15 @@ def clone_container(node, vm_id, snapshot, new_vm_id, new_vm_name):
         full=1,
         snapname=snapshot
     )
+
+def clone_lxc(node, template_id, new_vm_id, new_vm_name):
+    print(f"Cloning new container {new_vm_id} ({new_vm_name}) from template {template_id}...")
+    get_proxmox_client().nodes(node).lxc(template_id).clone().create(
+        newid=new_vm_id,
+        hostname=new_vm_name,
+        full=1
+    )
+    print(f"Clone {new_vm_id} ({new_vm_name}) created successfully.")
 
 def wait_for_unlock(node, vm_id, timeout=300, interval=5):
     total_time = 0
