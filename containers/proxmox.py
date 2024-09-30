@@ -167,7 +167,6 @@ def start_lxc(node, vm_id):
 
 def get_ip_address(node, vm_id):
     network_info = get_proxmox_client().nodes(node).lxc(vm_id).interfaces().get()
-    print(network_info)
     if network_info:
         for interface in network_info:
             if interface['name'] == "eth0":
