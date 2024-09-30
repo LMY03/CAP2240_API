@@ -71,33 +71,40 @@ def clone_lxc(node, template_id, new_vm_id, new_vm_name):
     )
     print(f"Clone {new_vm_id} ({new_vm_name}) created successfully.")
 
-def wait_for_clone_completion(node, new_vm_id, timeout=300, interval=5):
+def is_template_locked(node, vm_id):
     """
-    Wait for a container clone operation to complete.
-    
-    :param node: The Proxmox node name.
-    :param new_vm_id: The ID of the new cloned container.
-    :param timeout: Total time in seconds to wait for the clone to complete.
-    :param interval: Time in seconds between status checks.
-    :return: True if clone completed successfully, False if timeout reached.
+    Check if the template or container is locked.
+    :param node: Proxmox node name.
+    :param vm_id: ID of the VM or container.
+    :return: True if locked, False otherwise.
     """
-    total_wait_time = 0
-    while total_wait_time < timeout:
-        # Check the status of the container
-        status = get_proxmox_client().nodes(node).lxc(new_vm_id).status.current().get()
-        print(f"Checking status of container {new_vm_id}: {status['status']}")
+    # Query the status of the template/container
+    status = get_proxmox_client().nodes(node).lxc(vm_id).status.current().get()
+    return 'lock' in status
 
-        # If the container status is 'stopped' or 'running', cloning is complete
-        if status['status'] in ['stopped', 'running']:
-            print(f"Container {new_vm_id} clone operation completed successfully.")
+def wait_for_template_unlock(node, vm_id, timeout=300, interval=5):
+    """
+    Wait until the template is unlocked.
+    :param node: Proxmox node name.
+    :param vm_id: ID of the template/container.
+    :param timeout: Maximum time to wait (in seconds).
+    :param interval: Time interval between checks (in seconds).
+    :return: True if unlocked within timeout, False otherwise.
+    """
+    total_time = 0
+    while total_time < timeout:
+        # Check if the template is locked
+        if not is_template_locked(node, vm_id):
+            print(f"Template {vm_id} is now unlocked and ready for cloning.")
             return True
-
+        else:
+            print(f"Template {vm_id} is currently locked. Waiting for it to be unlocked...")
+        
         # Wait for the next interval before checking again
         time.sleep(interval)
-        total_wait_time += interval
-
-    # If we reach here, the cloning operation did not complete within the timeout
-    print(f"Timeout reached while waiting for clone {new_vm_id} to complete.")
+        total_time += interval
+    
+    print(f"Template {vm_id} is still locked after {timeout} seconds. Exiting.")
     return False
 
 def wait_for_unlock(node, vm_id, timeout=300, interval=5):

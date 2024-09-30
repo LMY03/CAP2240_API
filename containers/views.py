@@ -27,15 +27,24 @@ def clone_lxc(request):
     # return redirect('containers:form')
 
 def mass_provision(original_vm_id, new_vm_ids, new_vm_names):
-    original_vm_id = int(original_vm_id)
-    node = 'pve'  # Assuming node is 'pve', modify as per your setup
+    """
+    Mass provisioning function that clones containers and waits for each to complete.
+    
+    :param original_vm_id: The ID of the original template container.
+    :param new_vm_ids: List of new container IDs to be created.
+    :param new_vm_names: List of new container names.
+    """
+    original_vm_id = int(original_vm_id)  # Ensure the original VM ID is an integer
+    node = 'pve'  # Modify this as per your Proxmox node name
 
-    # Convert the original container to a template
-    # proxmox.convert_to_template(node, original_vm_id)
-
-    # Perform cloning for each new VM ID and Name
+    # Loop through each new VM ID and Name to perform cloning sequentially
     for new_vm_id, new_vm_name in zip(new_vm_ids, new_vm_names):
         print(f"Starting clone operation for new container ID: {new_vm_id} with name: {new_vm_name}")
+
+        # Wait for the template to be unlocked before starting the clone
+        if not proxmox.wait_for_template_unlock(node, original_vm_id):
+            print(f"Template {original_vm_id} did not unlock in time. Skipping clone for {new_vm_id}.")
+            continue
 
         # Start the clone operation
         proxmox.clone_lxc(node, original_vm_id, new_vm_id, new_vm_name)
