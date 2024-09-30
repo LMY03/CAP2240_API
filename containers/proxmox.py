@@ -171,9 +171,7 @@ def get_ip_address(node, vm_id):
     if network_info:
         for interface in network_info:
             if interface['name'] == "eth0":
-                if 'inet' not in interface: continue
-                if interface['inet']:
-                    print(interface['inet'].split('/')[0])
+                if 'inet' in interface:
                     return interface['inet'].split('/')[0]
 
 # def clone_lxc(node, vm_id, new_vm_ids, new_names):
