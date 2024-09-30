@@ -99,37 +99,37 @@ def get_ip_address(node, vm_id):
     ip_address = network_info.get('ens18', {}).get('ip', None)
     return ip_address
 
-def clone_lxc(node, vm_id, new_vm_ids, new_names):
-    # Initialize Proxmox API connection
-    proxmox = ProxmoxAPI('10.1.200.11', user='root@pam', password='cap2240', verify_ssl=False)
+# def clone_lxc(node, vm_id, new_vm_ids, new_names):
+#     # Initialize Proxmox API connection
+#     proxmox = ProxmoxAPI('10.1.200.11', user='root@pam', password='cap2240', verify_ssl=False)
 
-    for new_id, new_name in zip(new_vm_ids, new_names):
-        try:
-            print(f"Starting clone operation for new container ID: {new_id} with name: {new_name}")
+#     for new_id, new_name in zip(new_vm_ids, new_names):
+#         try:
+#             print(f"Starting clone operation for new container ID: {new_id} with name: {new_name}")
             
-            # Perform the clone operation
-            task = proxmox.nodes(node).lxc(vm_id).clone.post(
-                newid=new_id,
-                target=node,
-                full=1,
-                storage='local-lvm',
-            )
-            print(f"Successfully cloned LXC ID '{vm_id}' to new ID '{new_id}'.")
+#             # Perform the clone operation
+#             task = proxmox.nodes(node).lxc(vm_id).clone.post(
+#                 newid=new_id,
+#                 target=node,
+#                 full=1,
+#                 storage='local-lvm',
+#             )
+#             print(f"Successfully cloned LXC ID '{vm_id}' to new ID '{new_id}'.")
 
-            # Use config.put to clear the lock instead of status.unlock.post
-            print(f"Clearing the lock for the cloned container {new_id}...")
-            proxmox.nodes(node).lxc(new_id).config.put(
-                lock=None
-            )
-            print(f"Container {new_id} lock cleared successfully.")
+#             # Use config.put to clear the lock instead of status.unlock.post
+#             print(f"Clearing the lock for the cloned container {new_id}...")
+#             proxmox.nodes(node).lxc(new_id).config.put(
+#                 lock=None
+#             )
+#             print(f"Container {new_id} lock cleared successfully.")
 
-            # Optional: Start the container if needed
-            print(f"Starting container {new_id}...")
-            proxmox.nodes(node).lxc(new_id).status.start.post()
-            print(f"Container {new_id} started successfully.")
+#             # Optional: Start the container if needed
+#             print(f"Starting container {new_id}...")
+#             proxmox.nodes(node).lxc(new_id).status.start.post()
+#             print(f"Container {new_id} started successfully.")
 
-        except Exception as e:
-            print(f"Clone operation failed for ID {new_id}. Error: {e}")
+#         except Exception as e:
+#             print(f"Clone operation failed for ID {new_id}. Error: {e}")
 
     # for new_id in new_vm_ids:
     #     print(f"Starting container {new_id}...")
