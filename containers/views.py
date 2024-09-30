@@ -36,15 +36,28 @@ def mass_provision(original_vm_id, new_vm_ids, new_vm_names):
     # Perform cloning for each new VM ID and Name
     for new_vm_id, new_vm_name in zip(new_vm_ids, new_vm_names):
         print(f"Starting clone operation for new container ID: {new_vm_id} with name: {new_vm_name}")
+
+        # Start the clone operation
         proxmox.clone_lxc(node, original_vm_id, new_vm_id, new_vm_name)
 
-    # Wait until all clone operations are complete
-    while not all(proxmox.check_clone_status(node, vm_id) for vm_id in new_vm_ids):
-        time.sleep(5)  # Check every 5 seconds
-
-    # Start all the cloned containers
-    for new_vm_id in new_vm_ids:
+        # Wait for the cloning operation to complete
+        clone_complete = proxmox.wait_for_clone_completion(node, new_vm_id)
         proxmox.start_lxc(node, new_vm_id)
+
+        # If the cloning operation failed or timed out, handle it accordingly
+        if not clone_complete:
+            print(f"Failed to complete cloning for container ID: {new_vm_id}")
+            return False
+
+    print("All containers cloned successfully.")
+
+    # # Wait until all clone operations are complete
+    # while not all(proxmox.check_clone_status(node, vm_id) for vm_id in new_vm_ids):
+    #     time.sleep(5)  # Check every 5 seconds
+
+    # # Start all the cloned containers
+    # for new_vm_id in new_vm_ids:
+    #     proxmox.start_lxc(node, new_vm_id)
 
     # Retrieve IP addresses of the cloned containers
     ip_addresses = []
