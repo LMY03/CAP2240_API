@@ -109,7 +109,7 @@ def wait_for_template_unlock(node, vm_id, timeout=300, interval=5):
 
 def wait_for_clone_completion(node, new_vm_id, timeout=300, interval=5):
     """
-    Wait for a container clone operation to complete.
+    Wait for a container clone operation to complete, considering config lock status.
     
     :param node: The Proxmox node name.
     :param new_vm_id: The ID of the new cloned container.
@@ -121,12 +121,17 @@ def wait_for_clone_completion(node, new_vm_id, timeout=300, interval=5):
     while total_wait_time < timeout:
         # Check the status of the container
         status = get_proxmox_client().nodes(node).lxc(new_vm_id).status.current().get()
-        print(f"Checking status of container {new_vm_id}: {status['status']}")
+        print(status)
+        print(f"Checking status of container {new_vm_id}: {status['status']} (Config: {status.get('lock', 'None')})")
 
-        # If the container status is 'stopped' or 'running', cloning is complete
-        if status['status'] in ['stopped', 'running']:
+        # If the container is not locked, the cloning operation is complete
+        if 'lock' not in status:
             print(f"Container {new_vm_id} clone operation completed successfully.")
             return True
+
+        # If the container is locked for creation, continue waiting
+        if status.get('lock') == 'create':
+            print(f"Container {new_vm_id} is still being cloned. Waiting...")
 
         # Wait for the next interval before checking again
         time.sleep(interval)
@@ -135,6 +140,7 @@ def wait_for_clone_completion(node, new_vm_id, timeout=300, interval=5):
     # If we reach here, the cloning operation did not complete within the timeout
     print(f"Timeout reached while waiting for clone {new_vm_id} to complete.")
     return False
+
 
 def wait_for_unlock(node, vm_id, timeout=300, interval=5):
     total_time = 0
