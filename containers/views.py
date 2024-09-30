@@ -27,9 +27,6 @@ def clone_lxc(request):
 
 def mass_provision(original_vm_id, new_vm_ids, new_vm_names):
     node = 'pve'  # Assuming node is 'pve', modify as per your setup
-    
-    # Ensure `new_vm_ids` are integers
-    new_vm_ids = [int(vm_id) for vm_id in new_vm_ids]
 
     # Convert the original container to a template
     # proxmox.convert_to_template(node, original_vm_id)
