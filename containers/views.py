@@ -18,18 +18,18 @@ def clone_lxc(request):
 
         newid = ['4002', '4003']
 
-        data = mass_provision(vmid, newid, newid)
+        data = mass_provision(vmid, newid, newid, "test snapshot")
 
         return render(request, "containers/data.html", { 'data' : data })
     
     # return redirect('containers:form')
 
-def mass_provision(original_vm_id, new_vm_ids, new_vm_names):
+def mass_provision(original_vm_id, new_vm_ids, new_vm_names, snap_name):
 
     node = 'pve'  # Assuming node is 'pve', modify as per your setup
 
     # Step 1: Create a snapshot of the original container
-    snapshot_name = proxmox.create_snapshot(node, original_vm_id, original_vm_id)
+    snapshot_name = proxmox.create_snapshot(node, original_vm_id, snap_name)
 
     # Step 2: Perform cloning for each VM ID and Name
     for new_vm_id, new_vm_name in zip(new_vm_ids, new_vm_names):
@@ -42,6 +42,8 @@ def mass_provision(original_vm_id, new_vm_ids, new_vm_names):
     # Step 4: Start all the cloned containers
     for new_vm_id in new_vm_ids:
         proxmox.start_lxc(node, new_vm_id)
+
+    proxmox.delete_snapshot(node, original_vm_id, snap_name)
 
     # Step 5: Retrieve IP addresses of the cloned containers
     ip_addresses = []
