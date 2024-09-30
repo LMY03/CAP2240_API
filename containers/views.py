@@ -18,17 +18,17 @@ def clone_lxc(request):
 
         vmid = 4002
         newid = ['4003', '4004']
+        newnames = ["container_1", "container_2"]
 
-        data = mass_provision(vmid, newid, newid)
+        data = mass_provision(vmid, newid, newnames)
 
         return render(request, "containers/data.html", { 'data' : data })
     
     # return redirect('containers:form')
 
 def mass_provision(original_vm_id, new_vm_ids, new_vm_names):
+    original_vm_id = [int(id) for id in original_vm_id]
     node = 'pve'  # Assuming node is 'pve', modify as per your setup
-
-    new_vm_ids = [int(vm_id) for vm_id in new_vm_ids]
 
     # Convert the original container to a template
     # proxmox.convert_to_template(node, original_vm_id)
