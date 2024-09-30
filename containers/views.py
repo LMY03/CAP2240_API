@@ -31,13 +31,6 @@ def clone_lxc(request):
     # return redirect('containers:form')
 
 def mass_provision(original_vm_id, new_vm_ids, new_vm_names):
-    """
-    Mass provisioning function that clones containers and waits for each to complete.
-    
-    :param original_vm_id: The ID of the original template container.
-    :param new_vm_ids: List of new container IDs to be created.
-    :param new_vm_names: List of new container names.
-    """
     original_vm_id = int(original_vm_id)  # Ensure the original VM ID is an integer
     node = 'pve'  # Modify this as per your Proxmox node name
 
