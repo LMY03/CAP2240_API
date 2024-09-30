@@ -11,7 +11,6 @@ def renders(request):
 
 def start_lxc(request):
     proxmox.start_lxc("pve", 4003)
-    return render(request, "containers/form.html")
 
 def clone_lxc(request):
     if request.method == "POST":
