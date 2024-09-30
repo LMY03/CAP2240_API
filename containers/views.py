@@ -27,7 +27,6 @@ def clone_lxc(request):
     # return redirect('containers:form')
 
 def mass_provision(original_vm_id, new_vm_ids, new_vm_names):
-    original_vm_id = [int(id) for id in original_vm_id]
     node = 'pve'  # Assuming node is 'pve', modify as per your setup
 
     # Convert the original container to a template
