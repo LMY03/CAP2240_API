@@ -26,23 +26,28 @@ def clone_lxc(request):
     # return redirect('containers:form')
 
 def mass_provision(original_vm_id, new_vm_ids, new_vm_names):
-
     node = 'pve'  # Assuming node is 'pve', modify as per your setup
     
+    # Ensure `new_vm_ids` are integers
+    new_vm_ids = [int(vm_id) for vm_id in new_vm_ids]
+
+    # Convert the original container to a template
     proxmox.convert_to_template(node, original_vm_id)
 
+    # Perform cloning for each new VM ID and Name
     for new_vm_id, new_vm_name in zip(new_vm_ids, new_vm_names):
+        print(f"Starting clone operation for new container ID: {new_vm_id} with name: {new_vm_name}")
         proxmox.clone_lxc(node, original_vm_id, new_vm_id, new_vm_name)
 
-    # Step 3: Wait for all clones to be completed
+    # Wait until all clone operations are complete
     while not all(proxmox.check_clone_status(node, vm_id) for vm_id in new_vm_ids):
         time.sleep(5)  # Check every 5 seconds
 
-    # Step 4: Start all the cloned containers
+    # Start all the cloned containers
     for new_vm_id in new_vm_ids:
         proxmox.start_lxc(node, new_vm_id)
 
-    # Step 5: Retrieve IP addresses of the cloned containers
+    # Retrieve IP addresses of the cloned containers
     ip_addresses = []
     max_retries = 10  # Maximum number of retries before timing out
     retry_delay = 5   # Delay in seconds between retries
