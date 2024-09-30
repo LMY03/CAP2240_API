@@ -87,6 +87,9 @@ def config_lxc(node, vm_id, cpu_cores, memory_mb):
         memory=memory_mb,
     )
 
+def get_lxc_status(node, vm_id):
+    return get_proxmox_client().nodes(node).lxc(vm_id).status.current().get()
+
 def is_template_locked(node, vm_id):
     """
     Check if the template or container is locked.
@@ -188,6 +191,12 @@ def get_ip_address(node, vm_id):
             if interface['name'] == "eth0":
                 if 'inet' in interface:
                     return interface['inet'].split('/')[0]
+
+def wait_for_lxc_stop(node, vmid):
+    while True:
+        status = get_lxc_status(node, vmid).get('status')
+        if status == "stopped" : return status
+        time.sleep(5)
 
 # def clone_lxc(node, vm_id, new_vm_ids, new_names):
 #     # Initialize Proxmox API connection
