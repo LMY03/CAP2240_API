@@ -16,7 +16,8 @@ def clone_lxc(request):
         vmid = [data.get("vmid")]
         newid = [data.get("newid")]
 
-        newid = ['4002', '4003']
+        vmid = 4002
+        newid = ['4003', '4004']
 
         data = mass_provision(vmid, newid, newid, "test_snapshot")
 
