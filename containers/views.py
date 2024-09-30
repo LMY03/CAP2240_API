@@ -55,7 +55,7 @@ def mass_provision(original_vm_id, new_vm_ids, new_vm_names):
 
         # Wait for the cloning operation to complete
         proxmox.wait_for_clone_completion(node, new_vm_id)
-        proxmox.config_lxc(node, new_vm_id, 2, 2048)
+        proxmox.config_lxc(node, new_vm_id, 1, 4096)
         proxmox.start_lxc(node, new_vm_id)
 
     print("All containers cloned successfully.")
