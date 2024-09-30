@@ -18,7 +18,7 @@ def clone_lxc(request):
 
         vmid = 4002
         newid = [4003, 4004]
-        newnames = ["container_1", "container_2"]
+        newnames = ["container-1", "container-2"]
 
         data = mass_provision(vmid, newid, newnames)
 
