@@ -67,7 +67,7 @@ def clone_lxc(node, template_id, new_vm_id, new_vm_name):
     get_proxmox_client().nodes(node).lxc(template_id).clone().create(
         newid=new_vm_id,
         hostname=new_vm_name,
-        full=1
+        full=1,
     )
     print(f"Clone {new_vm_id} ({new_vm_name}) created successfully.")
 
