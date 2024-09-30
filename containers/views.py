@@ -9,9 +9,6 @@ from . import proxmox
 def renders(request):
     return render(request, "containers/form.html")
 
-def start_lxc(request):
-    proxmox.start_lxc("pve", 4003)
-
 def clone_lxc(request):
     if request.method == "POST":
 

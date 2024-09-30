@@ -156,8 +156,7 @@ def check_clone_status(node, vm_id):
     return True
 
 def start_lxc(node, vm_id):
-    a = get_proxmox_client().nodes(node).lxc(vm_id).status.start().post()
-    print(a)
+    get_proxmox_client().nodes(node).lxc(vm_id).status.start().post()
 
 
 def get_ip_address(node, vm_id):
