@@ -6,7 +6,11 @@ from . import proxmox
 
 # Create your views here.
 
-def renders(request) : 
+def renders(request):
+    return render(request, "containers/form.html")
+
+def start_lxc(request):
+    proxmox.start_lxc("pve", 4003)
     return render(request, "containers/form.html")
 
 def clone_lxc(request):
