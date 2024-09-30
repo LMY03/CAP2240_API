@@ -18,7 +18,7 @@ def clone_lxc(request):
 
         newid = ['4002', '4003']
 
-        data = mass_provision(vmid, newid, newid, "test snapshot")
+        data = mass_provision(vmid, newid, newid, "test_snapshot")
 
         return render(request, "containers/data.html", { 'data' : data })
     
