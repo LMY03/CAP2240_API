@@ -166,9 +166,12 @@ def start_lxc(node, vm_id):
 
 
 def get_ip_address(node, vm_id):
-    network_info = get_proxmox_client().nodes(node).lxc(vm_id).config().get()
+    network_info = get_proxmox_client().nodes(node).lxc(vm_id).status.current.get()
     print(network_info)
-    ip_address = network_info.get('net0', {}).get('ip', None)
+    if "data" in network_info and "ens18" in network_info['data']:
+            ip_info = network_info['data']['net0'].get('ip-addresses', [])
+            # Filter for a valid IPv4 address (not a link-local address)
+            ip_address = next((ip['ip'] for ip in ip_info if ip['family'] == 'inet'), None)
     return ip_address
 
 # def clone_lxc(node, vm_id, new_vm_ids, new_names):
