@@ -36,12 +36,25 @@ def delete_snapshot(node, vm_id, snapshot_name):
 
 # full clone snapshot
 def clone_container(node, vm_id, snapshot, new_vm_id, new_vm_name):
+    wait_for_unlock(node, vm_id)
     get_proxmox_client().nodes(node).lxc(vm_id).clone().create(
         newid=new_vm_id,
         hostname=new_vm_name,
         full=1,
         snapname=snapshot
     )
+
+def wait_for_unlock(node, vm_id, timeout=300, interval=5):
+    total_time = 0
+    while total_time < timeout:
+        # Check if the container is locked
+        config = get_proxmox_client().nodes(node).lxc(vm_id).status.current().get()
+        if 'lock' not in config:
+            return True  # Unlocked, proceed with the next step
+        print(f"Container {vm_id} is locked, waiting...")
+        time.sleep(interval)  # Wait before the next check
+        total_time += interval
+    raise TimeoutError(f"Container {vm_id} is still locked after {timeout} seconds.")
 
 def check_clone_status(node, vm_id):
     task_status = get_proxmox_client().nodes(node).tasks().get()
