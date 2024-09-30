@@ -91,6 +91,7 @@ def mass_provision(original_vm_id, new_vm_ids, new_vm_names):
 
     for new_vm_id in new_vm_ids:
         proxmox.shutdown_lxc(node, new_vm_id)
+        proxmox.wait_for_lxc_stop(node, new_vm_id)
         proxmox.delete_lxc(node, new_vm_id)
 
     print(ip_addresses)
