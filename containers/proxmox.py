@@ -31,6 +31,9 @@ def create_snapshot(node, vm_id, snapshot_name="automation_snapshot"):
     get_proxmox_client().nodes(node).lxc(vm_id).snapshot().create(snapname=snapshot_name)
     return snapshot_name
 
+def delete_snapshot(node, vm_id, snapshot_name):
+    get_proxmox_client().nodes(node).lxc(vm_id).snapshot(snapshot_name).delete()
+
 # full clone snapshot
 def clone_container(node, vm_id, snapshot, new_vm_id, new_vm_name):
     get_proxmox_client().nodes(node).lxc(vm_id).clone().create(
