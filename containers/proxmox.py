@@ -71,6 +71,9 @@ def clone_lxc(node, template_id, new_vm_id, new_vm_name):
     )
     print(f"Clone {new_vm_id} ({new_vm_name}) created successfully.")
 
+def stop_lxc(node, vmid):
+    get_proxmox_client().nodes(node).lxc(vmid).status.stop().post()
+
 def is_template_locked(node, vm_id):
     """
     Check if the template or container is locked.
