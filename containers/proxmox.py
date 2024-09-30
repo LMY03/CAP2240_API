@@ -15,6 +15,47 @@ STORAGE = 'local-lvm'
 # proxmox = ProxmoxAPI('10.1.200.11', user='root@pam', password='cap2240', verify_ssl=CA_CRT)
 # proxmox = ProxmoxAPI(PROXMOX_IP, user=PROXMOX_USERNAME, password=PROXMOX_PASSWORD, verify_ssl=CA_CRT)
 
+def get_proxmox_client():
+    proxmox = ProxmoxAPI(
+        host=PROXMOX_IP,
+        user=PROXMOX_USERNAME,
+        password=PROXMOX_PASSWORD,
+        verify_ssl=CA_CRT
+    )
+    return proxmox
+
+# clone_lxc
+
+# create_snapshot
+def create_snapshot(node, vm_id, snapshot_name="automation_snapshot"):
+    get_proxmox_client().nodes(node).lxc(vm_id).snapshot().create(snapname=snapshot_name)
+    return snapshot_name
+
+# full clone snapshot
+def clone_container(node, vm_id, snapshot, new_vm_id, new_vm_name):
+    get_proxmox_client().nodes(node).lxc(vm_id).clone().create(
+        newid=new_vm_id,
+        name=new_vm_name,
+        full=True,
+        snapname=snapshot
+    )
+
+def check_clone_status(node, vm_id):
+    task_status = get_proxmox_client().nodes(node).tasks().get()
+    for task in task_status:
+        if task['upid'].startswith(f"UPID:{node}:{vm_id}:") and task['status'] == 'running':
+            return False
+    return True
+
+def start_lxc(node, vm_id):
+    get_proxmox_client().nodes(node).lxc(vm_id).status().start()
+
+
+def get_ip_address(node, vm_id):
+    network_info = get_proxmox_client().nodes(node).lxc(vm_id).config().get()
+    ip_address = network_info.get('ens18', {}).get('ip', None)
+    return ip_address
+
 def clone_lxc(node, vm_id, new_vm_ids, new_names):
     # Initialize Proxmox API connection
     proxmox = ProxmoxAPI('10.1.200.11', user='root@pam', password='cap2240', verify_ssl=False)
