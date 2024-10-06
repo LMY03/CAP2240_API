@@ -185,12 +185,17 @@ def start_lxc(node, vm_id):
 
 
 def get_ip_address(node, vm_id):
-    network_info = get_proxmox_client().nodes(node).lxc(vm_id).interfaces().get()
-    if network_info:
-        for interface in network_info:
-            if interface['name'] == "eth0":
-                if 'inet' in interface:
-                    return interface['inet'].split('/')[0]
+    # Fetch the LXC container status
+    container_status = get_proxmox_client().nodes(node).lxc(vm_id).status().current().get()
+    print(f"container_status: {container_status}")
+    
+    if 'net' in container_status:
+        network_info = container_status['net']
+        for interface_name, interface_data in network_info.items():
+            if 'ip' in interface_data:
+                ip_address = interface_data['ip']
+                return ip_address
+    return None
 
 def wait_for_lxc_stop(node, vmid):
     while True:
