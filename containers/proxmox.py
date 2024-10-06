@@ -87,6 +87,12 @@ def config_lxc(node, vm_id, cpu_cores, memory_mb):
         memory=memory_mb,
     )
 
+def change_lxc_name(node, vm_id, cpu_cores, memory_mb):
+    get_proxmox_client().nodes(node).lxc(vm_id).config.put(
+        cores=cpu_cores,
+        memory=memory_mb,
+    )
+
 def get_lxc_status(node, vm_id):
     return get_proxmox_client().nodes(node).lxc(vm_id).status.current().get()
 
@@ -183,19 +189,27 @@ def check_clone_status(node, vm_id):
 def start_lxc(node, vm_id):
     get_proxmox_client().nodes(node).lxc(vm_id).status.start().post()
 
-
-def get_ip_address(node, vm_id):
+def fetch_lxc_ip(node, vm_id):
     network_info = get_proxmox_client().nodes(node).lxc(vm_id).interfaces().get()
+    print(f"network_info: {network_info}")
+    print(f"node: {node}")
+    print(f"vm_id: {vm_id}")
     if network_info:
         for interface in network_info:
             if interface['name'] == "eth0":
                 if 'inet' in interface:
                     return interface['inet'].split('/')[0]
 
-def wait_for_lxc_stop(node, vmid):
+def wait_for_lxc_stop(node, vm_id):
     while True:
-        status = get_lxc_status(node, vmid).get('status')
+        status = get_lxc_status(node, vm_id).get('status')
         if status == "stopped" : return status
+        time.sleep(5)
+
+def wait_and_fetch_lxc_ip(node, vm_id):
+    while True:
+        ip_add = fetch_lxc_ip(node, vm_id)
+        if ip_add : return ip_add
         time.sleep(5)
 
 # def clone_lxc(node, vm_id, new_vm_ids, new_names):

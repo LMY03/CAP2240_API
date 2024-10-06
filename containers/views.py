@@ -20,7 +20,7 @@ def clone_lxc(request):
         vmid = [data.get("vmid")]
         newid = [data.get("newid")]
 
-        vmid = 4002
+        vmid = 4000
         newid = [4003, 4004]
         newnames = ["container-1", "container-2"]
 
@@ -29,6 +29,25 @@ def clone_lxc(request):
         return render(request, "containers/data.html", { 'data' : data })
     
     # return redirect('containers:form')
+
+def create_test_vm(request):
+
+    lxc_template_id = 4000
+    new_vm_id = 4001
+    cpu_cores=2
+    ram = 2048
+
+    vm_name = "API-TEST-VM"
+    node = "jin"
+    proxmox.clone_lxc(node, lxc_template_id, new_vm_id, vm_name)
+    proxmox.wait_for_clone_completion(node, new_vm_id)
+    proxmox.config_lxc(node, new_vm_id, cpu_cores, ram)
+    proxmox.start_lxc(node, new_vm_id)
+    ip_add = proxmox.wait_and_fetch_lxc_ip(node, new_vm_id)
+    proxmox.shutdown_lxc(node, new_vm_id)
+    proxmox.wait_for_lxc_stop(node, new_vm_id)
+
+    return JsonResponse({"success": True, "ip_add": ip_add})
 
 def mass_provision(original_vm_id, new_vm_ids, new_vm_names):
     original_vm_id = int(original_vm_id)  # Ensure the original VM ID is an integer
@@ -69,7 +88,7 @@ def mass_provision(original_vm_id, new_vm_ids, new_vm_names):
     for new_vm_id, new_vm_name in zip(new_vm_ids, new_vm_names):
         # Retry mechanism to get the IP address
         for attempt in range(max_retries):
-            ip_address = proxmox.get_ip_address(node, new_vm_id)
+            ip_address = proxmox.fetch_lxc_ip(node, new_vm_id)
             if ip_address:
                 ip_addresses.append(ip_address)
                 print(f"Container {new_vm_name} (ID: {new_vm_id}) has IP address: {ip_address}")
