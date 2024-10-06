@@ -20,7 +20,7 @@ def clone_lxc(request):
         vmid = [data.get("vmid")]
         newid = [data.get("newid")]
 
-        vmid = 4000
+        vmid = 4002
         newid = [4003, 4004]
         newnames = ["container-1", "container-2"]
 
@@ -30,28 +30,9 @@ def clone_lxc(request):
     
     # return redirect('containers:form')
 
-def create_test_vm(request):
-
-    lxc_template_id = 4000
-    new_vm_id = 4001
-    cpu_cores=2
-    ram = 2048
-
-    vm_name = "API-TEST-VM"
-    node = "jin"
-    proxmox.clone_lxc(node, lxc_template_id, new_vm_id, vm_name)
-    proxmox.wait_for_clone_completion(node, new_vm_id)
-    proxmox.config_lxc(node, new_vm_id, cpu_cores, ram)
-    proxmox.start_lxc(node, new_vm_id)
-    # ip_add = proxmox.wait_and_fetch_lxc_ip(node, new_vm_id)
-    proxmox.shutdown_lxc(node, new_vm_id)
-    proxmox.wait_for_lxc_stop(node, new_vm_id)
-
-    # return JsonResponse({"success": True, "ip_add": ip_add})
-
 def mass_provision(original_vm_id, new_vm_ids, new_vm_names):
     original_vm_id = int(original_vm_id)  # Ensure the original VM ID is an integer
-    node = 'jin'  # Modify this as per your Proxmox node name
+    node = 'pve'  # Modify this as per your Proxmox node name
 
     # Loop through each new VM ID and Name to perform cloning sequentially
     for new_vm_id, new_vm_name in zip(new_vm_ids, new_vm_names):
