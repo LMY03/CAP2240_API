@@ -43,21 +43,11 @@ def create_test_vm(request):
     proxmox.wait_for_clone_completion(node, new_vm_id)
     proxmox.config_lxc(node, new_vm_id, cpu_cores, ram)
     proxmox.start_lxc(node, new_vm_id)
-    max_retries = 10  # Maximum number of retries before timing out
-    retry_delay = 5   # Delay in seconds between retries
-
-    for attempt in range(max_retries):
-        ip_address = proxmox.fetch_lxc_ip(node, new_vm_id)
-        if ip_address:
-            print(f"Container {vm_name} (ID: {new_vm_id}) has IP address: {ip_address}")
-            break
-        else:
-            print(f"Waiting for IP address for {vm_name} (ID: {new_vm_id}), attempt {attempt + 1}...")
-            time.sleep(retry_delay)  # Wait before retrying
+    ip_add = proxmox.wait_and_fetch_lxc_ip(node, new_vm_id)
     proxmox.shutdown_lxc(node, new_vm_id)
     proxmox.wait_for_lxc_stop(node, new_vm_id)
 
-    return JsonResponse({"success": True, "ip_add": ip_address})
+    return JsonResponse({"success": True, "ip_add": ip_add})
 
 def mass_provision(original_vm_id, new_vm_ids, new_vm_names):
     original_vm_id = int(original_vm_id)  # Ensure the original VM ID is an integer
