@@ -87,12 +87,6 @@ def config_lxc(node, vm_id, cpu_cores, memory_mb):
         memory=memory_mb,
     )
 
-def change_lxc_name(node, vm_id, cpu_cores, memory_mb):
-    get_proxmox_client().nodes(node).lxc(vm_id).config.put(
-        cores=cpu_cores,
-        memory=memory_mb,
-    )
-
 def get_lxc_status(node, vm_id):
     return get_proxmox_client().nodes(node).lxc(vm_id).status.current().get()
 
@@ -189,33 +183,20 @@ def check_clone_status(node, vm_id):
 def start_lxc(node, vm_id):
     get_proxmox_client().nodes(node).lxc(vm_id).status.start().post()
 
-def fetch_lxc_ip(node, vm_id):
+
+def get_ip_address(node, vm_id):
     network_info = get_proxmox_client().nodes(node).lxc(vm_id).interfaces().get()
-    print(f"network_info: {network_info}")
-    print(f"node: {node}")
-    print(f"vm_id: {vm_id}")
     if network_info:
         for interface in network_info:
             if interface['name'] == "eth0":
                 if 'inet' in interface:
                     return interface['inet'].split('/')[0]
 
-def wait_for_lxc_stop(node, vm_id):
+def wait_for_lxc_stop(node, vmid):
     while True:
-        status = get_lxc_status(node, vm_id).get('status')
+        status = get_lxc_status(node, vmid).get('status')
         if status == "stopped" : return status
         time.sleep(5)
-
-def wait_and_fetch_lxc_ip(node, vm_id, max_retries=10, retry_delay=5):
-    for attempt in range(max_retries):
-        ip_address = fetch_lxc_ip(node, vm_id)
-        if ip_address:
-            return ip_address
-            print(f"Container {vm_name} (ID: {new_vm_id}) has IP address: {ip_address}")
-            break
-        else:
-            print(f"Waiting for IP address for ID: {vm_id}, attempt {attempt + 1}...")
-            time.sleep(retry_delay)  # Wait before retrying
 
 # def clone_lxc(node, vm_id, new_vm_ids, new_names):
 #     # Initialize Proxmox API connection
