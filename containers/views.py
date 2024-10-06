@@ -20,7 +20,7 @@ def clone_lxc(request):
         vmid = [data.get("vmid")]
         newid = [data.get("newid")]
 
-        vmid = 4002
+        vmid = 4000
         newid = [4003, 4004]
         newnames = ["container-1", "container-2"]
 
@@ -32,7 +32,7 @@ def clone_lxc(request):
 
 def mass_provision(original_vm_id, new_vm_ids, new_vm_names):
     original_vm_id = int(original_vm_id)  # Ensure the original VM ID is an integer
-    node = 'pve'  # Modify this as per your Proxmox node name
+    node = 'jin'  # Modify this as per your Proxmox node name
 
     # Loop through each new VM ID and Name to perform cloning sequentially
     for new_vm_id, new_vm_name in zip(new_vm_ids, new_vm_names):
