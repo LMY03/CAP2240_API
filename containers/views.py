@@ -58,9 +58,9 @@ def mass_provision(original_vm_id, new_vm_ids, new_vm_names):
         print(f"Starting clone operation for new container ID: {new_vm_id} with name: {new_vm_name}")
 
         # Wait for the template to be unlocked before starting the clone
-        if not proxmox.wait_for_template_unlock(node, original_vm_id):
-            print(f"Template {original_vm_id} did not unlock in time. Skipping clone for {new_vm_id}.")
-            continue
+        # if not proxmox.wait_for_template_unlock(node, original_vm_id):
+        #     print(f"Template {original_vm_id} did not unlock in time. Skipping clone for {new_vm_id}.")
+        #     continue
 
         # Start the clone operation
         proxmox.clone_lxc(node, original_vm_id, new_vm_id, new_vm_name)
