@@ -51,7 +51,7 @@ def create_test_vm(request):
 
 def mass_provision(original_vm_id, new_vm_ids, new_vm_names):
     original_vm_id = int(original_vm_id)  # Ensure the original VM ID is an integer
-    node = 'pve'  # Modify this as per your Proxmox node name
+    node = 'jin'  # Modify this as per your Proxmox node name
 
     # Loop through each new VM ID and Name to perform cloning sequentially
     for new_vm_id, new_vm_name in zip(new_vm_ids, new_vm_names):
